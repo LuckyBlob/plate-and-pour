@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plate &amp; Pour — recipe cost &amp; pricing</title>
+<style>
+  /* ---------- Design tokens ---------- */
+  :root{
+    --paper:#F3F2EA;--surface:#FBFAF4;--surface-2:#EBEAE0;--line:#DAD7C9;--line-strong:#C6C2B0;
+    --ink:#1B221E;--ink-2:#54605A;--ink-3:#8A938C;--accent:#1E5B4F;--accent-2:#2A7D6C;--accent-soft:#E1EBE6;
+    --brass:#8C6A20;--info:#2F6DB0;--good:#2E7D57;--warn:#A9761B;--bad:#B2453A;
+    --good-soft:#E2EEE7;--warn-soft:#F4ECD8;--bad-soft:#F5E4E1;
+    --shadow:0 1px 2px rgba(27,34,30,.06), 0 6px 22px rgba(27,34,30,.06);
+    --shadow-pop:0 12px 40px rgba(27,34,30,.22);--r:10px;
+    --font-display:"Iowan Old Style","Palatino Linotype",Palatino,"Book Antiqua",Georgia,serif;
+    --font-sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --font-mono:ui-monospace,"SF Mono","Cascadia Code",Consolas,"Liberation Mono",monospace;
+  }
+  @media (prefers-color-scheme:dark){
+    :root{
+      --paper:#12160F;--surface:#1A1F17;--surface-2:#232A20;--line:#333B2F;--line-strong:#455040;
+      --ink:#E9E7DA;--ink-2:#A7B0A4;--ink-3:#79837A;--accent:#3FA089;--accent-2:#54BBA2;--accent-soft:#1E2C27;
+      --brass:#CBA351;--info:#6FB0F0;--good:#5CBE8C;--warn:#D2A24B;--bad:#E0776B;
+      --good-soft:#1B2A22;--warn-soft:#2B2513;--bad-soft:#2E1D1A;
+      --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);--shadow-pop:0 12px 44px rgba(0,0,0,.55);
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#12160F;--surface:#1A1F17;--surface-2:#232A20;--line:#333B2F;--line-strong:#455040;
+    --ink:#E9E7DA;--ink-2:#A7B0A4;--ink-3:#79837A;--accent:#3FA089;--accent-2:#54BBA2;--accent-soft:#1E2C27;
+    --brass:#CBA351;--info:#6FB0F0;--good:#5CBE8C;--warn:#D2A24B;--bad:#E0776B;
+    --good-soft:#1B2A22;--warn-soft:#2B2513;--bad-soft:#2E1D1A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 6px 22px rgba(0,0,0,.35);--shadow-pop:0 12px 44px rgba(0,0,0,.55);
+  }
+  :root[data-theme="light"]{
+    --paper:#F3F2EA;--surface:#FBFAF4;--surface-2:#EBEAE0;--line:#DAD7C9;--line-strong:#C6C2B0;
+    --ink:#1B221E;--ink-2:#54605A;--ink-3:#8A938C;--accent:#1E5B4F;--accent-2:#2A7D6C;--accent-soft:#E1EBE6;
+    --brass:#8C6A20;--info:#2F6DB0;--good:#2E7D57;--warn:#A9761B;--bad:#B2453A;
+    --good-soft:#E2EEE7;--warn-soft:#F4ECD8;--bad-soft:#F5E4E1;
+    --shadow:0 1px 2px rgba(27,34,30,.06), 0 6px 22px rgba(27,34,30,.06);--shadow-pop:0 12px 40px rgba(27,34,30,.22);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--font-sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased}
+  .tnum{font-variant-numeric:tabular-nums}
+  button{font-family:inherit}
+  h1,h2,h3{margin:0;font-family:var(--font-display);font-weight:600;text-wrap:balance;letter-spacing:.1px}
+
+  header{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--paper) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  .bar{max-width:1120px;margin:0 auto;padding:14px 20px 0;display:flex;align-items:flex-start;gap:16px;flex-wrap:wrap;justify-content:space-between}
+  .brand{display:flex;align-items:center;gap:11px;min-width:0}
+  .mark{width:32px;height:32px;flex:none;color:var(--accent)}
+  .brand h1{font-size:21px;line-height:1;letter-spacing:.2px}
+  .brand .sub{font-size:11.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:1.4px;margin-top:3px}
+  .hactions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+  nav.tabs{max-width:1120px;margin:0 auto;padding:6px 12px 0;display:flex;gap:2px;overflow-x:auto}
+  nav.tabs button{appearance:none;border:0;background:none;color:var(--ink-2);cursor:pointer;padding:11px 14px;font-size:14px;font-weight:550;border-bottom:2.5px solid transparent;white-space:nowrap;border-radius:6px 6px 0 0;transition:color .15s,border-color .15s,background .15s}
+  nav.tabs button:hover{color:var(--ink);background:color-mix(in srgb,var(--accent-soft) 60%,transparent)}
+  nav.tabs button[aria-selected="true"]{color:var(--accent);border-bottom-color:var(--accent)}
+
+  main{max-width:1120px;margin:0 auto;padding:22px 20px 80px}
+
+  .btn{appearance:none;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);padding:8px 13px;border-radius:8px;font-size:13.5px;font-weight:550;cursor:pointer;display:inline-flex;align-items:center;gap:6px;transition:background .14s,border-color .14s,transform .05s}
+  .btn:hover{border-color:var(--accent);background:var(--accent-soft)}
+  .btn:active{transform:translateY(1px)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{background:var(--accent-2);border-color:var(--accent-2)}
+  .btn.ghost{border-color:transparent;background:transparent}
+  .btn.ghost:hover{background:var(--surface-2);border-color:var(--line)}
+  .btn.danger:hover{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+  .btn.sm{padding:5px 9px;font-size:12.5px}
+  .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,nav.tabs button:focus-visible,.iconbtn:focus-visible,.grouphead:focus-visible,.ovreset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .iconbtn{appearance:none;border:0;background:none;color:var(--ink-3);cursor:pointer;padding:5px;border-radius:6px;line-height:0}
+  .iconbtn:hover{color:var(--ink);background:var(--surface-2)}
+  .iconbtn.danger:hover{color:var(--bad);background:var(--bad-soft)}
+
+  input,select,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;width:100%}
+  input::placeholder{color:var(--ink-3)}
+  input[type=number]{font-variant-numeric:tabular-nums}
+  label.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.6px}
+  label.field input,label.field select{text-transform:none;font-weight:400;letter-spacing:normal;font-size:14px;color:var(--ink)}
+
+  .summary{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:22px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;box-shadow:var(--shadow)}
+  .stat .k{font-size:11px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-3);font-weight:600}
+  .stat .v{font-family:var(--font-display);font-size:27px;margin-top:6px;letter-spacing:.3px}
+
+  .sectionhead{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:4px 0 14px;flex-wrap:wrap}
+  .sectionhead h2{font-size:19px}
+  .sectionhead .hint{font-size:13px;color:var(--ink-3)}
+
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .table-wrap{overflow-x:auto}
+  table{border-collapse:collapse;width:100%;min-width:600px}
+  th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
+  thead th{background:var(--surface-2);font-size:11px;text-transform:uppercase;letter-spacing:.8px;color:var(--ink-2);font-weight:650;white-space:nowrap}
+  tbody tr:last-child td{border-bottom:0}
+  tbody tr:hover{background:color-mix(in srgb,var(--accent-soft) 40%,transparent)}
+  td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
+  .name-cell{font-weight:600}
+  .money{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+  .cost{font-family:var(--font-mono);color:var(--ink-2)}
+  .rowactions{display:flex;gap:2px;justify-content:flex-end}
+  .inline-input{padding:6px 8px;font-size:13.5px}
+  td .inline-input{max-width:100%}
+  .rowsub{font-size:12px;color:var(--ink-3);margin-top:2px;font-weight:400}
+
+  /* override cells (markup / price) */
+  .ovcell{display:flex;align-items:center;gap:3px;justify-content:flex-end}
+  .ovinput{width:60px;text-align:right;padding:5px 7px;font-size:13.5px;font-family:var(--font-mono);font-variant-numeric:tabular-nums}
+  .ovinput.price{width:74px;color:var(--brass);font-weight:600}
+  .ovinput.ov-red{color:var(--bad)!important;border-color:var(--bad);font-weight:600}
+  .ovinput.ov-blue{color:var(--info)!important;border-color:var(--info);font-weight:600}
+  .ovcell .suf,.ovcell .pre{color:var(--ink-3);font-size:12px;font-family:var(--font-mono)}
+  .ovreset{appearance:none;border:0;background:none;color:var(--ink-3);cursor:pointer;padding:2px;border-radius:5px;line-height:0}
+  .ovreset:hover{color:var(--accent);background:var(--surface-2)}
+  .ovreset[hidden]{display:none}
+
+  /* collapsible category groups */
+  .group{margin-bottom:14px}
+  .grouphead{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;cursor:pointer;text-align:left;color:var(--ink)}
+  .grouphead:hover{border-color:var(--accent)}
+  .grouphead .chev{color:var(--ink-3);line-height:0;transition:transform .18s}
+  .grouphead[aria-expanded="false"] .chev{transform:rotate(-90deg)}
+  .grouphead h3{font-size:15px;font-family:var(--font-sans);font-weight:650}
+  .grouphead .gcount{color:var(--ink-3);font-size:12.5px;font-weight:500}
+  .grouphead .gmarkup{margin-left:auto;color:var(--ink-2);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  .groupbody{margin-top:8px}
+  .groupbody[hidden]{display:none}
+
+  .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
+  .muted{color:var(--ink-3)}
+  .unitchips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip.unitchip{padding:3px 4px 3px 11px;gap:1px}
+  .chip.unitchip .iconbtn{padding:2px;color:var(--ink-3)}
+  .chip.unitchip .iconbtn:hover{color:var(--bad);background:transparent}
+
+  .empty{text-align:center;padding:48px 20px;color:var(--ink-3)}
+  .empty h3{font-size:18px;color:var(--ink-2);margin-bottom:6px}
+  .empty p{max-width:44ch;margin:0 auto 16px}
+
+  dialog{border:1px solid var(--line-strong);border-radius:14px;padding:0;background:var(--surface);color:var(--ink);box-shadow:var(--shadow-pop);width:min(620px,94vw);max-height:90vh;overflow:visible}
+  dialog::backdrop{background:rgba(15,20,17,.5);backdrop-filter:blur(2px)}
+  .dlg-head{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .dlg-head h2{font-size:18px}
+  .dlg-body{padding:18px 20px;overflow-y:auto;max-height:64vh}
+  .dlg-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--line);background:var(--surface-2)}
+  .dlg-foot .right{display:flex;gap:8px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .grid2.tight{grid-template-columns:1.6fr 1fr}
+
+  .lines{display:flex;flex-direction:column;gap:8px;margin-top:6px}
+  .line{display:grid;grid-template-columns:minmax(0,1fr) 80px 34px minmax(64px,auto) auto;gap:8px;align-items:center}
+  .line .lc{font-family:var(--font-mono);font-size:13px;color:var(--ink-2);white-space:nowrap;text-align:right;min-width:64px}
+  .line .u{font-size:12px;color:var(--ink-3);min-width:34px}
+  .preview{margin-top:16px;border:1px dashed var(--line-strong);border-radius:10px;padding:14px 16px;background:var(--paper)}
+  .preview .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:3px 0}
+  .preview .row .lab{color:var(--ink-2);font-size:13px}
+  .preview .big{font-size:24px;font-family:var(--font-mono);font-weight:700;color:var(--brass)}
+  .preview hr{border:0;border-top:1px solid var(--line);margin:8px 0}
+
+  .switch{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-2);font-weight:500}
+  .switch input{width:auto}
+  .subcard{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--paper);margin-top:8px}
+  .explain{font-size:13px;color:var(--ink-2);line-height:1.6}
+  .explain code{font-family:var(--font-mono);background:var(--surface-2);padding:1px 5px;border-radius:5px;font-size:12.5px}
+  .explain .sw{display:inline-block;width:9px;height:9px;border-radius:2px;vertical-align:baseline;margin-right:3px}
+  .danger-zone{border:1px solid var(--bad);border-radius:10px;padding:14px 16px;background:var(--bad-soft)}
+
+  #toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--paper);padding:11px 18px;border-radius:10px;font-size:14px;font-weight:500;box-shadow:var(--shadow-pop);pointer-events:none;transition:opacity .22s,transform .22s;z-index:50;max-width:90vw}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+  #toast.err{background:var(--bad);color:#fff}
+
+  @media (max-width:560px){
+    .brand .sub{display:none}
+    .line{grid-template-columns:minmax(0,1fr) 66px minmax(56px,auto) auto}
+    .line .u{display:none}
+    .grid2,.grid2.tight{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<header>
+  <div class="bar">
+    <div class="brand">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M6 3v18M4.5 3v5a1.5 1.5 0 003 0V3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M18.5 3c-1.6 0-2.5 1.6-2.5 4.5S16.9 12 18.5 12 21 10.4 21 7.5 20.1 3 18.5 3zM18.5 12v9" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div>
+        <h1>Plate&nbsp;&amp;&nbsp;Pour</h1>
+        <div class="sub">Food &amp; drink costing</div>
+      </div>
+    </div>
+    <div class="hactions">
+      <button class="btn ghost" id="btn-import" title="Load a previously exported file">Import</button>
+      <button class="btn" id="btn-export" title="Save a backup file you can load on another device">Export</button>
+      <input type="file" id="file-input" accept="application/json,.json" hidden>
+    </div>
+  </div>
+  <nav class="tabs" id="tabs" role="tablist">
+    <button role="tab" data-tab="recipes" aria-selected="true">Recipes</button>
+    <button role="tab" data-tab="elements" aria-selected="false">Elements</button>
+    <button role="tab" data-tab="categories" aria-selected="false">Categories</button>
+    <button role="tab" data-tab="settings" aria-selected="false">Settings</button>
+  </nav>
+</header>
+
+<main id="view"></main>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<dialog id="modal">
+  <form method="dialog" id="modal-form">
+    <div class="dlg-head"><h2 id="modal-title">Edit</h2>
+      <button type="button" class="iconbtn" id="modal-x" aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="dlg-body" id="modal-body"></div>
+    <div class="dlg-foot">
+      <div id="modal-foot-left"></div>
+      <div class="right">
+        <button type="button" class="btn ghost" id="modal-cancel">Cancel</button>
+        <button type="submit" class="btn primary" id="modal-save">Save</button>
+      </div>
+    </div>
+  </form>
+</dialog>
+
+<script>
+(function(){
+  "use strict";
+  var LS_KEY = "plateandpour.v1";
+
+  var state = load() || seed();
+  var ui = { tab:"recipes", collapsed:{} };
+
+  function uid(p){ return (p||"id") + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
+  function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ toast("Could not save locally: "+e.message, true); } }
+  function load(){
+    try{
+      var r = localStorage.getItem(LS_KEY);
+      if(!r){ var old = localStorage.getItem("pourcost.v1"); if(old){ return migrate(JSON.parse(old)); } return null; }
+      return migrate(JSON.parse(r));
+    }catch(e){ return null; }
+  }
+  function migrate(s){
+    if(!s || typeof s!=="object") return null;
+    if(!s.settings) s.settings = { currency:"$", defaultRatio:3, rounding:defaultRounding() };
+    if(!Array.isArray(s.settings.units) || !s.settings.units.length) s.settings.units = defaultUnits();
+    if(!s.settings.rounding) s.settings.rounding = defaultRounding();
+    if(s.settings.currency==null) s.settings.currency = "$";
+    if(s.settings.defaultRatio==null) s.settings.defaultRatio = 3;
+    if(!Array.isArray(s.categories)) s.categories = [];
+    s.categories.forEach(function(c){ delete c.rounding; });
+    if(!Array.isArray(s.elements)) s.elements = Array.isArray(s.ingredients) ? s.ingredients : [];
+    delete s.ingredients;
+    if(!Array.isArray(s.recipes)) s.recipes = [];
+    s.recipes.forEach(function(r){
+      if(!Array.isArray(r.lines)) r.lines = [];
+      r.lines.forEach(function(l){ if(l.elementId==null && l.ingredientId!=null) l.elementId=l.ingredientId; delete l.ingredientId; });
+      if(r.priceOverride===undefined) r.priceOverride = null;
+      if(r.ratio===undefined) r.ratio = null;
+    });
+    return s;
+  }
+  function defaultRounding(){ return { mode:"charm", increment:0.25, ending:0.95 }; }
+  function defaultUnits(){ return ["ml","cl","oz","L","g","kg","each","slice","portion","shot","dash","bottle","can"]; }
+
+  function seed(){
+    return {
+      settings: { currency:"$", defaultRatio:3, rounding:defaultRounding(), units:defaultUnits() },
+      categories: [
+        { id:"c_cocktail", name:"Cocktails",       ratio:4 },
+        { id:"c_beer",     name:"Beer & Cider",    ratio:2.5 },
+        { id:"c_wine",     name:"Wine (by glass)", ratio:3.5 },
+        { id:"c_food",     name:"Kitchen",         ratio:3 }
+      ],
+      elements: [
+        { id:"i_vodka",  name:"Vodka (well)",      size:750,  unit:"ml",   cost:22 },
+        { id:"i_triple", name:"Triple sec",        size:750,  unit:"ml",   cost:18 },
+        { id:"i_lime",   name:"Lime juice",        size:1000, unit:"ml",   cost:6 },
+        { id:"i_cran",   name:"Cranberry juice",   size:1890, unit:"ml",   cost:7 },
+        { id:"i_bun",    name:"Burger bun",        size:8,    unit:"each", cost:5.6 },
+        { id:"i_patty",  name:"Beef patty (150g)", size:1,    unit:"each", cost:2.35 },
+        { id:"i_cheese", name:"Cheddar slice",     size:24,   unit:"slice",cost:8.4 }
+      ],
+      recipes: [
+        { id:"r_cosmo", name:"Cosmopolitan", categoryId:"c_cocktail", ratio:null, priceOverride:null, lines:[
+          {elementId:"i_vodka",amount:45},{elementId:"i_triple",amount:15},{elementId:"i_lime",amount:15},{elementId:"i_cran",amount:30}
+        ]},
+        { id:"r_burger", name:"House Burger", categoryId:"c_food", ratio:null, priceOverride:14.5, lines:[
+          {elementId:"i_bun",amount:1},{elementId:"i_patty",amount:1},{elementId:"i_cheese",amount:1}
+        ]}
+      ]
+    };
+  }
+
+  /* ---------------- Lookups & math ---------------- */
+  function cat(id){ for(var i=0;i<state.categories.length;i++) if(state.categories[i].id===id) return state.categories[i]; return null; }
+  function elem(id){ for(var i=0;i<state.elements.length;i++) if(state.elements[i].id===id) return state.elements[i]; return null; }
+  function num(v){ var n = parseFloat(v); return isFinite(n) ? n : 0; }
+  function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
+  function round2(v){ return Math.round((v+Number.EPSILON)*100)/100; }
+
+  function unitCost(e){ return e && e.size>0 ? e.cost / e.size : 0; }
+  function lineCost(l){ var e = elem(l.elementId); return e ? unitCost(e)*num(l.amount) : 0; }
+  function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
+  function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
+
+  function roundPrice(raw, rule){
+    if(!rule || rule.mode==="none" || !isFinite(raw)) return round2(raw);
+    var eps = 1e-9;
+    if(rule.mode==="charm"){
+      var e = clamp(num(rule.ending),0,0.99), base = Math.floor(raw - eps), cand = base + e;
+      if(cand < raw - eps) cand += 1;
+      return round2(cand);
+    }
+    var inc = num(rule.increment)>0 ? num(rule.increment) : 0.01, v;
+    if(rule.mode==="up") v = Math.ceil(raw/inc - eps)*inc;
+    else if(rule.mode==="down") v = Math.floor(raw/inc + eps)*inc;
+    else v = Math.round(raw/inc)*inc;
+    return round2(v);
+  }
+  function gp(price,cost){ return price>0 ? (price-cost)/price : 0; }
+
+  // The heart of the pricing: resolve markup + price and how each was arrived at.
+  function computeRecipe(r){
+    var cost = recipeCost(r);
+    var inherited = inheritedRatio(r);
+    var markup, markupMode, price, priceMode;
+    if(r.priceOverride!=null && r.priceOverride!==""){
+      price = num(r.priceOverride); priceMode = "override";
+      markup = cost>0 ? price/cost : 0; markupMode = "derived";
+    } else if(r.ratio!=null && r.ratio!==""){
+      markup = num(r.ratio); markupMode = "override";
+      price = roundPrice(cost*markup, state.settings.rounding); priceMode = "computed";
+    } else {
+      markup = inherited; markupMode = "inherited";
+      price = roundPrice(cost*markup, state.settings.rounding); priceMode = "computed";
+    }
+    return { cost:cost, inherited:inherited, markup:markup, markupMode:markupMode, price:price, priceMode:priceMode };
+  }
+
+  function usageCountElem(id){ var n=0; state.recipes.forEach(function(r){ r.lines.forEach(function(l){ if(l.elementId===id) n++; }); }); return n; }
+  function usageCountCat(id){ var n=0; state.recipes.forEach(function(r){ if(r.categoryId===id) n++; }); return n; }
+
+  /* ---------------- Formatting ---------------- */
+  function cur(){ return state.settings.currency || "$"; }
+  function money(n){ if(!isFinite(n)) n=0; return cur() + n.toFixed(2); }
+  function pct(n){ return (n*100).toFixed(0) + "%"; }
+  function esc(s){ return String(s==null?"":s).replace(/[&<>"']/g,function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+  function ratioTxt(x){ return (Math.round(num(x)*100)/100).toString().replace(/\.00$/,"") + "×"; }
+  function roundingSummary(rule){
+    if(!rule || rule.mode==="none") return "no rounding";
+    if(rule.mode==="charm") return "ends in ." + String(Math.round(num(rule.ending)*100)).padStart(2,"0");
+    var word = rule.mode==="up"?"up":rule.mode==="down"?"down":"nearest";
+    return word + " " + cur() + num(rule.increment).toFixed(2);
+  }
+  function unitOptions(current){
+    var list = state.settings.units.slice();
+    if(current && list.indexOf(current)<0) list.unshift(current);
+    return list.map(function(u){ return '<option value="'+esc(u)+'"'+(u===current?" selected":"")+'>'+esc(u)+'</option>'; }).join("");
+  }
+
+  /* ---------------- Toast ---------------- */
+  var toastEl = document.getElementById("toast"), toastT;
+  function toast(msg, isErr){ toastEl.textContent = msg; toastEl.className = isErr ? "show err" : "show"; clearTimeout(toastT); toastT = setTimeout(function(){ toastEl.className = ""; }, 2600); }
+
+  /* ---------------- Icons ---------------- */
+  var ic_edit='<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M4 20h4L18 10l-4-4L4 16v4zM14 6l4 4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ic_trash='<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><path d="M5 7h14M10 7V5h4v2M6 7l1 12h10l1-12" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ic_dup='<svg width="17" height="17" viewBox="0 0 24 24" fill="none"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M4 15V5a1 1 0 011-1h10" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>';
+  var ic_x='<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
+  var ic_reset='<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4v6h6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10.5A8 8 0 114 15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ic_chev='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  function iconBtn(action,id,label,svg,danger){ return '<button class="iconbtn'+(danger?" danger":"")+'" data-act="'+action+'" data-id="'+id+'" title="'+label+'" aria-label="'+label+'">'+svg+'</button>'; }
+  function stat(k,v){ return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v tnum">'+v+'</div></div>'; }
+  function emptyCard(title,body,actId,actLabel){ return '<div class="card"><div class="empty"><h3>'+esc(title)+'</h3><p>'+esc(body)+'</p><button class="btn primary" id="'+actId+'">'+esc(actLabel)+'</button></div></div>'; }
+
+  /* ---------------- Rendering ---------------- */
+  var view = document.getElementById("view");
+  function render(){
+    document.querySelectorAll('nav.tabs button').forEach(function(b){ b.setAttribute("aria-selected", b.dataset.tab===ui.tab ? "true":"false"); });
+    if(ui.tab==="recipes") renderRecipes();
+    else if(ui.tab==="elements") renderElements();
+    else if(ui.tab==="categories") renderCategories();
+    else renderSettings();
+  }
+
+  function markupCell(r,m){
+    var val = m.markupMode==="inherited" ? "" : String(round2(m.markup));
+    var cls = m.markupMode==="override" ? " ov-red" : (m.markupMode==="derived" ? " ov-blue" : "");
+    return '<div class="ovcell">'
+      + '<input class="ovinput'+cls+'" data-rmarkup="'+r.id+'" type="number" step="any" min="0" inputmode="decimal" value="'+val+'" placeholder="'+round2(m.inherited)+'" aria-label="Markup">'
+      + '<span class="suf">×</span>'
+      + '<button class="ovreset" data-act="reset-markup" data-id="'+r.id+'" title="Reset to category markup" aria-label="Reset markup"'+(m.markupMode==="override"?"":" hidden")+'>'+ic_reset+'</button>'
+      + '</div>';
+  }
+  function priceCell(r,m){
+    var cls = m.priceMode==="override" ? " ov-red" : "";
+    return '<div class="ovcell">'
+      + '<span class="pre">'+esc(cur())+'</span>'
+      + '<input class="ovinput price'+cls+'" data-rprice="'+r.id+'" type="number" step="any" min="0" inputmode="decimal" value="'+round2(m.price)+'" aria-label="Price">'
+      + '<button class="ovreset" data-act="reset-price" data-id="'+r.id+'" title="Reset to calculated price" aria-label="Reset price"'+(m.priceMode==="override"?"":" hidden")+'>'+ic_reset+'</button>'
+      + '</div>';
+  }
+  function recipeRow(r){
+    var m = computeRecipe(r);
+    return '<tr data-rid="'+r.id+'">'
+      + '<td class="name-cell">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div></td>'
+      + '<td class="num cost cell-cost">'+money(m.cost)+'</td>'
+      + '<td class="num">'+markupCell(r,m)+'</td>'
+      + '<td class="num">'+priceCell(r,m)+'</td>'
+      + '<td class="num cell-margin muted">'+(m.cost>0?pct(gp(m.price,m.cost)):"—")+'</td>'
+      + '<td><div class="rowactions">'+iconBtn("edit-recipe",r.id,"Edit",ic_edit)+iconBtn("dup-recipe",r.id,"Duplicate",ic_dup)+iconBtn("del-recipe",r.id,"Delete",ic_trash,true)+'</div></td>'
+      + '</tr>';
+  }
+  function groupBlock(cid, name, markup, rs){
+    var collapsed = !!ui.collapsed[cid];
+    var rows = rs.map(recipeRow).join("");
+    return '<div class="group">'
+      + '<button class="grouphead" data-act="toggle-group" data-id="'+esc(cid)+'" aria-expanded="'+(collapsed?"false":"true")+'">'
+        + '<span class="chev">'+ic_chev+'</span><h3>'+esc(name)+'</h3>'
+        + '<span class="gcount">'+rs.length+' recipe'+(rs.length===1?"":"s")+'</span>'
+        + '<span class="gmarkup">'+ratioTxt(markup)+' default</span>'
+      + '</button>'
+      + '<div class="groupbody"'+(collapsed?" hidden":"")+'>'
+        + '<div class="card"><div class="table-wrap"><table><thead><tr>'
+          + '<th>Recipe</th><th class="num">Cost</th><th class="num">Markup</th><th class="num">Price</th><th class="num">Margin</th><th></th>'
+          + '</tr></thead><tbody>'+rows+'</tbody></table></div></div>'
+      + '</div></div>';
+  }
+  function renderRecipes(){
+    var totalGM=0, n=state.recipes.length;
+    state.recipes.forEach(function(r){ var m=computeRecipe(r); totalGM += (m.cost>0?gp(m.price,m.cost):0); });
+
+    var html = '<div class="summary">'
+      + stat("Recipes", n) + stat("Elements", state.elements.length)
+      + stat("Categories", state.categories.length) + stat("Avg. margin", n? pct(totalGM/n) : "—")
+      + '</div>';
+    html += '<div class="sectionhead"><h2>Recipes</h2><button class="btn primary" id="add-recipe">+ New recipe</button></div>';
+
+    if(!n){
+      html += emptyCard("No recipes yet","Create your first recipe to see its cost and a suggested sell price.",
+        state.elements.length? "add-recipe-2":"go-elements", state.elements.length? "+ New recipe":"Add elements first");
+      view.innerHTML = html; return;
+    }
+    var groups = "";
+    state.categories.forEach(function(c){
+      var rs = state.recipes.filter(function(r){ return r.categoryId===c.id; });
+      if(rs.length) groups += groupBlock(c.id, c.name, num(c.ratio), rs);
+    });
+    var uncat = state.recipes.filter(function(r){ return !cat(r.categoryId); });
+    if(uncat.length) groups += groupBlock("__uncat__","Uncategorized", num(state.settings.defaultRatio), uncat);
+    html += groups;
+    html += '<p class="hint" style="margin-top:6px">Type in a <strong>Markup</strong> or <strong>Price</strong> box to override it. '
+      + '<span style="color:var(--bad);font-weight:600">Red</span> = a manual override (click ↺ to reset). '
+      + 'A <span style="color:var(--info);font-weight:600">blue</span> markup is back-calculated from a price you set.</p>';
+    view.innerHTML = html;
+  }
+
+  function renderElements(){
+    var html = '<div class="sectionhead"><div><h2>Elements</h2>'
+      + '<div class="hint">The raw things you buy — food or drink. Enter the pack size you purchase and its price; the unit cost is worked out for you.</div></div>'
+      + '<button class="btn primary" id="add-elem">+ New element</button></div>';
+    if(!state.elements.length){
+      html += emptyCard("No elements yet","Add the things you buy — a 750 ml bottle of gin, a case of buns, a kilo of flour — with their pack size and price.","add-elem-2","+ New element");
+      view.innerHTML = html; return;
+    }
+    html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
+      + '<th style="min-width:180px">Name</th><th class="num">Pack size</th><th>Unit</th><th class="num">Pack cost</th><th class="num">Unit cost</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
+    state.elements.forEach(function(e){
+      html += '<tr data-id="'+e.id+'">'
+        + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name"></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:100px;text-align:right"></td>'
+        + '<td><select class="inline-input" data-f="unit" style="max-width:110px">'+unitOptions(e.unit)+'</select></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:110px;text-align:right"></td>'
+        + '<td class="num money muted">'+money(unitCost(e))+'<span class="muted" style="font-size:11px">/'+esc(e.unit||"unit")+'</span></td>'
+        + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
+        + '<td><div class="rowactions">'+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
+    });
+    html += '</tbody></table></div></div>';
+    html += '<p class="hint" style="margin-top:12px">Edit any field directly — changes save automatically and reprice every recipe that uses the element. Manage the unit list in Settings.</p>';
+    view.innerHTML = html;
+  }
+
+  function renderCategories(){
+    var html = '<div class="sectionhead"><div><h2>Categories</h2>'
+      + '<div class="hint">Types of item — Cocktails, Beer, Kitchen. Each sets the default markup that its recipes use unless a recipe overrides it.</div></div>'
+      + '<button class="btn primary" id="add-cat">+ New category</button></div>';
+    if(!state.categories.length){
+      html += emptyCard("No categories yet","Group your recipes — Cocktails, Beer, Kitchen — and give each a default markup.","add-cat-2","+ New category");
+      view.innerHTML = html; return;
+    }
+    html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
+      + '<th style="min-width:200px">Category</th><th class="num">Default markup</th><th class="num">Recipes</th><th></th></tr></thead><tbody>';
+    state.categories.forEach(function(c){
+      html += '<tr data-cid="'+c.id+'">'
+        + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
+        + '<td class="num"><div class="ovcell"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:80px;text-align:right"><span class="suf">×</span></div></td>'
+        + '<td class="num tnum muted">'+usageCountCat(c.id)+'</td>'
+        + '<td><div class="rowactions">'+iconBtn("del-cat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
+    });
+    html += '</tbody></table></div></div>';
+    html += '<p class="hint" style="margin-top:12px">The global default markup (used by recipes with no category) is set in Settings.</p>';
+    view.innerHTML = html;
+  }
+
+  function renderSettings(){
+    var s = state.settings;
+    var html = '<div class="sectionhead"><h2>Settings</h2></div>';
+    html += '<div class="card" style="padding:18px 20px;max-width:640px">'
+      + '<div class="grid2">'
+        + '<label class="field">Currency symbol<input id="set-cur" value="'+esc(s.currency)+'" maxlength="3"></label>'
+        + '<label class="field">Default markup (no category)<input id="set-ratio" type="number" step="any" min="0" value="'+esc(s.defaultRatio)+'"></label>'
+      + '</div>'
+      + '<div style="margin-top:18px"><div class="field" style="margin-bottom:8px">Rounding rule (applies to all prices)</div>'+roundingFields("g", s.rounding)+'</div>'
+      + '<div style="margin-top:18px;display:flex;justify-content:flex-end"><button class="btn primary" id="save-settings">Save settings</button></div>'
+      + '</div>';
+
+    html += '<div class="card" style="padding:18px 20px;max-width:640px;margin-top:18px">'
+      + '<h3 style="font-size:16px;margin-bottom:4px">Units</h3>'
+      + '<p class="hint" style="margin:0 0 12px">The unit options shown when you add an element. Add whatever you use for food and drink.</p>'
+      + '<div class="unitchips">'+ s.units.map(function(u,ix){ return '<span class="chip unitchip">'+esc(u)+'<button class="iconbtn" data-act="del-unit" data-id="'+ix+'" aria-label="Remove '+esc(u)+'">'+ic_x+'</button></span>'; }).join("") +'</div>'
+      + '<div style="display:flex;gap:8px;margin-top:14px;max-width:320px"><input id="unit-new" placeholder="e.g. tbsp" style="flex:1"><button class="btn" id="unit-add">Add unit</button></div>'
+      + '</div>';
+
+    html += '<div class="card" style="padding:18px 20px;max-width:640px;margin-top:18px">'
+      + '<h3 style="font-size:16px;margin-bottom:8px">How pricing works</h3>'
+      + '<div class="explain">'
+        + '<p style="margin:0 0 8px"><code>cost = Σ amount × element unit cost</code>, then <code>price = round( cost × markup )</code>.</p>'
+        + '<p style="margin:0 0 8px">Markup comes from the recipe’s own value if set, otherwise its category’s default, otherwise the global default above.</p>'
+        + '<p style="margin:0"><span class="sw" style="background:var(--bad)"></span><strong>Red</strong> in the Recipes tab means a value you typed to override; <span class="sw" style="background:var(--info)"></span><strong>blue</strong> markup is back-calculated from a price you set.</p>'
+      + '</div></div>';
+
+    html += '<div class="card" style="padding:18px 20px;max-width:640px;margin-top:18px">'
+      + '<h3 style="font-size:16px;margin-bottom:4px">Your data</h3>'
+      + '<p class="hint" style="margin:0 0 14px">Everything is stored in this browser. Use Export to back up or move your data to another device, then Import there.</p>'
+      + '<div style="display:flex;gap:8px;flex-wrap:wrap">'
+        + '<button class="btn" id="set-export">Export backup</button><button class="btn" id="set-import">Import backup</button><button class="btn" id="set-sample">Reload sample data</button>'
+      + '</div>'
+      + '<div class="danger-zone" style="margin-top:16px"><div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">'
+        + '<div><strong>Clear everything</strong><div class="hint" style="color:var(--bad)">Removes all elements, recipes and categories from this browser.</div></div>'
+        + '<button class="btn danger" id="set-clear">Clear all data</button></div></div>'
+      + '</div>';
+    view.innerHTML = html;
+    wireRounding("g");
+  }
+
+  /* ---------------- Rounding editor ---------------- */
+  function roundingFields(p, rule){
+    rule = rule || {mode:"none"};
+    var m = rule.mode||"none";
+    function opt(v,t){ return '<option value="'+v+'"'+(m===v?" selected":"")+'>'+t+'</option>'; }
+    var incVal = num(rule.increment)||0.25, endVal = (rule.ending!=null)? num(rule.ending) : 0.95;
+    return '<div class="subcard"><div class="grid2 tight">'
+      + '<label class="field">Rule<select id="'+p+'-mode">'
+          + opt("charm","Charm price (.95 / .99)")+opt("nearest","Nearest increment")+opt("up","Round up to increment")+opt("down","Round down to increment")+opt("none","No rounding")
+        + '</select></label>'
+      + '<label class="field" id="'+p+'-inc-wrap">Increment<select id="'+p+'-inc">'+incOpt(0.05,incVal)+incOpt(0.10,incVal)+incOpt(0.25,incVal)+incOpt(0.50,incVal)+incOpt(1.00,incVal)+'</select></label>'
+      + '<label class="field" id="'+p+'-end-wrap">Ending<select id="'+p+'-end">'+endOpt(0.95,endVal)+endOpt(0.99,endVal)+endOpt(0.50,endVal)+endOpt(0.00,endVal)+endOpt(0.49,endVal)+'</select></label>'
+      + '</div><div class="hint" style="margin-top:10px" id="'+p+'-preview"></div></div>';
+  }
+  function incOpt(v,c){ return '<option value="'+v+'"'+(Math.abs(v-c)<1e-6?" selected":"")+'>'+cur0(v)+'</option>'; }
+  function endOpt(v,c){ return '<option value="'+v+'"'+(Math.abs(v-c)<1e-6?" selected":"")+'>.'+String(Math.round(v*100)).padStart(2,"0")+'</option>'; }
+  function cur0(v){ return (state.settings.currency||"$") + v.toFixed(2); }
+  function readRounding(p){ return { mode:document.getElementById(p+"-mode").value, increment:num(document.getElementById(p+"-inc").value), ending:num(document.getElementById(p+"-end").value) }; }
+  function wireRounding(p){
+    var modeEl = document.getElementById(p+"-mode"); if(!modeEl) return;
+    function upd(){
+      var mode = modeEl.value, isCharm = mode==="charm", isNone = mode==="none";
+      document.getElementById(p+"-end-wrap").style.display = isCharm ? "" : "none";
+      document.getElementById(p+"-inc-wrap").style.display = (isCharm||isNone) ? "none" : "";
+      var prev = document.getElementById(p+"-preview");
+      if(isNone){ prev.textContent = "Prices shown to the cent, unrounded."; return; }
+      var rule = readRounding(p);
+      prev.innerHTML = "Example: " + [8.13,11.40].map(function(x){ return money(x)+" → <strong>"+money(roundPrice(x,rule))+"</strong>"; }).join(" · ");
+    }
+    modeEl.addEventListener("change", upd);
+    var i=document.getElementById(p+"-inc"), e=document.getElementById(p+"-end");
+    if(i) i.addEventListener("change", upd); if(e) e.addEventListener("change", upd);
+    upd();
+  }
+
+  /* ---------------- Modal ---------------- */
+  var modal = document.getElementById("modal"), modalForm = document.getElementById("modal-form"), onModalSave = null;
+  function openModal(title, bodyHtml, saveFn, footLeftHtml){
+    var sb = document.getElementById("modal-save");
+    sb.textContent = "Save"; sb.className = "btn primary"; sb.style.background=""; sb.style.borderColor=""; sb.style.color="";
+    document.getElementById("modal-title").textContent = title;
+    document.getElementById("modal-body").innerHTML = bodyHtml;
+    document.getElementById("modal-foot-left").innerHTML = footLeftHtml||"";
+    onModalSave = saveFn;
+    modal.showModal();
+    var first = modal.querySelector('input,select,textarea'); if(first) first.focus();
+  }
+  function closeModal(){ modal.close(); onModalSave=null; }
+  document.getElementById("modal-x").addEventListener("click", closeModal);
+  document.getElementById("modal-cancel").addEventListener("click", closeModal);
+  modalForm.addEventListener("submit", function(e){ e.preventDefault(); if(onModalSave){ if(onModalSave()!==false){ closeModal(); render(); save(); } } });
+
+  /* ---------------- Recipe editor (structure only; markup/price edited inline) ---------------- */
+  function editRecipe(r){
+    var isNew = !r;
+    if(state.elements.length===0){ toast("Add some elements first.", true); ui.tab="elements"; render(); return; }
+    r = r || { id:uid("r"), name:"", categoryId: state.categories[0]?state.categories[0].id:null, ratio:null, priceOverride:null, lines:[] };
+    var draft = JSON.parse(JSON.stringify(r));
+    if(draft.lines.length===0) draft.lines.push({elementId:state.elements[0].id, amount:0});
+
+    function body(){
+      var catOpts = '<option value="">Uncategorized</option>' + state.categories.map(function(c){ return '<option value="'+c.id+'"'+(draft.categoryId===c.id?" selected":"")+'>'+esc(c.name)+' ('+ratioTxt(c.ratio)+')</option>'; }).join("");
+      return '<div class="grid2 tight">'
+        + '<label class="field">Recipe name<input id="r-name" value="'+esc(draft.name)+'" placeholder="e.g. Negroni"></label>'
+        + '<label class="field">Category<select id="r-cat">'+catOpts+'</select></label></div>'
+        + '<div class="field" style="margin:18px 0 0">Elements</div><div class="lines" id="r-lines"></div>'
+        + '<div style="margin-top:10px"><button type="button" class="btn sm" id="r-addline">+ Add element</button></div>'
+        + '<div class="preview" id="r-preview"></div>';
+    }
+    function lineRow(l, idx){
+      var opts = state.elements.map(function(e){ return '<option value="'+e.id+'"'+(l.elementId===e.id?" selected":"")+'>'+esc(e.name)+'</option>'; }).join("");
+      var e = elem(l.elementId);
+      return '<div class="line" data-idx="'+idx+'">'
+        + '<select data-lf="elementId">'+opts+'</select>'
+        + '<input data-lf="amount" type="number" step="any" min="0" inputmode="decimal" value="'+esc(l.amount)+'" aria-label="Amount">'
+        + '<span class="u">'+esc(e?e.unit:"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
+        + '<button type="button" class="iconbtn danger" data-lrem="'+idx+'" aria-label="Remove">'+ic_trash+'</button></div>';
+    }
+    function paintLines(){
+      var box = document.getElementById("r-lines");
+      box.innerHTML = draft.lines.map(function(l,idx){ return lineRow(l,idx); }).join("");
+      box.querySelectorAll(".line").forEach(function(row){
+        var idx = +row.dataset.idx;
+        row.querySelector('[data-lf="elementId"]').addEventListener("change", function(ev){ draft.lines[idx].elementId=ev.target.value; paintLines(); paintPreview(); });
+        row.querySelector('[data-lf="amount"]').addEventListener("input", function(ev){ draft.lines[idx].amount=ev.target.value; row.querySelector(".lc").textContent=money(lineCost(draft.lines[idx])); paintPreview(); });
+        row.querySelector('[data-lrem]').addEventListener("click", function(){ draft.lines.splice(idx,1); if(!draft.lines.length) draft.lines.push({elementId:state.elements[0].id,amount:0}); paintLines(); paintPreview(); });
+      });
+    }
+    function readTop(){ draft.name = document.getElementById("r-name").value; draft.categoryId = document.getElementById("r-cat").value || null; }
+    function paintPreview(){
+      readTop();
+      var m = computeRecipe(draft);
+      var note = m.markupMode==="derived" ? " (from price)" : (m.markupMode==="override" ? " (override)" : "");
+      document.getElementById("r-preview").innerHTML =
+          '<div class="row"><span class="lab">Element cost</span><span class="money">'+money(m.cost)+'</span></div>'
+        + '<div class="row"><span class="lab">Markup'+note+'</span><span class="money">'+ratioTxt(m.markup)+'</span></div>'
+        + '<hr><div class="row"><span class="lab" style="font-weight:600;color:var(--ink)">Suggested price</span><span class="big">'+money(m.price)+'</span></div>'
+        + '<div class="row"><span class="lab">Margin</span><span class="money">'+(m.cost>0?pct(gp(m.price,m.cost)):"—")+'</span></div>';
+    }
+    openModal(isNew? "New recipe":"Edit recipe", body(), function(){
+      readTop();
+      if(!draft.name.trim()){ toast("Give the recipe a name.", true); return false; }
+      draft.lines = draft.lines.filter(function(l){ return num(l.amount)>0; });
+      var idx = state.recipes.map(function(x){return x.id;}).indexOf(draft.id);
+      if(idx>=0) state.recipes[idx]=draft; else state.recipes.push(draft);
+      toast(isNew?"Recipe added":"Recipe saved");
+    });
+    document.getElementById("r-cat").addEventListener("change", paintPreview);
+    document.getElementById("r-addline").addEventListener("click", function(){ draft.lines.push({elementId:state.elements[0].id,amount:0}); paintLines(); paintPreview(); });
+    paintLines(); paintPreview();
+  }
+
+  /* ---------------- Delete confirm ---------------- */
+  function confirmDelete(title, msg, fn){
+    openModal(title, '<p class="explain" style="margin:0">'+esc(msg)+'</p>', function(){ fn(); });
+    var b = document.getElementById("modal-save");
+    b.textContent="Delete"; b.className="btn danger"; b.style.background="var(--bad)"; b.style.borderColor="var(--bad)"; b.style.color="#fff";
+  }
+
+  /* ---------------- Import / Export ---------------- */
+  function doExport(){
+    var data = JSON.stringify(state, null, 2), name = "plate-and-pour-backup.json";
+    if(window.claude && window.claude.downloads){
+      window.claude.downloads.save({ filename:name, data:data }).then(function(){ toast("Backup saved"); })
+        .catch(function(err){ if(err && err.code==="declined") return; fallbackDownload(data, name); });
+    } else { fallbackDownload(data, name); }
+  }
+  function fallbackDownload(data, name){
+    try{
+      var blob = new Blob([data], {type:"application/json"}), url = URL.createObjectURL(blob);
+      var a = document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(url); a.remove(); }, 100);
+      toast("Backup downloaded");
+    }catch(e){ toast("Export failed: "+e.message, true); }
+  }
+  var fileInput = document.getElementById("file-input");
+  function doImport(){ fileInput.value=""; fileInput.click(); }
+  fileInput.addEventListener("change", function(){
+    var f = fileInput.files[0]; if(!f) return;
+    var rd = new FileReader();
+    rd.onload = function(){
+      try{
+        var obj = JSON.parse(rd.result);
+        var ok = obj && obj.settings && (Array.isArray(obj.elements)||Array.isArray(obj.ingredients)) && Array.isArray(obj.recipes) && Array.isArray(obj.categories);
+        if(!ok) throw new Error("This file isn’t a Plate & Pour backup.");
+        state = migrate(obj); save(); render(); toast("Data imported");
+      }catch(e){ toast("Import failed: "+e.message, true); }
+    };
+    rd.readAsText(f);
+  });
+
+  /* ---------------- Events ---------------- */
+  document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("button[data-tab]"); if(!b) return; ui.tab=b.dataset.tab; render(); });
+  document.getElementById("btn-export").addEventListener("click", doExport);
+  document.getElementById("btn-import").addEventListener("click", doImport);
+  function rowOf(rid){ return view.querySelector('tr[data-rid="'+rid+'"]'); }
+
+  view.addEventListener("click", function(e){
+    var act = e.target.closest("[data-act]");
+    if(act){
+      var id = act.dataset.id, a = act.dataset.act, r;
+      if(a==="toggle-group"){ var open=act.getAttribute("aria-expanded")==="true"; act.setAttribute("aria-expanded",open?"false":"true"); var body=act.parentElement.querySelector(".groupbody"); if(body) body.hidden=open; ui.collapsed[id]=open; return; }
+      if(a==="edit-recipe") editRecipe(findRecipe(id));
+      else if(a==="dup-recipe"){ r=findRecipe(id); if(r){ var copy=JSON.parse(JSON.stringify(r)); copy.id=uid("r"); copy.name=r.name+" (copy)"; state.recipes.push(copy); save(); render(); toast("Recipe duplicated"); } }
+      else if(a==="del-recipe"){ r=findRecipe(id); confirmDelete("Delete recipe","Delete “"+(r?r.name:"")+"”? This can’t be undone.", function(){ state.recipes=state.recipes.filter(function(x){return x.id!==id;}); save(); render(); toast("Recipe deleted"); }); }
+      else if(a==="reset-markup"){ r=findRecipe(id); if(r){ r.ratio=null; save(); repriceRow(rowOf(id)); } }
+      else if(a==="reset-price"){ r=findRecipe(id); if(r){ r.priceOverride=null; save(); repriceRow(rowOf(id)); } }
+      else if(a==="del-cat"){ var ucn=usageCountCat(id), cc=cat(id); confirmDelete("Delete category", ucn? ("“"+cc.name+"” is used by "+ucn+" recipe"+(ucn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+cc.name+"”?"), function(){ state.recipes.forEach(function(x){ if(x.categoryId===id) x.categoryId=null; }); state.categories=state.categories.filter(function(x){return x.id!==id;}); save(); render(); toast("Category deleted"); }); }
+      else if(a==="del-elem"){ var un=usageCountElem(id), ee=elem(id); confirmDelete("Delete element", un? ("“"+ee.name+"” is used in "+un+" recipe"+(un===1?"":"s")+". It’ll be removed from them. Delete it?") : ("Delete “"+ee.name+"”?"), function(){ state.recipes.forEach(function(x){ x.lines=x.lines.filter(function(l){return l.elementId!==id;}); }); state.elements=state.elements.filter(function(x){return x.id!==id;}); save(); render(); toast("Element deleted"); }); }
+      else if(a==="del-unit"){ state.settings.units.splice(+id,1); save(); render(); }
+      return;
+    }
+    var t = e.target.closest("button[id]"); if(!t) return;
+    var bid = t.id;
+    if(bid==="add-recipe"||bid==="add-recipe-2") editRecipe(null);
+    else if(bid==="go-elements"){ ui.tab="elements"; render(); }
+    else if(bid==="add-elem"||bid==="add-elem-2") addElement();
+    else if(bid==="add-cat"||bid==="add-cat-2") addCategory();
+    else if(bid==="unit-add") addUnit();
+    else if(bid==="save-settings") saveSettings();
+    else if(bid==="set-export") doExport();
+    else if(bid==="set-import") doImport();
+    else if(bid==="set-sample"){ confirmDelete("Reload sample data","Replace everything in this browser with the built-in sample data?", function(){ state=seed(); save(); render(); toast("Sample data loaded"); }); }
+    else if(bid==="set-clear"){ confirmDelete("Clear all data","Remove all elements, recipes and categories from this browser? Export a backup first if you might want it back.", function(){ state={settings:{currency:state.settings.currency,defaultRatio:state.settings.defaultRatio,rounding:state.settings.rounding,units:state.settings.units},categories:[],elements:[],recipes:[]}; save(); render(); toast("All data cleared"); }); }
+  });
+
+  // inline markup / price overrides (recipes) + inline element/category fields
+  function handleMarkup(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.ratio = v===""?null:num(v); r.priceOverride=null; save(); repriceRow(row,"markup"); }
+  function handlePrice(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.priceOverride = v===""?null:num(v); save(); repriceRow(row,"price"); }
+  function onFieldEdit(e){
+    var inp = e.target.closest("[data-f]"); if(!inp) return;
+    var f = inp.dataset.f;
+    var erow = inp.closest("tr[data-id]");
+    if(erow){ var el=elem(erow.dataset.id); if(el){ el[f]=(f==="size"||f==="cost")?num(inp.value):inp.value; var uc=erow.children[4]; if(uc) uc.innerHTML=money(unitCost(el))+'<span class="muted" style="font-size:11px">/'+esc(el.unit||"unit")+'</span>'; save(); } return; }
+    var crow = inp.closest("tr[data-cid]");
+    if(crow){ var c=cat(crow.dataset.cid); if(c){ c[f]=(f==="ratio")?num(inp.value):inp.value; save(); } return; }
+  }
+  view.addEventListener("input", function(e){
+    var mk=e.target.closest("[data-rmarkup]"); if(mk){ handleMarkup(mk); return; }
+    var pr=e.target.closest("[data-rprice]"); if(pr){ handlePrice(pr); return; }
+    onFieldEdit(e);
+  });
+  view.addEventListener("change", onFieldEdit);
+  view.addEventListener("keydown", function(e){ if(e.target && e.target.id==="unit-new" && e.key==="Enter"){ e.preventDefault(); addUnit(); } });
+
+  function repriceRow(row, active){
+    if(!row) return;
+    var r = findRecipe(row.dataset.rid); if(!r) return;
+    var m = computeRecipe(r);
+    var cc=row.querySelector(".cell-cost"); if(cc) cc.textContent=money(m.cost);
+    var mi=row.querySelector("[data-rmarkup]");
+    if(mi){
+      if(active!=="markup") mi.value = m.markupMode==="inherited" ? "" : String(round2(m.markup));
+      mi.placeholder = String(round2(m.inherited));
+      mi.classList.remove("ov-red","ov-blue");
+      if(m.markupMode==="override") mi.classList.add("ov-red"); else if(m.markupMode==="derived") mi.classList.add("ov-blue");
+      var mr=row.querySelector('[data-act="reset-markup"]'); if(mr) mr.hidden = (m.markupMode!=="override");
+    }
+    var pi=row.querySelector("[data-rprice]");
+    if(pi){
+      if(active!=="price") pi.value = String(round2(m.price));
+      pi.classList.toggle("ov-red", m.priceMode==="override");
+      var pr2=row.querySelector('[data-act="reset-price"]'); if(pr2) pr2.hidden = (m.priceMode!=="override");
+    }
+    var mg=row.querySelector(".cell-margin"); if(mg) mg.textContent = m.cost>0?pct(gp(m.price,m.cost)):"—";
+  }
+
+  function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
+  function addElement(){
+    var it = { id:uid("i"), name:"", size:1, unit:(state.settings.units[0]||"each"), cost:0 };
+    state.elements.push(it); save(); render();
+    var row = view.querySelector('tr[data-id="'+it.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
+  }
+  function addCategory(){
+    var c = { id:uid("c"), name:"", ratio:3 };
+    state.categories.push(c); save(); render();
+    var row = view.querySelector('tr[data-cid="'+c.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
+  }
+  function addUnit(){
+    var el = document.getElementById("unit-new"); if(!el) return;
+    var v = (el.value||"").trim(); if(!v) return;
+    if(state.settings.units.indexOf(v)<0) state.settings.units.push(v);
+    save(); render(); var n=document.getElementById("unit-new"); if(n) n.focus();
+  }
+  function saveSettings(){
+    state.settings.currency = document.getElementById("set-cur").value || "$";
+    state.settings.defaultRatio = num(document.getElementById("set-ratio").value)||1;
+    state.settings.rounding = readRounding("g");
+    save(); render(); toast("Settings saved");
+  }
+
+  render();
+})();
+</script>
+
+</body>
+</html>
