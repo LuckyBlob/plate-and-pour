@@ -929,7 +929,7 @@
   }
 
   render();
-  // On open: if Drive sync is on and configured, pull the shared data once (quietly on failure).
-  if(driveEnabled()){ driveFetch({errMsg:false}); }
+  // On open: if Drive sync is on and configured, pull the shared data once; show a note if it can't reach the drive.
+  if(driveEnabled()){ driveFetch({errMsg:false}).catch(function(){ toast("Couldn’t reach the shared drive — showing local data. Tap Import to retry.", true); }); }
 })();
 </script>
