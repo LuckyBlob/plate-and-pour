@@ -1,0 +1,52 @@
+name: Sync data from Adversaire drive
+
+# Keeps data.json (served same-origin by GitHub Pages) in step with the live
+# Google Drive file, so networks that block Google still see up-to-date data.
+# GitHub's runners can reach script.google.com even when a workplace can't.
+
+on:
+  schedule:
+    - cron: "*/15 * * * *"   # every 15 minutes (GitHub may delay scheduled runs)
+  workflow_dispatch: {}        # allow manual "Run workflow"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-drive
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fetch the live drive data
+        run: |
+          curl -sSL --max-time 60 \
+            "https://script.google.com/macros/s/AKfycbyTQNKOZRoDZlhBovwptpJif3jvNrXgq5BsTZvs9B5qXqKyXupjV57c_7qs25R_STvN/exec" \
+            -o fetched.json
+
+      - name: Validate it is a real dataset
+        run: |
+          python3 - <<'PY'
+          import json
+          d = json.load(open('fetched.json', encoding='utf-8'))
+          assert isinstance(d.get('recipes'), list), 'no recipes array'
+          assert isinstance(d.get('elements'), list) and d['elements'], 'no elements'
+          print('valid:', len(d['elements']), 'elements,', len(d['recipes']), 'recipes')
+          PY
+
+      - name: Commit data.json if it changed
+        run: |
+          mv fetched.json data.json
+          git add data.json
+          if git diff --cached --quiet; then
+            echo "No change."
+          else
+            git config user.name  "adversaire-drive-sync"
+            git config user.email "actions@users.noreply.github.com"
+            git commit -m "Sync data.json from Adversaire drive"
+            git push
+          fi

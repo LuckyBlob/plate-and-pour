@@ -1,0 +1,4035 @@
+{
+  "settings": {
+    "currency": "$",
+    "defaultRatio": 3.2,
+    "defaultMargin": 67,
+    "rounding": {
+      "mode": "nearest",
+      "increment": 0.5,
+      "ending": 0.95
+    },
+    "units": [
+      "portion",
+      "oz",
+      "dash",
+      "goutte",
+      "unité",
+      "canette",
+      "ml",
+      "g",
+      "kg",
+      "each",
+      "L",
+      "slice"
+    ]
+  },
+  "categories": [
+    {
+      "id": "cat_cuisine",
+      "name": "Cuisine",
+      "ratio": 3.2,
+      "desiredMargin": 67
+    },
+    {
+      "id": "cat_cocktails",
+      "name": "Cocktails",
+      "ratio": 3.2,
+      "desiredMargin": 69
+    },
+    {
+      "id": "cat_mocktails",
+      "name": "Mocktails",
+      "ratio": 3.2,
+      "desiredMargin": 69
+    },
+    {
+      "id": "cat_vins",
+      "name": "Vins",
+      "ratio": 2.9,
+      "desiredMargin": 65
+    },
+    {
+      "id": "cat_bieres",
+      "name": "Bières",
+      "ratio": 3.3,
+      "desiredMargin": 67
+    },
+    {
+      "id": "cat_canettes",
+      "name": "Canettes",
+      "ratio": 3.3,
+      "desiredMargin": 67
+    }
+  ],
+  "elements": [
+    {
+      "id": "el001",
+      "name": "Agostura (orange)",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0525,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el002",
+      "name": "batonnet fromages",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.8943,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el003",
+      "name": "Bitter (jaune)",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.051,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el004",
+      "name": "brownies",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.8225,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el005",
+      "name": "Café",
+      "size": 1,
+      "unit": "unité",
+      "cost": 27.35,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el006",
+      "name": "cerise",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.082,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el007",
+      "name": "chili végétarien",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.769,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el008",
+      "name": "chips jalapeno",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.079,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el009",
+      "name": "chips Nachos",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.3136,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el010",
+      "name": "chips ordinaire",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.9945,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el011",
+      "name": "chips sel et vinaigre",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.124,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el012",
+      "name": "chips sweet chili",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.9985,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el013",
+      "name": "Chips Ruffles BBQ",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.9538,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el014",
+      "name": "Chocolat chaud",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.5634,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el015",
+      "name": "Churros",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.2744,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el016",
+      "name": "Citron",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1067,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el017",
+      "name": "Coke Zéro",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.6667,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el018",
+      "name": "Confiture aux fraises",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.9859,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el019",
+      "name": "Crème fouettée",
+      "size": 1,
+      "unit": "unité",
+      "cost": 6.5733,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el020",
+      "name": "crème glacé",
+      "size": 1,
+      "unit": "unité",
+      "cost": 0.7146,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el021",
+      "name": "crème sure",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.4888,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el022",
+      "name": "crevettes",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.27,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el023",
+      "name": "Edamames",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.9752,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el024",
+      "name": "épices a bifteck",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1382,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el025",
+      "name": "fromage rapé",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.6202,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el026",
+      "name": "Fromage Suisse",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.7272,
+      "notes": "Attention, prix par kg",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el027",
+      "name": "jus de citron",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0539,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el028",
+      "name": "jus de lime",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0781,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el029",
+      "name": "ketchup",
+      "size": 1,
+      "unit": "unité",
+      "cost": 2.8433,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el030",
+      "name": "Lime",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1458,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el031",
+      "name": "mac and cheese",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.1745,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el032",
+      "name": "mayonnaise",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2916,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el033",
+      "name": "miel",
+      "size": 1,
+      "unit": "unité",
+      "cost": 14.395,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el034",
+      "name": "mini pogo",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.497,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el035",
+      "name": "Moutarde",
+      "size": 1,
+      "unit": "unité",
+      "cost": 3.065,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el036",
+      "name": "moutarde a l'ancienne",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.284,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el037",
+      "name": "oignon vert",
+      "size": 1,
+      "unit": "unité",
+      "cost": 15.88,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el038",
+      "name": "Oignons rouges",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el039",
+      "name": "Olives Vertes Farcies",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0317,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el040",
+      "name": "Orange",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1126,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el041",
+      "name": "origan",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.11,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el042",
+      "name": "pain ciabatta",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.6551,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el043",
+      "name": "pain Naan",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.9717,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el044",
+      "name": "Piments doux marinés",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.6979,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el045",
+      "name": "pogo vegan",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.3333,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el046",
+      "name": "Porc effiloché",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.3296,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el047",
+      "name": "poulet pop corn",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.1378,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el048",
+      "name": "redbull",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.2125,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el049",
+      "name": "salade orzo",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.0665,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el050",
+      "name": "sauce chili sucré",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.152,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el051",
+      "name": "sauce chipotle",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2979,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el052",
+      "name": "sauce marinara",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1283,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el053",
+      "name": "sauce miel et ail",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1841,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el054",
+      "name": "sauce ranch",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2958,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el055",
+      "name": "sauce salsa",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2486,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el056",
+      "name": "sauce Soja",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2481,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el057",
+      "name": "sauce Worchestershire",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0528,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el058",
+      "name": "sirop simple",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.045,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el059",
+      "name": "Sucre",
+      "size": 1,
+      "unit": "unité",
+      "cost": 5.87,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el060",
+      "name": "Tabasco",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.0525,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el061",
+      "name": "Tartes Pacanes",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.2702,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el062",
+      "name": "trempette aux epinards",
+      "size": 1,
+      "unit": "portion",
+      "cost": 4.1175,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el063",
+      "name": "menthe",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.35,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el064",
+      "name": "Jus de gun pour drinks",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.7,
+      "notes": "utilisé pour tous les drink",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el065",
+      "name": "Jus de canneberge",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.25,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el066",
+      "name": "Olive verte tranché",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.2006,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el067",
+      "name": "Confit d'oignon",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.5,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el068",
+      "name": "Salade Quinoa fidji",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.501,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el069",
+      "name": "Salade Edamames",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.792,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el070",
+      "name": "vinaigre blanc pur",
+      "size": 1,
+      "unit": "unité",
+      "cost": 18.91,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el071",
+      "name": "Gateau citron noix de cocos",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.5212,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el072",
+      "name": "Bouché choux-fleur pané",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.3384,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el073",
+      "name": "Rondelle patate",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.453,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el074",
+      "name": "Sauce Buffalo",
+      "size": 1,
+      "unit": "unité",
+      "cost": 49.33,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el075",
+      "name": "sirop grenadine",
+      "size": 1,
+      "unit": "unité",
+      "cost": 17.01,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el076",
+      "name": "cornichons a l'aneth",
+      "size": 1,
+      "unit": "unité",
+      "cost": 24.67,
+      "notes": "1 cornichon = 4ml ou 0,004L",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el077",
+      "name": "poivre noir",
+      "size": 1,
+      "unit": "unité",
+      "cost": 46.37,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el078",
+      "name": "lait",
+      "size": 1,
+      "unit": "unité",
+      "cost": 5.07,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el079",
+      "name": "Canelle",
+      "size": 1,
+      "unit": "unité",
+      "cost": 26.25,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el080",
+      "name": "Samosas Vegan",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.0289,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el081",
+      "name": "Quesadillas Poulet",
+      "size": 1,
+      "unit": "portion",
+      "cost": 3.2855,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el082",
+      "name": "Peperroni",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.1999,
+      "notes": "Environ 0,02$ / Gramme",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el083",
+      "name": "Bacon",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.6181,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el084",
+      "name": "Sauce Hollandaise",
+      "size": 1,
+      "unit": "unité",
+      "cost": 23.88,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el085",
+      "name": "Maïs éclaté au beurre",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.8279,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el086",
+      "name": "Pâtes alimentaire",
+      "size": 1,
+      "unit": "unité",
+      "cost": 17.56,
+      "notes": "Environ 0,003$ / Gramme",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el087",
+      "name": "Sauce Fromage",
+      "size": 1,
+      "unit": "unité",
+      "cost": 21.415,
+      "notes": "Environ 10,71$ / Litre",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el088",
+      "name": "Épices Grecques",
+      "size": 1,
+      "unit": "unité",
+      "cost": 13.0,
+      "notes": "1 portion = 25g",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el089",
+      "name": "Sirop purée de fruit du dragon",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.0,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el090",
+      "name": "sirop de lavande",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.6471,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el091",
+      "name": "Coulis Assortis",
+      "size": 1,
+      "unit": "unité",
+      "cost": 5.59,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el092",
+      "name": "Côte de dos de porc",
+      "size": 1,
+      "unit": "portion",
+      "cost": 4.2575,
+      "notes": "1 portion = 300g",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el093",
+      "name": "Sirop Barbotine Neutre",
+      "size": 1,
+      "unit": "unité",
+      "cost": 19.22,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el094",
+      "name": "Sauce Sriracha",
+      "size": 1,
+      "unit": "unité",
+      "cost": 5.05,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el095",
+      "name": "Pain Burger Patate 4Po",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.66,
+      "notes": "1 portion = 1 pain",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el096",
+      "name": "Boulette de viande haché précuite",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.66,
+      "notes": "1 portion = 85g",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el097",
+      "name": "Frites coupe régulière",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0.84,
+      "notes": "1 portion = 200g",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el098",
+      "name": "Cannelle",
+      "size": 1,
+      "unit": "unité",
+      "cost": 25.72,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el099",
+      "name": "Détergent Laveuse",
+      "size": 1,
+      "unit": "unité",
+      "cost": 16.285,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el100",
+      "name": "Huile Olive Extra Vierge",
+      "size": 1,
+      "unit": "unité",
+      "cost": 19.73,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el101",
+      "name": "Gâteau aux carottes",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.4242,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el102",
+      "name": "Piroulines",
+      "size": 1,
+      "unit": "unité",
+      "cost": 0.1936,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el103",
+      "name": "Romarin",
+      "size": 1,
+      "unit": "unité",
+      "cost": 1.4683,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el104",
+      "name": "basilic",
+      "size": 1,
+      "unit": "unité",
+      "cost": 1.52,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el105",
+      "name": "Perrier",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.45,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el106",
+      "name": "Rouleaux de papier caisse",
+      "size": 1,
+      "unit": "unité",
+      "cost": 93.52,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el107",
+      "name": "Rouleaux de papier TPV",
+      "size": 1,
+      "unit": "unité",
+      "cost": 28.85,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el108",
+      "name": "Filet à cheveux",
+      "size": 1,
+      "unit": "unité",
+      "cost": 52.22,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el109",
+      "name": "Sac compost",
+      "size": 1,
+      "unit": "unité",
+      "cost": 103.99,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el110",
+      "name": "Sac Ordures noirs",
+      "size": 1,
+      "unit": "unité",
+      "cost": 43.73,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el111",
+      "name": "Sac Ordures transparent",
+      "size": 1,
+      "unit": "unité",
+      "cost": 51.82,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el112",
+      "name": "Tamis pour urinoir",
+      "size": 1,
+      "unit": "unité",
+      "cost": 62.43,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el113",
+      "name": "Filet à barbe",
+      "size": 1,
+      "unit": "unité",
+      "cost": 55.7,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el114",
+      "name": "Papier Hygiénique",
+      "size": 1,
+      "unit": "unité",
+      "cost": 76.32,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el115",
+      "name": "Essuie-mains",
+      "size": 1,
+      "unit": "unité",
+      "cost": 64.13,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el116",
+      "name": "Serviette de table",
+      "size": 1,
+      "unit": "unité",
+      "cost": 71.3,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el117",
+      "name": "Pics en Bambou",
+      "size": 1,
+      "unit": "unité",
+      "cost": 41.18,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el118",
+      "name": "Feuille de cuisson",
+      "size": 1,
+      "unit": "unité",
+      "cost": 99.76,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el119",
+      "name": "Papier Journal (cuisson)",
+      "size": 1,
+      "unit": "unité",
+      "cost": 37.04,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el120",
+      "name": "Profiteroles vides",
+      "size": 1,
+      "unit": "portion",
+      "cost": 2.0033,
+      "notes": "1 portion = 6 choux à la crème",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el121",
+      "name": "Salade de Bruschetta",
+      "size": 1,
+      "unit": "portion",
+      "cost": 1.44,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el122",
+      "name": "Sauce Maison",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0,
+      "notes": "",
+      "priceDate": null
+    },
+    {
+      "id": "el123",
+      "name": "lime gose sans alcool (burdock)",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.14,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el124",
+      "name": "Gose sans alcool",
+      "size": 1,
+      "unit": "canette",
+      "cost": 2.8975,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el125",
+      "name": "blonde sans alcool boréal",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.0417,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el126",
+      "name": "radler sans alcool",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.0417,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el127",
+      "name": "Sure bleuet hibicus sans alcool",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.9,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el128",
+      "name": "Kombucha Ékorce",
+      "size": 1,
+      "unit": "canette",
+      "cost": 2.4433,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el129",
+      "name": "Neipa Helix",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.4896,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el130",
+      "name": "Saison houblonnée",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.4896,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el131",
+      "name": "Miami rice",
+      "size": 1,
+      "unit": "canette",
+      "cost": 3.2917,
+      "notes": "",
+      "priceDate": "2026-02-03"
+    },
+    {
+      "id": "el132",
+      "name": "aberlour 12 ans",
+      "size": 1,
+      "unit": "oz",
+      "cost": 3.39,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el133",
+      "name": "Amermelade",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.972,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el134",
+      "name": "Aperol les iles",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.974,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el135",
+      "name": "Avril",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.5,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el136",
+      "name": "bitter chipotle cacao",
+      "size": 1,
+      "unit": "dash",
+      "cost": 0.13,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el137",
+      "name": "Bulle de nuit",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.3332,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el138",
+      "name": "ButterScotch",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.862,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el139",
+      "name": "Canadian club",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.1776,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el140",
+      "name": "Canopée",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.63,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el141",
+      "name": "Captain Morgan",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.9605,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el142",
+      "name": "chambord",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.9,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el143",
+      "name": "Curaçao",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.956,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el144",
+      "name": "el dorado 12 ans",
+      "size": 1,
+      "unit": "oz",
+      "cost": 2.08,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el145",
+      "name": "Fireball",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.9539,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el146",
+      "name": "Gin #6",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.59,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el147",
+      "name": "gin 7 Heaven",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.63,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el148",
+      "name": "goldschlager",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.99,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el149",
+      "name": "hennessy",
+      "size": 1,
+      "unit": "oz",
+      "cost": 2.96,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el150",
+      "name": "Humble framboise",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.25,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el151",
+      "name": "Jagermeister",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.3618,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el152",
+      "name": "Jameson",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.5132,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el153",
+      "name": "Kahlua",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.29,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el154",
+      "name": "Kamouraska",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.9671,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el155",
+      "name": "km12",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.98,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el156",
+      "name": "L'auberge cuvée fest blanc",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.2888,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el157",
+      "name": "L'auberge cuvée fest rouge",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.2888,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el158",
+      "name": "lot no40 rye",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.7,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el159",
+      "name": "Malibu",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.136,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el160",
+      "name": "Méga Mousse",
+      "size": 1,
+      "unit": "goutte",
+      "cost": 0.01,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el161",
+      "name": "Midori",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.35,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el162",
+      "name": "Noa Amaretto",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.3,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el163",
+      "name": "O'casey's",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.048,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el164",
+      "name": "Oshlag houblonnée",
+      "size": 1,
+      "unit": "oz",
+      "cost": 2.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el165",
+      "name": "radoune",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.8321,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el166",
+      "name": "Rosemont épicé",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.63,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el167",
+      "name": "Rouge gorge",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.932,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el168",
+      "name": "soho",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.26,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el169",
+      "name": "sortilège",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.35,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el170",
+      "name": "st-germain",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.99,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el171",
+      "name": "Tequila Jose Cuervo",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.5263,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el172",
+      "name": "Triple sec",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.184,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el173",
+      "name": "Ungava",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.3882,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el174",
+      "name": "Vermouth Kayak",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.864,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el175",
+      "name": "vodka cirka",
+      "size": 1,
+      "unit": "oz",
+      "cost": 2.06,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el176",
+      "name": "vodka vanille",
+      "size": 1,
+      "unit": "oz",
+      "cost": 1.3,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el177",
+      "name": "Soda",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el178",
+      "name": "Limonade",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el179",
+      "name": "Sprite",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el180",
+      "name": "coke",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el181",
+      "name": "Thé glacé",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el182",
+      "name": "Tonic",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el183",
+      "name": "clamato",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el184",
+      "name": "ginger ale",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el185",
+      "name": "jus d'ananas",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el186",
+      "name": "jus d'orange",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el187",
+      "name": "jus de pamplemousse",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.18,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el188",
+      "name": "sirop canneberge romarin",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el189",
+      "name": "sirop miel",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el190",
+      "name": "sirop de curacao",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el191",
+      "name": "sirop hibiscus",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el192",
+      "name": "sirop d'érable",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el193",
+      "name": "purée de peche",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.65,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el194",
+      "name": "sirop basilic",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.07,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el195",
+      "name": "slush",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.02,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el196",
+      "name": "mango loco",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.14,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el197",
+      "name": "tomato water",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.35,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el198",
+      "name": "mozza brine",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.87,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el199",
+      "name": "cantina rouge",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.64,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el200",
+      "name": "Esteban Martin windsor",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.598,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el201",
+      "name": "Cantina blanc",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.64,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el202",
+      "name": "El ilusionista Joel Delaunay",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.878,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el203",
+      "name": "Blanc de lys",
+      "size": 1,
+      "unit": "oz",
+      "cost": 0.678,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el204",
+      "name": "Blanc d'oeuf",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0,
+      "notes": "",
+      "priceDate": null
+    },
+    {
+      "id": "el205",
+      "name": "Jalapenos",
+      "size": 1,
+      "unit": "portion",
+      "cost": 0,
+      "notes": "",
+      "priceDate": null
+    },
+    {
+      "id": "el206",
+      "name": "1201",
+      "size": 1,
+      "unit": "canette",
+      "cost": 6.7917,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el207",
+      "name": "salt and pulpa",
+      "size": 1,
+      "unit": "canette",
+      "cost": 6.2917,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    },
+    {
+      "id": "el208",
+      "name": "Amourette",
+      "size": 1,
+      "unit": "canette",
+      "cost": 9.2,
+      "notes": "",
+      "priceDate": "2025-03-07"
+    }
+  ],
+  "recipes": [
+    {
+      "id": "rc001",
+      "name": "le Grilled cheese",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 16.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el026",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el010",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el067",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc002",
+      "name": "Le mélange de salade",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 17.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el049",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el068",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el069",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el121",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc003",
+      "name": "Le panini au porc",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 18.0,
+      "lines": [
+        {
+          "elementId": "el042",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el046",
+          "amount": 1.3333
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el026",
+          "amount": 1.3333
+        },
+        {
+          "elementId": "el010",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc004",
+      "name": "Pizza de base",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el052",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el038",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc005",
+      "name": "Pizza avec Peperroni",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 16.5,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el052",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el082",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc006",
+      "name": "Pizza avec Bacon",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 16.5,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el052",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el083",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc007",
+      "name": "Pizza avec Peperroni + Bacon",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 20.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el052",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el083",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el082",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc008",
+      "name": "Pizza Bacon+peperroni+porc",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 24.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el052",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el083",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el082",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el046",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el038",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc009",
+      "name": "Le chili végé",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 16.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el007",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc010",
+      "name": "La trempette epinard",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 19.0,
+      "lines": [
+        {
+          "elementId": "el043",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el009",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el062",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc011",
+      "name": "Edamames",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 10.5,
+      "lines": [
+        {
+          "elementId": "el023",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el056",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el032",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc012",
+      "name": "Pogos végane",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 12.5,
+      "lines": [
+        {
+          "elementId": "el045",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el032",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc013",
+      "name": "Le Nachos regulier (tavernier)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc014",
+      "name": "Double Tavernier",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 25.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        }
+      ]
+    },
+    {
+      "id": "rc015",
+      "name": "Le nachos porc (aventurier)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 18.5,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el026",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el046",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc016",
+      "name": "Double Aventurier",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 30.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.99
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el046",
+          "amount": 2.001
+        }
+      ]
+    },
+    {
+      "id": "rc017",
+      "name": "Le Nachos végé (druide)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 18.5,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el038",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc018",
+      "name": "Double Druide",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 30.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.994
+        },
+        {
+          "elementId": "el044",
+          "amount": 2.006
+        },
+        {
+          "elementId": "el038",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc019",
+      "name": "Le Nachos chili (magicienne)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 18.5,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el007",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc020",
+      "name": "Double Magicienne",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 30.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el007",
+          "amount": 1.873
+        }
+      ]
+    },
+    {
+      "id": "rc021",
+      "name": "Le Nachos supreme (impératrice)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 22.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el044",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el038",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el046",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el051",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el024",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc022",
+      "name": "Double Impératrice",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 40.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el066",
+          "amount": 1.994
+        },
+        {
+          "elementId": "el038",
+          "amount": 4.0
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el046",
+          "amount": 2.001
+        },
+        {
+          "elementId": "el051",
+          "amount": 0.504
+        },
+        {
+          "elementId": "el024",
+          "amount": 2.026
+        }
+      ]
+    },
+    {
+      "id": "rc023",
+      "name": "Le Nachos pop corn (barbare)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 21.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el026",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el067",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el047",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc024",
+      "name": "Double Barbare",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 36.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el067",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el047",
+          "amount": 1.001
+        },
+        {
+          "elementId": "el041",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc025",
+      "name": "Le Nachos Chasseur (Pep/Bac)",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 20.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el055",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el082",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el083",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc026",
+      "name": "Double Chasseur",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 35.0,
+      "lines": [
+        {
+          "elementId": "el009",
+          "amount": 1.492
+        },
+        {
+          "elementId": "el025",
+          "amount": 1.987
+        },
+        {
+          "elementId": "el021",
+          "amount": 1.002
+        },
+        {
+          "elementId": "el055",
+          "amount": 2.011
+        },
+        {
+          "elementId": "el082",
+          "amount": 8.004
+        },
+        {
+          "elementId": "el083",
+          "amount": 7.895
+        }
+      ]
+    },
+    {
+      "id": "rc027",
+      "name": "Croqu'iel",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 16.0,
+      "lines": [
+        {
+          "elementId": "el042",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el083",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el082",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el010",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc028",
+      "name": "Repas Mac & Cheese",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el031",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el083",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc029",
+      "name": "Repas Burger",
+      "categoryId": "cat_cuisine",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el095",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el025",
+          "amount": 0.2
+        },
+        {
+          "elementId": "el096",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el097",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el122",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el038",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc030",
+      "name": "lime gose sans alcool (burdock)",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 8.5,
+      "lines": [
+        {
+          "elementId": "el123",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc031",
+      "name": "Gose sans alcool",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 9.5,
+      "lines": [
+        {
+          "elementId": "el124",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc032",
+      "name": "blonde sans alcool boréal",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 12.0,
+      "lines": [
+        {
+          "elementId": "el125",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc033",
+      "name": "radler sans alcool",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 12.0,
+      "lines": [
+        {
+          "elementId": "el126",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc034",
+      "name": "Sure bleuet hibicus sans alcool",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el127",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc035",
+      "name": "Kombucha Ékorce",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 7.0,
+      "lines": [
+        {
+          "elementId": "el128",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc036",
+      "name": "Neipa Helix",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el129",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc037",
+      "name": "Saison houblonnée",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el130",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc038",
+      "name": "Miami rice",
+      "categoryId": "cat_canettes",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el131",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc039",
+      "name": "Esteban Martin windsor (verre 5oz)",
+      "categoryId": "cat_vins",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el200",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rc040",
+      "name": "Cantina blanc (verre 5oz)",
+      "categoryId": "cat_vins",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el201",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rc041",
+      "name": "cantina rouge (verre 5oz)",
+      "categoryId": "cat_vins",
+      "ratio": null,
+      "priceOverride": 11.0,
+      "lines": [
+        {
+          "elementId": "el199",
+          "amount": 5
+        }
+      ]
+    },
+    {
+      "id": "rc042",
+      "name": "Hoch'mojito",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el166",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el030",
+          "amount": 3.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el063",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc043",
+      "name": "Old Fashionned",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el139",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el001",
+          "amount": 3.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el003",
+          "amount": 3.0
+        },
+        {
+          "elementId": "el040",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el006",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc044",
+      "name": "flamand",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el154",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el168",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el006",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el018",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el065",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc045",
+      "name": "Bloody cesar",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el154",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el024",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el064",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el060",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el057",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el016",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el039",
+          "amount": 3.0
+        }
+      ]
+    },
+    {
+      "id": "rc046",
+      "name": "Avril sour",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el135",
+          "amount": 2.25
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el204",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el040",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el006",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc047",
+      "name": "soda des iles",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el172",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el134",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el167",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.25
+        },
+        {
+          "elementId": "el016",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el030",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc048",
+      "name": "scoobydoo (drinks)",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el159",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el161",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el064",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el040",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el006",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc049",
+      "name": "Spritz",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el137",
+          "amount": 3.0
+        },
+        {
+          "elementId": "el134",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el133",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el040",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc050",
+      "name": "Sangria rouge verre",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 14.0,
+      "lines": [
+        {
+          "elementId": "el157",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el172",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el161",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el016",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el030",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el040",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc051",
+      "name": "sangria blanche verre",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 14.0,
+      "lines": [
+        {
+          "elementId": "el156",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el172",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el141",
+          "amount": 0.25
+        },
+        {
+          "elementId": "el016",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el030",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el040",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc052",
+      "name": "sangria bulle verre",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 14.0,
+      "lines": [
+        {
+          "elementId": "el137",
+          "amount": 4.0
+        },
+        {
+          "elementId": "el141",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el172",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el028",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc053",
+      "name": "Martini classique",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el172",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el169",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc054",
+      "name": "Daiquiri classique",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 13.0,
+      "lines": [
+        {
+          "elementId": "el140",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el028",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc055",
+      "name": "Daiquiri framboise",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el140",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el028",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el058",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el167",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc056",
+      "name": "Daiquiri Ananapérol",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el140",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el028",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el134",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el064",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc057",
+      "name": "Kir Framboise",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el136",
+          "amount": 5.0
+        },
+        {
+          "elementId": "el168",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc058",
+      "name": "Poivrons et dragon",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el154",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el030",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el064",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el089",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el205",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc059",
+      "name": "Bramble",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el172",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el168",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el064",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el030",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc060",
+      "name": "Lavande 75",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el172",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el090",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el136",
+          "amount": 3.0
+        }
+      ]
+    },
+    {
+      "id": "rc061",
+      "name": "Mexican Hot Chocolate",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el171",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el014",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el176",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el078",
+          "amount": 5.0
+        },
+        {
+          "elementId": "el136",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc062",
+      "name": "Gin Sour Romarin Canneberge",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el147",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el188",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el160",
+          "amount": 3.0
+        }
+      ]
+    },
+    {
+      "id": "rc063",
+      "name": "Spiced Rum Milk Punch",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el166",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el176",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el058",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el078",
+          "amount": 3.0
+        }
+      ]
+    },
+    {
+      "id": "rc064",
+      "name": "Hugo Spritz",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el170",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el063",
+          "amount": 0.03
+        },
+        {
+          "elementId": "el137",
+          "amount": 4.0
+        },
+        {
+          "elementId": "el177",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el016",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc065",
+      "name": "Gin Basilic",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el147",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el104",
+          "amount": 0.03
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc066",
+      "name": "Gin Basilic Framboise",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el147",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el104",
+          "amount": 0.03
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el142",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc067",
+      "name": "Gin Basilic new york",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el147",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el104",
+          "amount": 0.03
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el058",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el199",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc068",
+      "name": "Paloma L'érable",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el171",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el187",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el192",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el028",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el177",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc069",
+      "name": "croustade au peche",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el139",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el193",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el192",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el160",
+          "amount": 4.0
+        }
+      ]
+    },
+    {
+      "id": "rc070",
+      "name": "Hibiscus frozen marg",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el171",
+          "amount": 0.75
+        },
+        {
+          "elementId": "el172",
+          "amount": 0.25
+        },
+        {
+          "elementId": "el028",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el191",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el195",
+          "amount": 2.0
+        }
+      ]
+    },
+    {
+      "id": "rc071",
+      "name": "mango loco marg",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el171",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el172",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el028",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el196",
+          "amount": 4.0
+        }
+      ]
+    },
+    {
+      "id": "rc072",
+      "name": "salade caprese",
+      "categoryId": "cat_cocktails",
+      "ratio": null,
+      "priceOverride": 15.0,
+      "lines": [
+        {
+          "elementId": "el171",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el197",
+          "amount": 2.5
+        },
+        {
+          "elementId": "el198",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el194",
+          "amount": 0.5
+        }
+      ]
+    },
+    {
+      "id": "rc073",
+      "name": "Amaretto Sour N/A",
+      "categoryId": "cat_mocktails",
+      "ratio": null,
+      "priceOverride": 9.0,
+      "lines": [
+        {
+          "elementId": "el162",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el058",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el160",
+          "amount": 3.0
+        }
+      ]
+    },
+    {
+      "id": "rc074",
+      "name": "Soda Rougemarin",
+      "categoryId": "cat_mocktails",
+      "ratio": null,
+      "priceOverride": 9.0,
+      "lines": [
+        {
+          "elementId": "el018",
+          "amount": 2.0
+        },
+        {
+          "elementId": "el188",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el027",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el177",
+          "amount": 0.0
+        }
+      ]
+    },
+    {
+      "id": "rc075",
+      "name": "Miel Hibiscus Sour",
+      "categoryId": "cat_mocktails",
+      "ratio": null,
+      "priceOverride": 9.0,
+      "lines": [
+        {
+          "elementId": "el189",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el191",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el027",
+          "amount": 1.5
+        },
+        {
+          "elementId": "el177",
+          "amount": 1.0
+        }
+      ]
+    },
+    {
+      "id": "rc076",
+      "name": "Virgin blue lagoon",
+      "categoryId": "cat_mocktails",
+      "ratio": null,
+      "priceOverride": 9.0,
+      "lines": [
+        {
+          "elementId": "el030",
+          "amount": 3.0
+        },
+        {
+          "elementId": "el063",
+          "amount": 1.0
+        },
+        {
+          "elementId": "el190",
+          "amount": 0.5
+        },
+        {
+          "elementId": "el179",
+          "amount": 0.0
+        }
+      ]
+    },
+    {
+      "id": "rc077",
+      "name": "1201",
+      "categoryId": "cat_bieres",
+      "ratio": null,
+      "priceOverride": 16.98,
+      "lines": [
+        {
+          "elementId": "el206",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc078",
+      "name": "salt and pulpa",
+      "categoryId": "cat_bieres",
+      "ratio": null,
+      "priceOverride": 15.73,
+      "lines": [
+        {
+          "elementId": "el207",
+          "amount": 1
+        }
+      ]
+    },
+    {
+      "id": "rc079",
+      "name": "Amourette",
+      "categoryId": "cat_bieres",
+      "ratio": null,
+      "priceOverride": 23.0,
+      "lines": [
+        {
+          "elementId": "el208",
+          "amount": 1
+        }
+      ]
+    }
+  ]
+}

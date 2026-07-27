@@ -772,7 +772,7 @@
     }catch(e){ toast("Export failed: "+e.message, true); }
   }
   var fileInput = document.getElementById("file-input");
-  function doImport(){ if(driveEnabled()){ driveFetch({}); return; } fileInput.value=""; fileInput.click(); }
+  function doImport(){ if(state.settings.driveSync){ syncShared({manual:true}); return; } fileInput.value=""; fileInput.click(); }
   fileInput.addEventListener("change", function(){
     var f = fileInput.files[0]; if(!f) return;
     var rd = new FileReader();
@@ -793,6 +793,22 @@
         if(o.okMsg!==false) toast("Loaded from Adversaire drive");
       })
       .catch(function(err){ if(o.errMsg!==false) toast("Drive fetch failed: "+((err&&err.message)||err), true); throw err; });
+  }
+  // Same-origin snapshot (committed to the GitHub Pages repo, refreshed from Drive by a scheduled job).
+  // Works even on networks that block Google, because it's served from the same site as the app.
+  function snapshotFetch(){
+    return fetch("data.json?ts="+Date.now(), {cache:"no-store"}).then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.json(); }).then(function(obj){ applyImported(obj); });
+  }
+  // Load shared data: try the live Adversaire drive first, then fall back to the same-origin snapshot.
+  function syncShared(opts){
+    opts = opts || {};
+    return driveFetch({okMsg:false, errMsg:false})
+      .then(function(){ toast("Loaded from Adversaire drive"); return "drive"; })
+      .catch(function(){
+        return snapshotFetch()
+          .then(function(){ toast(opts.manual ? "Loaded shared snapshot (live drive not reachable here)" : "Loaded shared data"); return "snapshot"; })
+          .catch(function(err){ if(opts.manual) toast("Couldn’t reach the shared data — showing local.", true); throw err; });
+      });
   }
   function drivePush(){
     var url = driveUrl();
@@ -937,8 +953,8 @@
   }
 
   render();
-  // On open: if Drive sync is on and configured, pull the shared data once; show a note if it can't reach the drive.
-  if(driveEnabled()){ driveFetch({errMsg:false}).catch(function(){ toast("Couldn’t reach the shared drive — showing local data. Tap Import to retry.", true); }); }
+  // On open: pull shared data — live Adversaire drive if reachable, otherwise the same-origin snapshot (so it works even where Google is blocked).
+  if(state.settings.driveSync){ syncShared({}).catch(function(){}); }
 })();
 </script>
 
