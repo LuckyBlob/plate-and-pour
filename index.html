@@ -131,6 +131,14 @@
   .grouphead .gmarkup{margin-left:auto;color:var(--ink-2);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
   .groupbody[hidden]{display:none}
   .group thead th{background:var(--surface)}
+  .sortable{cursor:pointer;user-select:none}
+  .sortable:hover{color:var(--ink)}
+  .sortarrow{color:var(--accent);font-size:10px;margin-left:2px}
+  .mark-ok{color:var(--good);line-height:0}
+  .mark-no{color:var(--bad);line-height:0}
+  .cell-margin{white-space:nowrap}
+  .elnotes{margin-top:4px;font-size:12px;color:var(--ink-2);padding:3px 8px;border-style:dashed}
+  .eldate{text-align:right;white-space:nowrap}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
   .muted{color:var(--ink-3)}
@@ -239,8 +247,9 @@
   "use strict";
   var LS_KEY = "plateandpour.v1";
 
-  var state = load() || seed();
-  var ui = { tab:"recipes", collapsed:{} };
+  var state = load() || migrate(seed());
+  var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1} };
+  function today(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ""; } }
 
   function uid(p){ return (p||"id") + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
   function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ toast("Could not save locally: "+e.message, true); } }
@@ -258,16 +267,21 @@
     if(!s.settings.rounding) s.settings.rounding = defaultRounding();
     if(s.settings.currency==null) s.settings.currency = "$";
     if(s.settings.defaultRatio==null) s.settings.defaultRatio = 3;
+    if(s.settings.defaultMargin==null) s.settings.defaultMargin = 65;
+    if(s.settings.driveSync==null) s.settings.driveSync = true;
+    if(s.settings.driveUrl==null) s.settings.driveUrl = "";
     if(!Array.isArray(s.categories)) s.categories = [];
-    s.categories.forEach(function(c){ delete c.rounding; });
+    s.categories.forEach(function(c){ delete c.rounding; if(c.desiredMargin==null) c.desiredMargin = 65; });
     if(!Array.isArray(s.elements)) s.elements = Array.isArray(s.ingredients) ? s.ingredients : [];
     delete s.ingredients;
+    s.elements.forEach(function(e){ if(e.notes==null) e.notes = ""; if(e.priceDate===undefined) e.priceDate = null; });
     if(!Array.isArray(s.recipes)) s.recipes = [];
     s.recipes.forEach(function(r){
       if(!Array.isArray(r.lines)) r.lines = [];
       r.lines.forEach(function(l){ if(l.elementId==null && l.ingredientId!=null) l.elementId=l.ingredientId; delete l.ingredientId; });
       if(r.priceOverride===undefined) r.priceOverride = null;
       if(r.ratio===undefined) r.ratio = null;
+      if(r.desiredMargin===undefined) r.desiredMargin = null;
     });
     return s;
   }
@@ -346,7 +360,15 @@
       markup = inherited; markupMode = "inherited";
       price = roundPrice(cost*markup, state.settings.rounding); priceMode = "computed";
     }
-    return { cost:cost, inherited:inherited, markup:markup, markupMode:markupMode, price:price, priceMode:priceMode };
+    var c = cat(r.categoryId);
+    var inhMargin = (c && c.desiredMargin!=null) ? num(c.desiredMargin) : num(state.settings.defaultMargin);
+    var desired, desiredMode;
+    if(r.desiredMargin!=null && r.desiredMargin!==""){ desired = num(r.desiredMargin); desiredMode = "override"; }
+    else { desired = inhMargin; desiredMode = "inherited"; }
+    var marginPct = (price>0) ? gp(price,cost)*100 : 0;
+    var meets = (cost>0 && price>0) ? (marginPct >= desired - 1e-9) : null;
+    return { cost:cost, inherited:inherited, markup:markup, markupMode:markupMode, price:price, priceMode:priceMode,
+             inhMargin:inhMargin, desired:desired, desiredMode:desiredMode, marginPct:marginPct, meets:meets };
   }
 
   function usageCountElem(id){ var n=0; state.recipes.forEach(function(r){ r.lines.forEach(function(l){ if(l.elementId===id) n++; }); }); return n; }
@@ -381,6 +403,9 @@
   var ic_x='<svg width="13" height="13" viewBox="0 0 24 24" fill="none"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>';
   var ic_reset='<svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M4 4v6h6" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/><path d="M4.5 10.5A8 8 0 114 15" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
   var ic_chev='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ic_check='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px"><path d="M5 12l4 4L19 7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var ic_cross='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" style="vertical-align:-3px"><path d="M7 7l10 10M17 7L7 17" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg>';
+  var ic_sell='<svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M4 4h7l9 9-7 7-9-9V4z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><circle cx="8.5" cy="8.5" r="1.3" fill="currentColor"/></svg>';
   function iconBtn(action,id,label,svg,danger){ return '<button class="iconbtn'+(danger?" danger":"")+'" data-act="'+action+'" data-id="'+id+'" title="'+label+'" aria-label="'+label+'">'+svg+'</button>'; }
   function stat(k,v){ return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v tnum">'+v+'</div></div>'; }
   function emptyCard(title,body,actId,actLabel){ return '<div class="card"><div class="empty"><h3>'+esc(title)+'</h3><p>'+esc(body)+'</p><button class="btn primary" id="'+actId+'">'+esc(actLabel)+'</button></div></div>'; }
@@ -411,6 +436,20 @@
       + '<button class="ovreset" data-act="reset-price" data-id="'+r.id+'" title="Reset to calculated price" aria-label="Reset price"'+(m.priceMode==="override"?"":" hidden")+'>'+ic_reset+'</button>'
       + '</div>';
   }
+  function desiredCell(r,m){
+    var val = m.desiredMode==="override" ? String(round2(m.desired)) : "";
+    var cls = m.desiredMode==="override" ? " ov-red" : "";
+    return '<div class="ovcell">'
+      + '<input class="ovinput'+cls+'" data-rdesired="'+r.id+'" type="number" step="any" min="0" max="100" inputmode="decimal" value="'+val+'" placeholder="'+round2(m.inhMargin)+'" aria-label="Desired margin percent">'
+      + '<span class="suf">%</span>'
+      + '<button class="ovreset" data-act="reset-desired" data-id="'+r.id+'" title="Reset to category" aria-label="Reset desired margin"'+(m.desiredMode==="override"?"":" hidden")+'>'+ic_reset+'</button>'
+      + '</div>';
+  }
+  function marginInner(m){
+    if(!(m.cost>0 && m.price>0)) return '<span class="muted">—</span>';
+    var ic = m.meets ? '<span class="mark-ok" title="Meets desired margin">'+ic_check+'</span>' : '<span class="mark-no" title="Below desired margin">'+ic_cross+'</span>';
+    return '<span class="tnum">'+pct(gp(m.price,m.cost))+'</span> '+ic;
+  }
   function recipeRow(r){
     var m = computeRecipe(r);
     return '<tr data-rid="'+r.id+'">'
@@ -418,13 +457,33 @@
       + '<td class="num cost cell-cost">'+money(m.cost)+'</td>'
       + '<td class="num">'+markupCell(r,m)+'</td>'
       + '<td class="num">'+priceCell(r,m)+'</td>'
-      + '<td class="num cell-margin muted">'+(m.cost>0?pct(gp(m.price,m.cost)):"—")+'</td>'
+      + '<td class="num cell-margin">'+marginInner(m)+'</td>'
+      + '<td class="num">'+desiredCell(r,m)+'</td>'
       + '<td><div class="rowactions">'+iconBtn("edit-recipe",r.id,"Edit",ic_edit)+iconBtn("dup-recipe",r.id,"Duplicate",ic_dup)+iconBtn("del-recipe",r.id,"Delete",ic_trash,true)+'</div></td>'
       + '</tr>';
   }
+  function sortTh(label,col,numeric){
+    var active = ui.sort.col===col;
+    var arrow = active ? '<span class="sortarrow">'+(ui.sort.dir>0?"▲":"▼")+'</span>' : '';
+    return '<th class="'+(numeric?"num ":"")+'sortable" data-sortcol="'+col+'">'+esc(label)+arrow+'</th>';
+  }
+  function sortRecipes(rs){
+    var col=ui.sort.col, dir=ui.sort.dir;
+    return rs.slice().sort(function(a,b){
+      if(col==="name"){ var an=(a.name||"").toLowerCase(), bn=(b.name||"").toLowerCase(); return an<bn?-dir:an>bn?dir:0; }
+      var ma=computeRecipe(a), mb=computeRecipe(b), av, bv;
+      if(col==="cost"){ av=ma.cost; bv=mb.cost; }
+      else if(col==="markup"){ av=ma.markup; bv=mb.markup; }
+      else if(col==="price"){ av=ma.price; bv=mb.price; }
+      else if(col==="margin"){ av=ma.cost>0?ma.marginPct:-1; bv=mb.cost>0?mb.marginPct:-1; }
+      else if(col==="desired"){ av=ma.desired; bv=mb.desired; }
+      else { av=0; bv=0; }
+      return (av-bv)*dir;
+    });
+  }
   function groupBlock(cid, name, markup, rs){
     var collapsed = !!ui.collapsed[cid];
-    var rows = rs.map(recipeRow).join("");
+    var rows = sortRecipes(rs).map(recipeRow).join("");
     return '<div class="group">'
       + '<button class="grouphead" data-act="toggle-group" data-id="'+esc(cid)+'" aria-expanded="'+(collapsed?"false":"true")+'">'
         + '<span class="chev">'+ic_chev+'</span><h3>'+esc(name)+'</h3>'
@@ -433,7 +492,8 @@
       + '</button>'
       + '<div class="groupbody"'+(collapsed?" hidden":"")+'>'
         + '<div class="table-wrap"><table><thead><tr>'
-          + '<th>Recipe</th><th class="num">Cost</th><th class="num">Markup</th><th class="num">Price</th><th class="num">Margin</th><th></th>'
+          + sortTh("Recipe","name",false)+sortTh("Cost","cost",true)+sortTh("Markup","markup",true)
+          + sortTh("Price","price",true)+sortTh("Margin","margin",true)+sortTh("Desired","desired",true)+'<th></th>'
           + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
       + '</div></div>';
   }
@@ -454,9 +514,10 @@
     var uncat = state.recipes.filter(function(r){ return !cat(r.categoryId); });
     if(uncat.length) groups += groupBlock("__uncat__","Uncategorized", num(state.settings.defaultRatio), uncat);
     html += groups;
-    html += '<p class="hint" style="margin-top:6px">Type in a <strong>Markup</strong> or <strong>Price</strong> box to override it. '
-      + '<span style="color:var(--bad);font-weight:600">Red</span> = a manual override (click ↺ to reset). '
-      + 'A <span style="color:var(--info);font-weight:600">blue</span> markup is back-calculated from a price you set.</p>';
+    html += '<p class="hint" style="margin-top:6px">Type in a <strong>Markup</strong>, <strong>Price</strong> or <strong>Desired</strong> box to override it. '
+      + '<span style="color:var(--bad);font-weight:600">Red</span> = a manual override (click ↺ to reset); '
+      + 'a <span style="color:var(--info);font-weight:600">blue</span> markup is back-calculated from a price you set. '
+      + 'The Margin column shows a <span style="color:var(--good);font-weight:600">✓</span> at or above the desired margin, <span style="color:var(--bad);font-weight:600">✗</span> below. Click any column header to sort.</p>';
     view.innerHTML = html;
   }
 
@@ -469,19 +530,21 @@
       view.innerHTML = html; return;
     }
     html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th style="min-width:180px">Name</th><th class="num">Pack size</th><th>Unit</th><th class="num">Pack cost</th><th class="num">Unit cost</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
+      + '<th style="min-width:200px">Name</th><th class="num">Pack size</th><th>Unit</th><th class="num">Pack cost</th><th class="num">Unit cost</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
     state.elements.forEach(function(e){
       html += '<tr data-id="'+e.id+'">'
-        + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name"></td>'
+        + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name">'
+          + '<input class="inline-input elnotes" data-f="notes" value="'+esc(e.notes||"")+'" placeholder="notes…"></td>'
         + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:100px;text-align:right"></td>'
         + '<td><select class="inline-input" data-f="unit" style="max-width:110px">'+unitOptions(e.unit)+'</select></td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:110px;text-align:right"></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:110px;text-align:right">'
+          + '<div class="rowsub eldate">'+(e.priceDate? "as of "+esc(e.priceDate):"")+'</div></td>'
         + '<td class="num money muted">'+money(unitCost(e))+'<span class="muted" style="font-size:11px">/'+esc(e.unit||"unit")+'</span></td>'
         + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
-        + '<td><div class="rowactions">'+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
+        + '<td><div class="rowactions">'+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
     });
     html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px">Edit any field directly — changes save automatically and reprice every recipe that uses the element. Manage the unit list in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px">Edit any field directly — it saves automatically and reprices every recipe using the element. Changing a <strong>Pack cost</strong> stamps today’s date under it. Use the tag icon to sell an element on its own (creates a one-line recipe). Manage the unit list in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -494,16 +557,17 @@
       view.innerHTML = html; return;
     }
     html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th style="min-width:200px">Category</th><th class="num">Default markup</th><th class="num">Recipes</th><th></th></tr></thead><tbody>';
+      + '<th style="min-width:200px">Category</th><th class="num">Default markup</th><th class="num">Desired margin</th><th class="num">Recipes</th><th></th></tr></thead><tbody>';
     state.categories.forEach(function(c){
       html += '<tr data-cid="'+c.id+'">'
         + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:90px;text-align:right"></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:80px;text-align:right"></td>'
+        + '<td class="num"><div class="ovcell" style="justify-content:flex-end"><input class="inline-input tnum" data-f="desiredMargin" type="number" step="any" min="0" max="100" value="'+esc(c.desiredMargin)+'" style="max-width:66px;text-align:right"><span class="suf">%</span></div></td>'
         + '<td class="num tnum muted">'+usageCountCat(c.id)+'</td>'
         + '<td><div class="rowactions">'+iconBtn("del-cat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
     });
     html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px">The global default markup (used by recipes with no category) is set in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px">Desired margin (0–100%) is the gross-margin target a recipe should hit; recipes show a ✓/✗ against it and can override it. The global defaults for recipes with no category are set in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -515,7 +579,14 @@
         + '<label class="field">Currency symbol<input id="set-cur" value="'+esc(s.currency)+'" maxlength="3"></label>'
         + '<label class="field">Default markup (no category)<input id="set-ratio" type="number" step="any" min="0" value="'+esc(s.defaultRatio)+'"></label>'
       + '</div>'
+      + '<label class="field" style="margin-top:14px;max-width:320px">Default desired margin % (no category)<input id="set-margin" type="number" step="any" min="0" max="100" value="'+esc(s.defaultMargin)+'"></label>'
       + '<div style="margin-top:18px"><div class="field" style="margin-bottom:8px">Rounding rule (applies to all prices)</div>'+roundingFields("g", s.rounding)+'</div>'
+      + '<div style="margin-top:18px"><div class="field" style="margin-bottom:8px">Sync with Adversaire drive</div>'
+        + '<label class="switch"><input type="checkbox" id="set-drive"'+(s.driveSync?" checked":"")+'> Fetch and push from Adversaire drive directly</label>'
+        + '<div class="hint" style="margin:6px 0 10px">On: Import/Export read &amp; write the shared Drive file, and the tool loads the shared data once each time it opens. Off: use local files (the original behaviour).</div>'
+        + '<input id="set-driveurl" value="'+esc(s.driveUrl||"")+'" placeholder="Apps Script web-app URL — https://script.google.com/macros/s/…/exec">'
+        + (s.driveSync && !s.driveUrl ? '<div class="hint" style="color:var(--warn);margin-top:6px">Drive sync is on but no URL is set yet — Import/Export won’t work until you paste the web-app URL above.</div>' : '')
+      + '</div>'
       + '<div style="margin-top:18px;display:flex;justify-content:flex-end"><button class="btn primary" id="save-settings">Save settings</button></div>'
       + '</div>';
 
@@ -668,7 +739,12 @@
   }
 
   /* ---------------- Import / Export ---------------- */
+  function driveEnabled(){ return !!(state.settings.driveSync && state.settings.driveUrl); }
+  function isDataset(obj){ return obj && obj.settings && (Array.isArray(obj.elements)||Array.isArray(obj.ingredients)) && Array.isArray(obj.recipes) && Array.isArray(obj.categories); }
+  function applyImported(obj){ if(!isDataset(obj)) throw new Error("Not a valid Plate & Pour dataset."); state = migrate(obj); save(); render(); }
+
   function doExport(){
+    if(driveEnabled()){ drivePush(); return; }
     var data = JSON.stringify(state, null, 2), name = "plate-and-pour-backup.json";
     if(window.claude && window.claude.downloads){
       window.claude.downloads.save({ filename:name, data:data }).then(function(){ toast("Backup saved"); })
@@ -684,20 +760,37 @@
     }catch(e){ toast("Export failed: "+e.message, true); }
   }
   var fileInput = document.getElementById("file-input");
-  function doImport(){ fileInput.value=""; fileInput.click(); }
+  function doImport(){ if(driveEnabled()){ driveFetch({}); return; } fileInput.value=""; fileInput.click(); }
   fileInput.addEventListener("change", function(){
     var f = fileInput.files[0]; if(!f) return;
     var rd = new FileReader();
-    rd.onload = function(){
-      try{
-        var obj = JSON.parse(rd.result);
-        var ok = obj && obj.settings && (Array.isArray(obj.elements)||Array.isArray(obj.ingredients)) && Array.isArray(obj.recipes) && Array.isArray(obj.categories);
-        if(!ok) throw new Error("This file isn’t a Plate & Pour backup.");
-        state = migrate(obj); save(); render(); toast("Data imported");
-      }catch(e){ toast("Import failed: "+e.message, true); }
-    };
+    rd.onload = function(){ try{ applyImported(JSON.parse(rd.result)); toast("Data imported"); }catch(e){ toast("Import failed: "+e.message, true); } };
     rd.readAsText(f);
   });
+
+  /* ---- Adversaire drive sync (via an Apps Script web app URL) ---- */
+  function driveFetch(o){
+    o = o || {};
+    var url = state.settings.driveUrl;
+    if(!url){ if(o.errMsg!==false) toast("Set the Drive URL in Settings first.", true); return Promise.reject(new Error("no url")); }
+    return fetch(url, {method:"GET"}).then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.text(); })
+      .then(function(txt){
+        var obj = JSON.parse(txt);
+        if(obj && obj.data && isDataset(obj.data)) obj = obj.data;   // tolerate a {ok,data} wrapper
+        applyImported(obj);
+        if(o.okMsg!==false) toast("Loaded from Adversaire drive");
+      })
+      .catch(function(err){ if(o.errMsg!==false) toast("Drive fetch failed: "+((err&&err.message)||err), true); throw err; });
+  }
+  function drivePush(){
+    var url = state.settings.driveUrl;
+    if(!url){ toast("Set the Drive URL in Settings first.", true); return; }
+    toast("Saving to Adversaire drive…");
+    fetch(url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(state)})
+      .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.text(); })
+      .then(function(){ toast("Saved to Adversaire drive"); })
+      .catch(function(err){ toast("Drive push failed: "+((err&&err.message)||err), true); });
+  }
 
   /* ---------------- Events ---------------- */
   document.getElementById("tabs").addEventListener("click", function(e){ var b = e.target.closest("button[data-tab]"); if(!b) return; ui.tab=b.dataset.tab; render(); });
@@ -706,6 +799,8 @@
   function rowOf(rid){ return view.querySelector('tr[data-rid="'+rid+'"]'); }
 
   view.addEventListener("click", function(e){
+    var sc = e.target.closest("[data-sortcol]");
+    if(sc){ var col=sc.dataset.sortcol; if(ui.sort.col===col){ ui.sort.dir*=-1; } else { ui.sort={col:col,dir:1}; } render(); return; }
     var act = e.target.closest("[data-act]");
     if(act){
       var id = act.dataset.id, a = act.dataset.act, r;
@@ -715,6 +810,8 @@
       else if(a==="del-recipe"){ r=findRecipe(id); confirmDelete("Delete recipe","Delete “"+(r?r.name:"")+"”? This can’t be undone.", function(){ state.recipes=state.recipes.filter(function(x){return x.id!==id;}); save(); render(); toast("Recipe deleted"); }); }
       else if(a==="reset-markup"){ r=findRecipe(id); if(r){ r.ratio=null; save(); repriceRow(rowOf(id)); } }
       else if(a==="reset-price"){ r=findRecipe(id); if(r){ r.priceOverride=null; save(); repriceRow(rowOf(id)); } }
+      else if(a==="reset-desired"){ r=findRecipe(id); if(r){ r.desiredMargin=null; save(); repriceRow(rowOf(id)); } }
+      else if(a==="sell-elem"){ sellElement(id); }
       else if(a==="del-cat"){ var ucn=usageCountCat(id), cc=cat(id); confirmDelete("Delete category", ucn? ("“"+cc.name+"” is used by "+ucn+" recipe"+(ucn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+cc.name+"”?"), function(){ state.recipes.forEach(function(x){ if(x.categoryId===id) x.categoryId=null; }); state.categories=state.categories.filter(function(x){return x.id!==id;}); save(); render(); toast("Category deleted"); }); }
       else if(a==="del-elem"){ var un=usageCountElem(id), ee=elem(id); confirmDelete("Delete element", un? ("“"+ee.name+"” is used in "+un+" recipe"+(un===1?"":"s")+". It’ll be removed from them. Delete it?") : ("Delete “"+ee.name+"”?"), function(){ state.recipes.forEach(function(x){ x.lines=x.lines.filter(function(l){return l.elementId!==id;}); }); state.elements=state.elements.filter(function(x){return x.id!==id;}); save(); render(); toast("Element deleted"); }); }
       else if(a==="del-unit"){ state.settings.units.splice(+id,1); save(); render(); }
@@ -730,24 +827,35 @@
     else if(bid==="save-settings") saveSettings();
     else if(bid==="set-export") doExport();
     else if(bid==="set-import") doImport();
-    else if(bid==="set-sample"){ confirmDelete("Reload sample data","Replace everything in this browser with the built-in sample data?", function(){ state=seed(); save(); render(); toast("Sample data loaded"); }); }
-    else if(bid==="set-clear"){ confirmDelete("Clear all data","Remove all elements, recipes and categories from this browser? Export a backup first if you might want it back.", function(){ state={settings:{currency:state.settings.currency,defaultRatio:state.settings.defaultRatio,rounding:state.settings.rounding,units:state.settings.units},categories:[],elements:[],recipes:[]}; save(); render(); toast("All data cleared"); }); }
+    else if(bid==="set-sample"){ confirmDelete("Reload sample data","Replace everything in this browser with the built-in sample data?", function(){ state=migrate(seed()); save(); render(); toast("Sample data loaded"); }); }
+    else if(bid==="set-clear"){ confirmDelete("Clear all data","Remove all elements, recipes and categories from this browser? Export a backup first if you might want it back.", function(){ var st=state.settings; state={settings:{currency:st.currency,defaultRatio:st.defaultRatio,defaultMargin:st.defaultMargin,rounding:st.rounding,units:st.units,driveSync:st.driveSync,driveUrl:st.driveUrl},categories:[],elements:[],recipes:[]}; save(); render(); toast("All data cleared"); }); }
   });
 
-  // inline markup / price overrides (recipes) + inline element/category fields
+  // inline markup / price / desired overrides (recipes) + inline element/category fields
   function handleMarkup(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.ratio = v===""?null:num(v); r.priceOverride=null; save(); repriceRow(row,"markup"); }
   function handlePrice(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.priceOverride = v===""?null:num(v); save(); repriceRow(row,"price"); }
+  function handleDesired(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.desiredMargin = v===""?null:clamp(num(v),0,100); save(); repriceRow(row,"desired"); }
   function onFieldEdit(e){
     var inp = e.target.closest("[data-f]"); if(!inp) return;
     var f = inp.dataset.f;
     var erow = inp.closest("tr[data-id]");
-    if(erow){ var el=elem(erow.dataset.id); if(el){ el[f]=(f==="size"||f==="cost")?num(inp.value):inp.value; var uc=erow.children[4]; if(uc) uc.innerHTML=money(unitCost(el))+'<span class="muted" style="font-size:11px">/'+esc(el.unit||"unit")+'</span>'; save(); } return; }
+    if(erow){
+      var el=elem(erow.dataset.id);
+      if(el){
+        if(f==="size"||f==="cost"){ el[f]=num(inp.value); if(f==="cost"){ el.priceDate=today(); var dd=erow.querySelector(".eldate"); if(dd) dd.textContent="as of "+el.priceDate; } }
+        else el[f]=inp.value;
+        var uc=erow.children[4]; if(uc) uc.innerHTML=money(unitCost(el))+'<span class="muted" style="font-size:11px">/'+esc(el.unit||"unit")+'</span>';
+        save();
+      }
+      return;
+    }
     var crow = inp.closest("tr[data-cid]");
-    if(crow){ var c=cat(crow.dataset.cid); if(c){ c[f]=(f==="ratio")?num(inp.value):inp.value; save(); } return; }
+    if(crow){ var c=cat(crow.dataset.cid); if(c){ c[f]=(f==="ratio")?num(inp.value):(f==="desiredMargin"?clamp(num(inp.value),0,100):inp.value); save(); } return; }
   }
   view.addEventListener("input", function(e){
     var mk=e.target.closest("[data-rmarkup]"); if(mk){ handleMarkup(mk); return; }
     var pr=e.target.closest("[data-rprice]"); if(pr){ handlePrice(pr); return; }
+    var ds=e.target.closest("[data-rdesired]"); if(ds){ handleDesired(ds); return; }
     onFieldEdit(e);
   });
   view.addEventListener("change", onFieldEdit);
@@ -772,17 +880,29 @@
       pi.classList.toggle("ov-red", m.priceMode==="override");
       var pr2=row.querySelector('[data-act="reset-price"]'); if(pr2) pr2.hidden = (m.priceMode!=="override");
     }
-    var mg=row.querySelector(".cell-margin"); if(mg) mg.textContent = m.cost>0?pct(gp(m.price,m.cost)):"—";
+    var mg=row.querySelector(".cell-margin"); if(mg) mg.innerHTML = marginInner(m);
+    var di=row.querySelector("[data-rdesired]");
+    if(di){
+      if(active!=="desired") di.value = m.desiredMode==="override" ? String(round2(m.desired)) : "";
+      di.placeholder = String(round2(m.inhMargin));
+      di.classList.toggle("ov-red", m.desiredMode==="override");
+      var dr=row.querySelector('[data-act="reset-desired"]'); if(dr) dr.hidden = (m.desiredMode!=="override");
+    }
   }
 
   function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
   function addElement(){
-    var it = { id:uid("i"), name:"", size:1, unit:(state.settings.units[0]||"each"), cost:0 };
+    var it = { id:uid("i"), name:"", size:1, unit:(state.settings.units[0]||"each"), cost:0, notes:"", priceDate:null };
     state.elements.push(it); save(); render();
     var row = view.querySelector('tr[data-id="'+it.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
   }
+  function sellElement(id){
+    var e = elem(id); if(!e) return;
+    state.recipes.push({ id:uid("r"), name:e.name, categoryId:(state.categories[0]?state.categories[0].id:null), ratio:null, priceOverride:null, desiredMargin:null, lines:[{elementId:id, amount:1}] });
+    save(); ui.tab="recipes"; render(); toast("Added “"+(e.name||"element")+"” as a recipe");
+  }
   function addCategory(){
-    var c = { id:uid("c"), name:"", ratio:3 };
+    var c = { id:uid("c"), name:"", ratio:3, desiredMargin:65 };
     state.categories.push(c); save(); render();
     var row = view.querySelector('tr[data-cid="'+c.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
   }
@@ -795,11 +915,16 @@
   function saveSettings(){
     state.settings.currency = document.getElementById("set-cur").value || "$";
     state.settings.defaultRatio = num(document.getElementById("set-ratio").value)||1;
+    state.settings.defaultMargin = clamp(num(document.getElementById("set-margin").value),0,100);
     state.settings.rounding = readRounding("g");
+    state.settings.driveSync = document.getElementById("set-drive").checked;
+    state.settings.driveUrl = (document.getElementById("set-driveurl").value||"").trim();
     save(); render(); toast("Settings saved");
   }
 
   render();
+  // On open: if Drive sync is on and configured, pull the shared data once (quietly on failure).
+  if(driveEnabled()){ driveFetch({errMsg:false}); }
 })();
 </script>
 
