@@ -246,6 +246,10 @@
 (function(){
   "use strict";
   var LS_KEY = "plateandpour.v1";
+  // Built-in Adversaire drive endpoint. When set, a brand-new visitor (empty browser)
+  // auto-loads the shared data on first open, with no import or setup. Set this to the
+  // deployed Apps Script /exec URL. A per-device URL in Settings overrides it.
+  var DEFAULT_DRIVE_URL = "";
 
   var state = load() || migrate(seed());
   var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1} };
@@ -584,8 +588,9 @@
       + '<div style="margin-top:18px"><div class="field" style="margin-bottom:8px">Sync with Adversaire drive</div>'
         + '<label class="switch"><input type="checkbox" id="set-drive"'+(s.driveSync?" checked":"")+'> Fetch and push from Adversaire drive directly</label>'
         + '<div class="hint" style="margin:6px 0 10px">On: Import/Export read &amp; write the shared Drive file, and the tool loads the shared data once each time it opens. Off: use local files (the original behaviour).</div>'
-        + '<input id="set-driveurl" value="'+esc(s.driveUrl||"")+'" placeholder="Apps Script web-app URL — https://script.google.com/macros/s/…/exec">'
-        + (s.driveSync && !s.driveUrl ? '<div class="hint" style="color:var(--warn);margin-top:6px">Drive sync is on but no URL is set yet — Import/Export won’t work until you paste the web-app URL above.</div>' : '')
+        + '<input id="set-driveurl" value="'+esc(s.driveUrl||"")+'" placeholder="'+(DEFAULT_DRIVE_URL?"Using the built-in Adversaire endpoint — leave blank, or paste your own":"Apps Script web-app URL — https://script.google.com/macros/s/…/exec")+'">'
+        + (s.driveSync && !driveUrl() ? '<div class="hint" style="color:var(--warn);margin-top:6px">Drive sync is on but no endpoint is set — deploy the bridge script and paste its web-app URL above.</div>' : '')
+        + (s.driveSync && DEFAULT_DRIVE_URL && !s.driveUrl ? '<div class="hint" style="color:var(--good);margin-top:6px">Connected to the built-in Adversaire drive — new visitors load the shared data automatically.</div>' : '')
       + '</div>'
       + '<div style="margin-top:18px;display:flex;justify-content:flex-end"><button class="btn primary" id="save-settings">Save settings</button></div>'
       + '</div>';
@@ -739,7 +744,8 @@
   }
 
   /* ---------------- Import / Export ---------------- */
-  function driveEnabled(){ return !!(state.settings.driveSync && state.settings.driveUrl); }
+  function driveUrl(){ return ((state.settings.driveUrl||"").trim()) || DEFAULT_DRIVE_URL; }
+  function driveEnabled(){ return !!(state.settings.driveSync && driveUrl()); }
   function isDataset(obj){ return obj && obj.settings && (Array.isArray(obj.elements)||Array.isArray(obj.ingredients)) && Array.isArray(obj.recipes) && Array.isArray(obj.categories); }
   function applyImported(obj){
     if(!isDataset(obj)) throw new Error("Not a valid Plate & Pour dataset.");
@@ -777,7 +783,7 @@
   /* ---- Adversaire drive sync (via an Apps Script web app URL) ---- */
   function driveFetch(o){
     o = o || {};
-    var url = state.settings.driveUrl;
+    var url = driveUrl();
     if(!url){ if(o.errMsg!==false) toast("Set the Drive URL in Settings first.", true); return Promise.reject(new Error("no url")); }
     return fetch(url, {method:"GET"}).then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.text(); })
       .then(function(txt){
@@ -789,7 +795,7 @@
       .catch(function(err){ if(o.errMsg!==false) toast("Drive fetch failed: "+((err&&err.message)||err), true); throw err; });
   }
   function drivePush(){
-    var url = state.settings.driveUrl;
+    var url = driveUrl();
     if(!url){ toast("Set the Drive URL in Settings first.", true); return; }
     toast("Saving to Adversaire drive…");
     var out = JSON.parse(JSON.stringify(state));
