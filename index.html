@@ -143,6 +143,12 @@
   .cell-margin{white-space:nowrap}
   .elnotes{margin-top:4px;font-size:12px;color:var(--ink-2);padding:3px 8px;border-style:dashed}
   .eldate{text-align:right;white-space:nowrap}
+  .el-main>td{border-bottom:0}
+  .el-portion>td{padding-top:0;padding-bottom:12px}
+  .el-main .cell-portioncost{color:var(--ink)}
+  .portion-box{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
+  .portion-box input,.portion-box select{padding:5px 7px;font-size:13px}
+  tbody tr.el-portion:hover{background:transparent}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
   .muted{color:var(--ink-3)}
@@ -258,6 +264,7 @@
   var state = load() || migrate(seed());
   var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1}, loadedFrom:null };
   function today(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ""; } }
+  function nowStamp(){ try{ var d=new Date(); function p(n){return (n<10?"0":"")+n;} return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); }catch(e){ return today(); } }
 
   function uid(p){ return (p||"id") + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
   function save(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(e){ toast("Could not save locally: "+e.message, true); } }
@@ -282,7 +289,7 @@
     s.categories.forEach(function(c){ delete c.rounding; if(c.desiredMargin==null) c.desiredMargin = 65; });
     if(!Array.isArray(s.elements)) s.elements = Array.isArray(s.ingredients) ? s.ingredients : [];
     delete s.ingredients;
-    s.elements.forEach(function(e){ if(e.notes==null) e.notes = ""; if(e.priceDate===undefined) e.priceDate = null; });
+    s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.modified==null) e.modified=today(); });
     if(!Array.isArray(s.recipes)) s.recipes = [];
     s.recipes.forEach(function(r){
       if(!Array.isArray(r.lines)) r.lines = [];
@@ -333,8 +340,14 @@
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
   function round2(v){ return Math.round((v+Number.EPSILON)*100)/100; }
 
-  function unitCost(e){ return e && e.size>0 ? e.cost / e.size : 0; }
-  function lineCost(l){ var e = elem(l.elementId); return e ? unitCost(e)*num(l.amount) : 0; }
+  // Unit conversion within a family (volume / mass); anything else = 1 (treat numbers as-is).
+  var VOLB={ml:1,cl:10,dl:100,l:1000,oz:29.5735,shot:44.36,dash:0.92,goutte:0.05,tbsp:14.79,tsp:4.93,cup:236.6};
+  var MASSB={g:1,kg:1000,mg:0.001,lb:453.592};
+  function ufam(u){ u=(u||"").toLowerCase(); if(VOLB[u]!=null) return ["v",VOLB[u]]; if(MASSB[u]!=null) return ["m",MASSB[u]]; return null; }
+  function unitFactor(from,to){ if(!from||!to||from===to) return 1; var a=ufam(from), b=ufam(to); return (a&&b&&a[0]===b[0]) ? a[1]/b[1] : 1; }
+  // Cost of one portion = pack cost × (one-portion size ÷ pack size), converting portion→pack unit.
+  function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)*unitFactor(e.portionUnit,e.unit)/s; }
+  function lineCost(l){ var e = elem(l.elementId); return e ? portionCost(e)*num(l.amount) : 0; }
   function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
   function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
 
@@ -549,21 +562,27 @@
       view.innerHTML = html; return;
     }
     html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th style="min-width:200px">Name</th><th class="num">Pack size</th><th>Unit</th><th class="num">Pack cost</th><th class="num">Unit cost</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
+      + '<th style="min-width:200px">Name</th><th class="num">Pack cost</th><th class="num">Pack size</th><th>Unit</th>'
+      + '<th class="num">Portion cost</th><th>Last modified</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
     state.elements.forEach(function(e){
-      html += '<tr data-id="'+e.id+'">'
+      html += '<tr data-id="'+e.id+'" class="el-main">'
         + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name">'
           + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:100px;text-align:right"></td>'
-        + '<td><select class="inline-input" data-f="unit" style="max-width:110px">'+unitOptions(e.unit)+'</select></td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:110px;text-align:right">'
-          + '<div class="rowsub eldate">'+(e.priceDate? "as of "+esc(e.priceDate):"")+'</div></td>'
-        + '<td class="num money muted">'+money(unitCost(e))+'<span class="muted" style="font-size:11px">/'+esc(e.unit||"unit")+'</span></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
+        + '<td><select class="inline-input" data-f="unit" style="max-width:100px">'+unitOptions(e.unit)+'</select></td>'
+        + '<td class="num money cell-portioncost">'+money(portionCost(e))+'<span class="muted" style="font-size:11px">/portion</span></td>'
+        + '<td class="muted cell-modified" style="font-size:12.5px;white-space:nowrap">'+esc(e.modified||"")+'</td>'
         + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
-        + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit (name, notes…)", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
+        + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>'
+        + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
+          + '<div class="portion-box"><span>One portion:</span>'
+            + '<input class="inline-input tnum" data-f="portion" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.portion)+'" style="width:72px;text-align:right">'
+            + '<select class="inline-input" data-f="portionUnit" style="width:auto">'+unitOptions(e.portionUnit)+'</select>'
+          + '</div></td><td></td><td></td><td></td><td></td></tr>';
     });
     html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px">Edit any field directly, or open the ✎ editor for the name &amp; notes. Changing a <strong>Pack cost</strong> stamps today’s date under it. The tag icon sells an element on its own (one-line recipe). Manage the unit list in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Any edit stamps <em>Last modified</em>. The ✎ editor holds name &amp; notes; the tag icon sells an element on its own. Manage units in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -715,7 +734,7 @@
       return '<div class="line" data-idx="'+idx+'">'
         + '<select data-lf="elementId">'+opts+'</select>'
         + '<input data-lf="amount" type="number" step="any" min="0" inputmode="decimal" value="'+esc(l.amount)+'" aria-label="Amount">'
-        + '<span class="u">'+esc(e?e.unit:"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
+        + '<span class="u">'+esc(e?(e.portionUnit||e.unit):"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
         + '<button type="button" class="iconbtn danger" data-lrem="'+idx+'" aria-label="Remove">'+ic_trash+'</button></div>';
     }
     function paintLines(){
@@ -890,9 +909,15 @@
     if(erow){
       var el=elem(erow.dataset.id);
       if(el){
-        if(f==="size"||f==="cost"){ el[f]=num(inp.value); if(f==="cost"){ el.priceDate=today(); var dd=erow.querySelector(".eldate"); if(dd) dd.textContent="as of "+el.priceDate; } }
+        if(f==="size"||f==="cost"||f==="portion") el[f]=num(inp.value);
         else el[f]=inp.value;
-        var uc=erow.children[4]; if(uc) uc.innerHTML=money(unitCost(el))+'<span class="muted" style="font-size:11px">/'+esc(el.unit||"unit")+'</span>';
+        if(f==="cost") el.priceDate=today();
+        el.modified=nowStamp();
+        var mrow=view.querySelector('tr[data-id="'+el.id+'"]');
+        if(mrow){
+          var pc=mrow.querySelector(".cell-portioncost"); if(pc) pc.innerHTML=money(portionCost(el))+'<span class="muted" style="font-size:11px">/portion</span>';
+          var md=mrow.querySelector(".cell-modified"); if(md) md.textContent=el.modified;
+        }
         save();
       }
       return;
@@ -940,7 +965,8 @@
 
   function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
   function addElement(){
-    var it = { id:uid("i"), name:"", size:1, unit:(state.settings.units[0]||"each"), cost:0, notes:"", priceDate:null };
+    var u = (state.settings.units[0]||"each");
+    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today() };
     state.elements.push(it); save(); render();
     var row = view.querySelector('tr[data-id="'+it.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
   }
@@ -953,19 +979,24 @@
     if(!e) return;
     var body = '<div class="grid2 tight">'
       + '<label class="field">Name<input id="e-name" value="'+esc(e.name)+'" placeholder="Element name"></label>'
-      + '<label class="field">Unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label></div>'
+      + '<label class="field">Notes<input id="e-notes" value="'+esc(e.notes||"")+'" placeholder="optional — shown under the name"></label></div>'
       + '<div class="grid2" style="margin-top:14px">'
-        + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label>'
-        + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label></div>'
-      + '<label class="field" style="margin-top:14px">Notes <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— optional, shown under the name</span><input id="e-notes" value="'+esc(e.notes||"")+'" placeholder="e.g. price per kg; 1 portion = 300 g"></label>';
+        + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label>'
+        + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label></div>'
+      + '<label class="field" style="margin-top:14px">Pack unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label>'
+      + '<div class="subcard" style="margin-top:14px"><div class="field" style="margin-bottom:8px">One portion</div><div class="grid2">'
+        + '<label class="field">Amount<input id="e-portion" type="number" step="any" min="0" value="'+esc(e.portion)+'"></label>'
+        + '<label class="field">Unit<select id="e-portionunit">'+unitOptions(e.portionUnit)+'</select></label>'
+      + '</div></div>';
     openModal("Edit element", body, function(){
       var name = document.getElementById("e-name").value.trim();
       if(!name){ toast("Give the element a name.", true); return false; }
       var nc = num(document.getElementById("e-cost").value);
       if(nc !== num(e.cost)) e.priceDate = today();
-      e.name = name; e.unit = document.getElementById("e-unit").value;
-      e.size = num(document.getElementById("e-size").value); e.cost = nc;
-      e.notes = document.getElementById("e-notes").value;
+      e.name = name; e.notes = document.getElementById("e-notes").value;
+      e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
+      e.portion = num(document.getElementById("e-portion").value); e.portionUnit = document.getElementById("e-portionunit").value;
+      e.modified = nowStamp();
       toast("Element saved");
     });
   }
