@@ -70,6 +70,8 @@
   .btn.ghost{border-color:transparent;background:transparent}
   .btn.ghost:hover{background:var(--surface-2);border-color:var(--line)}
   .btn.danger:hover{border-color:var(--bad);background:var(--bad-soft);color:var(--bad)}
+  .btn:disabled{opacity:.45;cursor:not-allowed}
+  .btn:disabled:hover{border-color:var(--line-strong);background:var(--surface)}
   .btn.sm{padding:5px 9px;font-size:12.5px}
   .btn:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,nav.tabs button:focus-visible,.iconbtn:focus-visible,.grouphead:focus-visible,.ovreset:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
   .iconbtn{appearance:none;border:0;background:none;color:var(--ink-3);cursor:pointer;padding:5px;border-radius:6px;line-height:0}
@@ -101,6 +103,8 @@
   tbody tr:hover{background:color-mix(in srgb,var(--accent-soft) 40%,transparent)}
   td.num,th.num{text-align:right;font-variant-numeric:tabular-nums}
   .name-cell{font-weight:600}
+  .rname{cursor:pointer}
+  .rname:hover{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
   .money{font-family:var(--font-mono);font-variant-numeric:tabular-nums}
   .cost{font-family:var(--font-mono);color:var(--ink-2)}
   .rowactions{display:flex;gap:2px;justify-content:flex-end}
@@ -252,7 +256,7 @@
   var DEFAULT_DRIVE_URL = "https://script.google.com/macros/s/AKfycbyTQNKOZRoDZlhBovwptpJif3jvNrXgq5BsTZvs9B5qXqKyXupjV57c_7qs25R_STvN/exec";
 
   var state = load() || migrate(seed());
-  var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1} };
+  var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1}, loadedFrom:null };
   function today(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ""; } }
 
   function uid(p){ return (p||"id") + "_" + Date.now().toString(36) + Math.random().toString(36).slice(2,7); }
@@ -422,6 +426,16 @@
     else if(ui.tab==="elements") renderElements();
     else if(ui.tab==="categories") renderCategories();
     else renderSettings();
+    updateExportState();
+  }
+  function updateExportState(){
+    var btn = document.getElementById("btn-export");
+    if(!btn) return;
+    var readOnly = state.settings.driveSync && ui.loadedFrom==="snapshot";
+    btn.disabled = readOnly;
+    btn.title = readOnly
+      ? "Read-only on this network — the live drive isn’t reachable here. Make edits from a network where it works."
+      : (state.settings.driveSync ? "Save changes to the shared drive" : "Save a backup file to this device");
   }
 
   function markupCell(r,m){
@@ -457,7 +471,7 @@
   function recipeRow(r){
     var m = computeRecipe(r);
     return '<tr data-rid="'+r.id+'">'
-      + '<td class="name-cell">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div></td>'
+      + '<td class="name-cell rname" data-act="edit-recipe" data-id="'+r.id+'" title="Click to edit">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div></td>'
       + '<td class="num cost cell-cost">'+money(m.cost)+'</td>'
       + '<td class="num">'+markupCell(r,m)+'</td>'
       + '<td class="num">'+priceCell(r,m)+'</td>'
@@ -756,6 +770,7 @@
   }
 
   function doExport(){
+    if(state.settings.driveSync && ui.loadedFrom==="snapshot"){ toast("Read-only on this network — can’t save to the drive here.", true); return; }
     if(driveEnabled()){ drivePush(); return; }
     var data = JSON.stringify(state, null, 2), name = "plate-and-pour-backup.json";
     if(window.claude && window.claude.downloads){
@@ -803,10 +818,10 @@
   function syncShared(opts){
     opts = opts || {};
     return driveFetch({okMsg:false, errMsg:false})
-      .then(function(){ toast("Loaded from Adversaire drive"); return "drive"; })
+      .then(function(){ ui.loadedFrom="drive"; updateExportState(); toast("Loaded from Adversaire drive"); return "drive"; })
       .catch(function(){
         return snapshotFetch()
-          .then(function(){ toast(opts.manual ? "Loaded shared snapshot (live drive not reachable here)" : "Loaded shared data"); return "snapshot"; })
+          .then(function(){ ui.loadedFrom="snapshot"; updateExportState(); toast("Loaded shared data — read-only on this network"); return "snapshot"; })
           .catch(function(err){ if(opts.manual) toast("Couldn’t reach the shared data — showing local.", true); throw err; });
       });
   }
