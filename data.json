@@ -2,7 +2,6 @@
   "settings": {
     "currency": "$",
     "defaultRatio": 3.2,
-    "defaultMargin": 67,
     "rounding": {
       "mode": "nearest",
       "increment": 0.5,
@@ -27,38 +26,32 @@
     {
       "id": "cat_cuisine",
       "name": "Cuisine",
-      "ratio": 3.2,
-      "desiredMargin": 67
+      "ratio": 3.2
     },
     {
       "id": "cat_cocktails",
       "name": "Cocktails",
-      "ratio": 3.2,
-      "desiredMargin": 69
+      "ratio": 3.2
     },
     {
       "id": "cat_mocktails",
       "name": "Mocktails",
-      "ratio": 3.2,
-      "desiredMargin": 69
+      "ratio": 3.2
     },
     {
       "id": "cat_vins",
       "name": "Vins",
-      "ratio": 2.9,
-      "desiredMargin": 65
+      "ratio": 2.9
     },
     {
       "id": "cat_bieres",
       "name": "Bières",
-      "ratio": 3.3,
-      "desiredMargin": 67
+      "ratio": 3.3
     },
     {
       "id": "cat_canettes",
       "name": "Canettes",
-      "ratio": 3.3,
-      "desiredMargin": 67
+      "ratio": 3.3
     }
   ],
   "elements": [
@@ -67,1872 +60,1456 @@
       "name": "Agostura (orange)",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0525,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0525
     },
     {
       "id": "el002",
       "name": "batonnet fromages",
       "size": 1,
       "unit": "portion",
-      "cost": 2.8943,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.8943
     },
     {
       "id": "el003",
       "name": "Bitter (jaune)",
       "size": 1,
       "unit": "portion",
-      "cost": 0.051,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.051
     },
     {
       "id": "el004",
       "name": "brownies",
       "size": 1,
       "unit": "portion",
-      "cost": 1.8225,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.8225
     },
     {
       "id": "el005",
       "name": "Café",
       "size": 1,
       "unit": "unité",
-      "cost": 27.35,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 27.35
     },
     {
       "id": "el006",
       "name": "cerise",
       "size": 1,
       "unit": "portion",
-      "cost": 0.082,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.082
     },
     {
       "id": "el007",
       "name": "chili végétarien",
       "size": 1,
       "unit": "portion",
-      "cost": 0.769,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.769
     },
     {
       "id": "el008",
       "name": "chips jalapeno",
       "size": 1,
       "unit": "portion",
-      "cost": 2.079,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.079
     },
     {
       "id": "el009",
       "name": "chips Nachos",
       "size": 1,
       "unit": "portion",
-      "cost": 1.3136,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.3136
     },
     {
       "id": "el010",
       "name": "chips ordinaire",
       "size": 1,
       "unit": "portion",
-      "cost": 1.9945,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.9945
     },
     {
       "id": "el011",
       "name": "chips sel et vinaigre",
       "size": 1,
       "unit": "portion",
-      "cost": 2.124,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.124
     },
     {
       "id": "el012",
       "name": "chips sweet chili",
       "size": 1,
       "unit": "portion",
-      "cost": 1.9985,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.9985
     },
     {
       "id": "el013",
       "name": "Chips Ruffles BBQ",
       "size": 1,
       "unit": "portion",
-      "cost": 1.9538,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.9538
     },
     {
       "id": "el014",
       "name": "Chocolat chaud",
       "size": 1,
       "unit": "portion",
-      "cost": 0.5634,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.5634
     },
     {
       "id": "el015",
       "name": "Churros",
       "size": 1,
       "unit": "portion",
-      "cost": 2.2744,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.2744
     },
     {
       "id": "el016",
       "name": "Citron",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1067,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1067
     },
     {
       "id": "el017",
       "name": "Coke Zéro",
       "size": 1,
       "unit": "portion",
-      "cost": 0.6667,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.6667
     },
     {
       "id": "el018",
       "name": "Confiture aux fraises",
       "size": 1,
       "unit": "portion",
-      "cost": 0.9859,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.9859
     },
     {
       "id": "el019",
       "name": "Crème fouettée",
       "size": 1,
       "unit": "unité",
-      "cost": 6.5733,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 6.5733
     },
     {
       "id": "el020",
       "name": "crème glacé",
       "size": 1,
       "unit": "unité",
-      "cost": 0.7146,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.7146
     },
     {
       "id": "el021",
       "name": "crème sure",
       "size": 1,
       "unit": "portion",
-      "cost": 0.4888,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.4888
     },
     {
       "id": "el022",
       "name": "crevettes",
       "size": 1,
       "unit": "portion",
-      "cost": 0.27,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.27
     },
     {
       "id": "el023",
       "name": "Edamames",
       "size": 1,
       "unit": "portion",
-      "cost": 1.9752,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.9752
     },
     {
       "id": "el024",
       "name": "épices a bifteck",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1382,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1382
     },
     {
       "id": "el025",
       "name": "fromage rapé",
       "size": 1,
       "unit": "portion",
-      "cost": 1.6202,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.6202
     },
     {
       "id": "el026",
       "name": "Fromage Suisse",
       "size": 1,
       "unit": "portion",
-      "cost": 0.7272,
-      "notes": "Attention, prix par kg",
-      "priceDate": "2026-02-03"
+      "cost": 0.7272
     },
     {
       "id": "el027",
       "name": "jus de citron",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0539,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0539
     },
     {
       "id": "el028",
       "name": "jus de lime",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0781,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0781
     },
     {
       "id": "el029",
       "name": "ketchup",
       "size": 1,
       "unit": "unité",
-      "cost": 2.8433,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.8433
     },
     {
       "id": "el030",
       "name": "Lime",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1458,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1458
     },
     {
       "id": "el031",
       "name": "mac and cheese",
       "size": 1,
       "unit": "portion",
-      "cost": 3.1745,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.1745
     },
     {
       "id": "el032",
       "name": "mayonnaise",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2916,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2916
     },
     {
       "id": "el033",
       "name": "miel",
       "size": 1,
       "unit": "unité",
-      "cost": 14.395,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 14.395
     },
     {
       "id": "el034",
       "name": "mini pogo",
       "size": 1,
       "unit": "portion",
-      "cost": 3.497,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.497
     },
     {
       "id": "el035",
       "name": "Moutarde",
       "size": 1,
       "unit": "unité",
-      "cost": 3.065,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.065
     },
     {
       "id": "el036",
       "name": "moutarde a l'ancienne",
       "size": 1,
       "unit": "portion",
-      "cost": 0.284,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.284
     },
     {
       "id": "el037",
       "name": "oignon vert",
       "size": 1,
       "unit": "unité",
-      "cost": 15.88,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 15.88
     },
     {
       "id": "el038",
       "name": "Oignons rouges",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1
     },
     {
       "id": "el039",
       "name": "Olives Vertes Farcies",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0317,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0317
     },
     {
       "id": "el040",
       "name": "Orange",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1126,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1126
     },
     {
       "id": "el041",
       "name": "origan",
       "size": 1,
       "unit": "portion",
-      "cost": 0.11,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.11
     },
     {
       "id": "el042",
       "name": "pain ciabatta",
       "size": 1,
       "unit": "portion",
-      "cost": 0.6551,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.6551
     },
     {
       "id": "el043",
       "name": "pain Naan",
       "size": 1,
       "unit": "portion",
-      "cost": 0.9717,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.9717
     },
     {
       "id": "el044",
       "name": "Piments doux marinés",
       "size": 1,
       "unit": "portion",
-      "cost": 0.6979,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.6979
     },
     {
       "id": "el045",
       "name": "pogo vegan",
       "size": 1,
       "unit": "portion",
-      "cost": 3.3333,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.3333
     },
     {
       "id": "el046",
       "name": "Porc effiloché",
       "size": 1,
       "unit": "portion",
-      "cost": 1.3296,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.3296
     },
     {
       "id": "el047",
       "name": "poulet pop corn",
       "size": 1,
       "unit": "portion",
-      "cost": 3.1378,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.1378
     },
     {
       "id": "el048",
       "name": "redbull",
       "size": 1,
       "unit": "portion",
-      "cost": 2.2125,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.2125
     },
     {
       "id": "el049",
       "name": "salade orzo",
       "size": 1,
       "unit": "portion",
-      "cost": 1.0665,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.0665
     },
     {
       "id": "el050",
       "name": "sauce chili sucré",
       "size": 1,
       "unit": "portion",
-      "cost": 0.152,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.152
     },
     {
       "id": "el051",
       "name": "sauce chipotle",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2979,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2979
     },
     {
       "id": "el052",
       "name": "sauce marinara",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1283,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1283
     },
     {
       "id": "el053",
       "name": "sauce miel et ail",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1841,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1841
     },
     {
       "id": "el054",
       "name": "sauce ranch",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2958,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2958
     },
     {
       "id": "el055",
       "name": "sauce salsa",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2486,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2486
     },
     {
       "id": "el056",
       "name": "sauce Soja",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2481,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2481
     },
     {
       "id": "el057",
       "name": "sauce Worchestershire",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0528,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0528
     },
     {
       "id": "el058",
       "name": "sirop simple",
       "size": 1,
       "unit": "portion",
-      "cost": 0.045,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.045
     },
     {
       "id": "el059",
       "name": "Sucre",
       "size": 1,
       "unit": "unité",
-      "cost": 5.87,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 5.87
     },
     {
       "id": "el060",
       "name": "Tabasco",
       "size": 1,
       "unit": "portion",
-      "cost": 0.0525,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.0525
     },
     {
       "id": "el061",
       "name": "Tartes Pacanes",
       "size": 1,
       "unit": "portion",
-      "cost": 2.2702,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.2702
     },
     {
       "id": "el062",
       "name": "trempette aux epinards",
       "size": 1,
       "unit": "portion",
-      "cost": 4.1175,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 4.1175
     },
     {
       "id": "el063",
       "name": "menthe",
       "size": 1,
       "unit": "portion",
-      "cost": 0.35,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.35
     },
     {
       "id": "el064",
       "name": "Jus de gun pour drinks",
       "size": 1,
       "unit": "portion",
-      "cost": 0.7,
-      "notes": "utilisé pour tous les drink",
-      "priceDate": "2026-02-03"
+      "cost": 0.7
     },
     {
       "id": "el065",
       "name": "Jus de canneberge",
       "size": 1,
       "unit": "portion",
-      "cost": 0.25,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.25
     },
     {
       "id": "el066",
       "name": "Olive verte tranché",
       "size": 1,
       "unit": "portion",
-      "cost": 0.2006,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.2006
     },
     {
       "id": "el067",
       "name": "Confit d'oignon",
       "size": 1,
       "unit": "portion",
-      "cost": 0.5,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.5
     },
     {
       "id": "el068",
       "name": "Salade Quinoa fidji",
       "size": 1,
       "unit": "portion",
-      "cost": 1.501,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.501
     },
     {
       "id": "el069",
       "name": "Salade Edamames",
       "size": 1,
       "unit": "portion",
-      "cost": 1.792,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.792
     },
     {
       "id": "el070",
       "name": "vinaigre blanc pur",
       "size": 1,
       "unit": "unité",
-      "cost": 18.91,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 18.91
     },
     {
       "id": "el071",
       "name": "Gateau citron noix de cocos",
       "size": 1,
       "unit": "portion",
-      "cost": 1.5212,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.5212
     },
     {
       "id": "el072",
       "name": "Bouché choux-fleur pané",
       "size": 1,
       "unit": "portion",
-      "cost": 2.3384,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.3384
     },
     {
       "id": "el073",
       "name": "Rondelle patate",
       "size": 1,
       "unit": "portion",
-      "cost": 1.453,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.453
     },
     {
       "id": "el074",
       "name": "Sauce Buffalo",
       "size": 1,
       "unit": "unité",
-      "cost": 49.33,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 49.33
     },
     {
       "id": "el075",
       "name": "sirop grenadine",
       "size": 1,
       "unit": "unité",
-      "cost": 17.01,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 17.01
     },
     {
       "id": "el076",
       "name": "cornichons a l'aneth",
       "size": 1,
       "unit": "unité",
-      "cost": 24.67,
-      "notes": "1 cornichon = 4ml ou 0,004L",
-      "priceDate": "2026-02-03"
+      "cost": 24.67
     },
     {
       "id": "el077",
       "name": "poivre noir",
       "size": 1,
       "unit": "unité",
-      "cost": 46.37,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 46.37
     },
     {
       "id": "el078",
       "name": "lait",
       "size": 1,
       "unit": "unité",
-      "cost": 5.07,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 5.07
     },
     {
       "id": "el079",
       "name": "Canelle",
       "size": 1,
       "unit": "unité",
-      "cost": 26.25,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 26.25
     },
     {
       "id": "el080",
       "name": "Samosas Vegan",
       "size": 1,
       "unit": "portion",
-      "cost": 3.0289,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.0289
     },
     {
       "id": "el081",
       "name": "Quesadillas Poulet",
       "size": 1,
       "unit": "portion",
-      "cost": 3.2855,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.2855
     },
     {
       "id": "el082",
       "name": "Peperroni",
       "size": 1,
       "unit": "portion",
-      "cost": 0.1999,
-      "notes": "Environ 0,02$ / Gramme",
-      "priceDate": "2026-02-03"
+      "cost": 0.1999
     },
     {
       "id": "el083",
       "name": "Bacon",
       "size": 1,
       "unit": "portion",
-      "cost": 0.6181,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.6181
     },
     {
       "id": "el084",
       "name": "Sauce Hollandaise",
       "size": 1,
       "unit": "unité",
-      "cost": 23.88,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 23.88
     },
     {
       "id": "el085",
       "name": "Maïs éclaté au beurre",
       "size": 1,
       "unit": "portion",
-      "cost": 0.8279,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.8279
     },
     {
       "id": "el086",
       "name": "Pâtes alimentaire",
       "size": 1,
       "unit": "unité",
-      "cost": 17.56,
-      "notes": "Environ 0,003$ / Gramme",
-      "priceDate": "2026-02-03"
+      "cost": 17.56
     },
     {
       "id": "el087",
       "name": "Sauce Fromage",
       "size": 1,
       "unit": "unité",
-      "cost": 21.415,
-      "notes": "Environ 10,71$ / Litre",
-      "priceDate": "2026-02-03"
+      "cost": 21.415
     },
     {
       "id": "el088",
       "name": "Épices Grecques",
       "size": 1,
       "unit": "unité",
-      "cost": 13.0,
-      "notes": "1 portion = 25g",
-      "priceDate": "2026-02-03"
+      "cost": 13.0
     },
     {
       "id": "el089",
       "name": "Sirop purée de fruit du dragon",
       "size": 1,
       "unit": "portion",
-      "cost": 1.0,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.0
     },
     {
       "id": "el090",
       "name": "sirop de lavande",
       "size": 1,
       "unit": "portion",
-      "cost": 0.6471,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.6471
     },
     {
       "id": "el091",
       "name": "Coulis Assortis",
       "size": 1,
       "unit": "unité",
-      "cost": 5.59,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 5.59
     },
     {
       "id": "el092",
       "name": "Côte de dos de porc",
       "size": 1,
       "unit": "portion",
-      "cost": 4.2575,
-      "notes": "1 portion = 300g",
-      "priceDate": "2026-02-03"
+      "cost": 4.2575
     },
     {
       "id": "el093",
       "name": "Sirop Barbotine Neutre",
       "size": 1,
       "unit": "unité",
-      "cost": 19.22,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 19.22
     },
     {
       "id": "el094",
       "name": "Sauce Sriracha",
       "size": 1,
       "unit": "unité",
-      "cost": 5.05,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 5.05
     },
     {
       "id": "el095",
       "name": "Pain Burger Patate 4Po",
       "size": 1,
       "unit": "portion",
-      "cost": 0.66,
-      "notes": "1 portion = 1 pain",
-      "priceDate": "2026-02-03"
+      "cost": 0.66
     },
     {
       "id": "el096",
       "name": "Boulette de viande haché précuite",
       "size": 1,
       "unit": "portion",
-      "cost": 1.66,
-      "notes": "1 portion = 85g",
-      "priceDate": "2026-02-03"
+      "cost": 1.66
     },
     {
       "id": "el097",
       "name": "Frites coupe régulière",
       "size": 1,
       "unit": "portion",
-      "cost": 0.84,
-      "notes": "1 portion = 200g",
-      "priceDate": "2026-02-03"
+      "cost": 0.84
     },
     {
       "id": "el098",
       "name": "Cannelle",
       "size": 1,
       "unit": "unité",
-      "cost": 25.72,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 25.72
     },
     {
       "id": "el099",
       "name": "Détergent Laveuse",
       "size": 1,
       "unit": "unité",
-      "cost": 16.285,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 16.285
     },
     {
       "id": "el100",
       "name": "Huile Olive Extra Vierge",
       "size": 1,
       "unit": "unité",
-      "cost": 19.73,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 19.73
     },
     {
       "id": "el101",
       "name": "Gâteau aux carottes",
       "size": 1,
       "unit": "portion",
-      "cost": 1.4242,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.4242
     },
     {
       "id": "el102",
       "name": "Piroulines",
       "size": 1,
       "unit": "unité",
-      "cost": 0.1936,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 0.1936
     },
     {
       "id": "el103",
       "name": "Romarin",
       "size": 1,
       "unit": "unité",
-      "cost": 1.4683,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.4683
     },
     {
       "id": "el104",
       "name": "basilic",
       "size": 1,
       "unit": "unité",
-      "cost": 1.52,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.52
     },
     {
       "id": "el105",
       "name": "Perrier",
       "size": 1,
       "unit": "portion",
-      "cost": 1.45,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.45
     },
     {
       "id": "el106",
       "name": "Rouleaux de papier caisse",
       "size": 1,
       "unit": "unité",
-      "cost": 93.52,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 93.52
     },
     {
       "id": "el107",
       "name": "Rouleaux de papier TPV",
       "size": 1,
       "unit": "unité",
-      "cost": 28.85,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 28.85
     },
     {
       "id": "el108",
       "name": "Filet à cheveux",
       "size": 1,
       "unit": "unité",
-      "cost": 52.22,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 52.22
     },
     {
       "id": "el109",
       "name": "Sac compost",
       "size": 1,
       "unit": "unité",
-      "cost": 103.99,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 103.99
     },
     {
       "id": "el110",
       "name": "Sac Ordures noirs",
       "size": 1,
       "unit": "unité",
-      "cost": 43.73,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 43.73
     },
     {
       "id": "el111",
       "name": "Sac Ordures transparent",
       "size": 1,
       "unit": "unité",
-      "cost": 51.82,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 51.82
     },
     {
       "id": "el112",
       "name": "Tamis pour urinoir",
       "size": 1,
       "unit": "unité",
-      "cost": 62.43,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 62.43
     },
     {
       "id": "el113",
       "name": "Filet à barbe",
       "size": 1,
       "unit": "unité",
-      "cost": 55.7,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 55.7
     },
     {
       "id": "el114",
       "name": "Papier Hygiénique",
       "size": 1,
       "unit": "unité",
-      "cost": 76.32,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 76.32
     },
     {
       "id": "el115",
       "name": "Essuie-mains",
       "size": 1,
       "unit": "unité",
-      "cost": 64.13,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 64.13
     },
     {
       "id": "el116",
       "name": "Serviette de table",
       "size": 1,
       "unit": "unité",
-      "cost": 71.3,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 71.3
     },
     {
       "id": "el117",
       "name": "Pics en Bambou",
       "size": 1,
       "unit": "unité",
-      "cost": 41.18,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 41.18
     },
     {
       "id": "el118",
       "name": "Feuille de cuisson",
       "size": 1,
       "unit": "unité",
-      "cost": 99.76,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 99.76
     },
     {
       "id": "el119",
       "name": "Papier Journal (cuisson)",
       "size": 1,
       "unit": "unité",
-      "cost": 37.04,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 37.04
     },
     {
       "id": "el120",
       "name": "Profiteroles vides",
       "size": 1,
       "unit": "portion",
-      "cost": 2.0033,
-      "notes": "1 portion = 6 choux à la crème",
-      "priceDate": "2026-02-03"
+      "cost": 2.0033
     },
     {
       "id": "el121",
       "name": "Salade de Bruschetta",
       "size": 1,
       "unit": "portion",
-      "cost": 1.44,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 1.44
     },
     {
       "id": "el122",
       "name": "Sauce Maison",
       "size": 1,
       "unit": "portion",
-      "cost": 0,
-      "notes": "",
-      "priceDate": null
+      "cost": 0
     },
     {
       "id": "el123",
       "name": "lime gose sans alcool (burdock)",
       "size": 1,
       "unit": "canette",
-      "cost": 3.14,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.14
     },
     {
       "id": "el124",
       "name": "Gose sans alcool",
       "size": 1,
       "unit": "canette",
-      "cost": 2.8975,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.8975
     },
     {
       "id": "el125",
       "name": "blonde sans alcool boréal",
       "size": 1,
       "unit": "canette",
-      "cost": 3.0417,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.0417
     },
     {
       "id": "el126",
       "name": "radler sans alcool",
       "size": 1,
       "unit": "canette",
-      "cost": 3.0417,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.0417
     },
     {
       "id": "el127",
       "name": "Sure bleuet hibicus sans alcool",
       "size": 1,
       "unit": "canette",
-      "cost": 3.9,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.9
     },
     {
       "id": "el128",
       "name": "Kombucha Ékorce",
       "size": 1,
       "unit": "canette",
-      "cost": 2.4433,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 2.4433
     },
     {
       "id": "el129",
       "name": "Neipa Helix",
       "size": 1,
       "unit": "canette",
-      "cost": 3.4896,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.4896
     },
     {
       "id": "el130",
       "name": "Saison houblonnée",
       "size": 1,
       "unit": "canette",
-      "cost": 3.4896,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.4896
     },
     {
       "id": "el131",
       "name": "Miami rice",
       "size": 1,
       "unit": "canette",
-      "cost": 3.2917,
-      "notes": "",
-      "priceDate": "2026-02-03"
+      "cost": 3.2917
     },
     {
       "id": "el132",
       "name": "aberlour 12 ans",
       "size": 1,
       "unit": "oz",
-      "cost": 3.39,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 3.39
     },
     {
       "id": "el133",
       "name": "Amermelade",
       "size": 1,
       "unit": "oz",
-      "cost": 0.972,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.972
     },
     {
       "id": "el134",
       "name": "Aperol les iles",
       "size": 1,
       "unit": "oz",
-      "cost": 0.974,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.974
     },
     {
       "id": "el135",
       "name": "Avril",
       "size": 1,
       "unit": "oz",
-      "cost": 1.5,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.5
     },
     {
       "id": "el136",
       "name": "bitter chipotle cacao",
       "size": 1,
       "unit": "dash",
-      "cost": 0.13,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.13
     },
     {
       "id": "el137",
       "name": "Bulle de nuit",
       "size": 1,
       "unit": "oz",
-      "cost": 0.3332,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.3332
     },
     {
       "id": "el138",
       "name": "ButterScotch",
       "size": 1,
       "unit": "oz",
-      "cost": 0.862,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.862
     },
     {
       "id": "el139",
       "name": "Canadian club",
       "size": 1,
       "unit": "oz",
-      "cost": 1.1776,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.1776
     },
     {
       "id": "el140",
       "name": "Canopée",
       "size": 1,
       "unit": "oz",
-      "cost": 1.63,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.63
     },
     {
       "id": "el141",
       "name": "Captain Morgan",
       "size": 1,
       "unit": "oz",
-      "cost": 0.9605,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.9605
     },
     {
       "id": "el142",
       "name": "chambord",
       "size": 1,
       "unit": "oz",
-      "cost": 1.9,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.9
     },
     {
       "id": "el143",
       "name": "Curaçao",
       "size": 1,
       "unit": "oz",
-      "cost": 0.956,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.956
     },
     {
       "id": "el144",
       "name": "el dorado 12 ans",
       "size": 1,
       "unit": "oz",
-      "cost": 2.08,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 2.08
     },
     {
       "id": "el145",
       "name": "Fireball",
       "size": 1,
       "unit": "oz",
-      "cost": 0.9539,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.9539
     },
     {
       "id": "el146",
       "name": "Gin #6",
       "size": 1,
       "unit": "oz",
-      "cost": 1.59,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.59
     },
     {
       "id": "el147",
       "name": "gin 7 Heaven",
       "size": 1,
       "unit": "oz",
-      "cost": 1.63,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.63
     },
     {
       "id": "el148",
       "name": "goldschlager",
       "size": 1,
       "unit": "oz",
-      "cost": 1.99,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.99
     },
     {
       "id": "el149",
       "name": "hennessy",
       "size": 1,
       "unit": "oz",
-      "cost": 2.96,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 2.96
     },
     {
       "id": "el150",
       "name": "Humble framboise",
       "size": 1,
       "unit": "oz",
-      "cost": 1.25,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.25
     },
     {
       "id": "el151",
       "name": "Jagermeister",
       "size": 1,
       "unit": "oz",
-      "cost": 1.3618,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.3618
     },
     {
       "id": "el152",
       "name": "Jameson",
       "size": 1,
       "unit": "oz",
-      "cost": 1.5132,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.5132
     },
     {
       "id": "el153",
       "name": "Kahlua",
       "size": 1,
       "unit": "oz",
-      "cost": 1.29,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.29
     },
     {
       "id": "el154",
       "name": "Kamouraska",
       "size": 1,
       "unit": "oz",
-      "cost": 0.9671,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.9671
     },
     {
       "id": "el155",
       "name": "km12",
       "size": 1,
       "unit": "oz",
-      "cost": 1.98,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.98
     },
     {
       "id": "el156",
       "name": "L'auberge cuvée fest blanc",
       "size": 1,
       "unit": "oz",
-      "cost": 0.2888,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.2888
     },
     {
       "id": "el157",
       "name": "L'auberge cuvée fest rouge",
       "size": 1,
       "unit": "oz",
-      "cost": 0.2888,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.2888
     },
     {
       "id": "el158",
       "name": "lot no40 rye",
       "size": 1,
       "unit": "oz",
-      "cost": 1.7,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.7
     },
     {
       "id": "el159",
       "name": "Malibu",
       "size": 1,
       "unit": "oz",
-      "cost": 1.136,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.136
     },
     {
       "id": "el160",
       "name": "Méga Mousse",
       "size": 1,
       "unit": "goutte",
-      "cost": 0.01,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.01
     },
     {
       "id": "el161",
       "name": "Midori",
       "size": 1,
       "unit": "oz",
-      "cost": 1.35,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.35
     },
     {
       "id": "el162",
       "name": "Noa Amaretto",
       "size": 1,
       "unit": "oz",
-      "cost": 1.3,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.3
     },
     {
       "id": "el163",
       "name": "O'casey's",
       "size": 1,
       "unit": "oz",
-      "cost": 1.048,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.048
     },
     {
       "id": "el164",
       "name": "Oshlag houblonnée",
       "size": 1,
       "unit": "oz",
-      "cost": 2.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 2.07
     },
     {
       "id": "el165",
       "name": "radoune",
       "size": 1,
       "unit": "oz",
-      "cost": 1.8321,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.8321
     },
     {
       "id": "el166",
       "name": "Rosemont épicé",
       "size": 1,
       "unit": "oz",
-      "cost": 1.63,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.63
     },
     {
       "id": "el167",
       "name": "Rouge gorge",
       "size": 1,
       "unit": "oz",
-      "cost": 0.932,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.932
     },
     {
       "id": "el168",
       "name": "soho",
       "size": 1,
       "unit": "oz",
-      "cost": 1.26,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.26
     },
     {
       "id": "el169",
       "name": "sortilège",
       "size": 1,
       "unit": "oz",
-      "cost": 1.35,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.35
     },
     {
       "id": "el170",
       "name": "st-germain",
       "size": 1,
       "unit": "oz",
-      "cost": 1.99,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.99
     },
     {
       "id": "el171",
       "name": "Tequila Jose Cuervo",
       "size": 1,
       "unit": "oz",
-      "cost": 1.5263,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.5263
     },
     {
       "id": "el172",
       "name": "Triple sec",
       "size": 1,
       "unit": "oz",
-      "cost": 1.184,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.184
     },
     {
       "id": "el173",
       "name": "Ungava",
       "size": 1,
       "unit": "oz",
-      "cost": 1.3882,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.3882
     },
     {
       "id": "el174",
       "name": "Vermouth Kayak",
       "size": 1,
       "unit": "oz",
-      "cost": 0.864,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.864
     },
     {
       "id": "el175",
       "name": "vodka cirka",
       "size": 1,
       "unit": "oz",
-      "cost": 2.06,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 2.06
     },
     {
       "id": "el176",
       "name": "vodka vanille",
       "size": 1,
       "unit": "oz",
-      "cost": 1.3,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 1.3
     },
     {
       "id": "el177",
       "name": "Soda",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el178",
       "name": "Limonade",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el179",
       "name": "Sprite",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el180",
       "name": "coke",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el181",
       "name": "Thé glacé",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el182",
       "name": "Tonic",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el183",
       "name": "clamato",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el184",
       "name": "ginger ale",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el185",
       "name": "jus d'ananas",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el186",
       "name": "jus d'orange",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el187",
       "name": "jus de pamplemousse",
       "size": 1,
       "unit": "oz",
-      "cost": 0.18,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.18
     },
     {
       "id": "el188",
       "name": "sirop canneberge romarin",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el189",
       "name": "sirop miel",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el190",
       "name": "sirop de curacao",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el191",
       "name": "sirop hibiscus",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el192",
       "name": "sirop d'érable",
       "size": 1,
       "unit": "oz",
-      "cost": 0,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0
     },
     {
       "id": "el193",
       "name": "purée de peche",
       "size": 1,
       "unit": "oz",
-      "cost": 0.65,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.65
     },
     {
       "id": "el194",
       "name": "sirop basilic",
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.07
     },
     {
       "id": "el195",
       "name": "slush",
       "size": 1,
       "unit": "oz",
-      "cost": 0.02,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.02
     },
     {
       "id": "el196",
       "name": "mango loco",
       "size": 1,
       "unit": "oz",
-      "cost": 0.14,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.14
     },
     {
       "id": "el197",
       "name": "tomato water",
       "size": 1,
       "unit": "oz",
-      "cost": 0.35,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.35
     },
     {
       "id": "el198",
       "name": "mozza brine",
       "size": 1,
       "unit": "oz",
-      "cost": 0.87,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.87
     },
     {
       "id": "el199",
       "name": "cantina rouge",
       "size": 1,
       "unit": "oz",
-      "cost": 0.64,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.64
     },
     {
       "id": "el200",
       "name": "Esteban Martin windsor",
       "size": 1,
       "unit": "oz",
-      "cost": 0.598,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.598
     },
     {
       "id": "el201",
       "name": "Cantina blanc",
       "size": 1,
       "unit": "oz",
-      "cost": 0.64,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.64
     },
     {
       "id": "el202",
       "name": "El ilusionista Joel Delaunay",
       "size": 1,
       "unit": "oz",
-      "cost": 0.878,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.878
     },
     {
       "id": "el203",
       "name": "Blanc de lys",
       "size": 1,
       "unit": "oz",
-      "cost": 0.678,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 0.678
     },
     {
       "id": "el204",
       "name": "Blanc d'oeuf",
       "size": 1,
       "unit": "portion",
-      "cost": 0,
-      "notes": "",
-      "priceDate": null
+      "cost": 0
     },
     {
       "id": "el205",
       "name": "Jalapenos",
       "size": 1,
       "unit": "portion",
-      "cost": 0,
-      "notes": "",
-      "priceDate": null
+      "cost": 0
     },
     {
       "id": "el206",
       "name": "1201",
       "size": 1,
       "unit": "canette",
-      "cost": 6.7917,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 6.7917
     },
     {
       "id": "el207",
       "name": "salt and pulpa",
       "size": 1,
       "unit": "canette",
-      "cost": 6.2917,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 6.2917
     },
     {
       "id": "el208",
       "name": "Amourette",
       "size": 1,
       "unit": "canette",
-      "cost": 9.2,
-      "notes": "",
-      "priceDate": "2025-03-07"
+      "cost": 9.2
     }
   ],
   "recipes": [
