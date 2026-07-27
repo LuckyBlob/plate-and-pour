@@ -566,7 +566,7 @@
       + '<th class="num">Portion cost</th><th>Last modified</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
     state.elements.forEach(function(e){
       html += '<tr data-id="'+e.id+'" class="el-main">'
-        + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name">'
+        + '<td class="name-cell rname" data-act="edit-elem" data-id="'+e.id+'" title="Click to edit">'+esc(e.name||"(unnamed)")
           + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
         + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
         + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
@@ -967,8 +967,7 @@
   function addElement(){
     var u = (state.settings.units[0]||"each");
     var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today() };
-    state.elements.push(it); save(); render();
-    var row = view.querySelector('tr[data-id="'+it.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
+    state.elements.push(it); save(); render(); editElement(it);
   }
   function sellElement(id){
     var e = elem(id); if(!e) return;
