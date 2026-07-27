@@ -78,7 +78,8 @@
 
   input,select,textarea{font-family:inherit;font-size:14px;color:var(--ink);background:var(--surface);border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;width:100%}
   input::placeholder{color:var(--ink-3)}
-  input[type=number]{font-variant-numeric:tabular-nums}
+  input[type=number]{font-variant-numeric:tabular-nums;-moz-appearance:textfield;appearance:textfield}
+  input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
   label.field{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.6px}
   label.field input,label.field select{text-transform:none;font-weight:400;letter-spacing:normal;font-size:14px;color:var(--ink)}
 
@@ -119,16 +120,17 @@
   .ovreset[hidden]{display:none}
 
   /* collapsible category groups */
-  .group{margin-bottom:14px}
-  .grouphead{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px;cursor:pointer;text-align:left;color:var(--ink)}
-  .grouphead:hover{border-color:var(--accent)}
+  .group{margin-bottom:14px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .grouphead{width:100%;display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--surface-2);border:0;cursor:pointer;text-align:left;color:var(--ink);transition:background .14s}
+  .grouphead:hover{background:color-mix(in srgb,var(--accent-soft) 55%,var(--surface-2))}
+  .grouphead[aria-expanded="true"]{border-bottom:1px solid var(--line)}
   .grouphead .chev{color:var(--ink-3);line-height:0;transition:transform .18s}
   .grouphead[aria-expanded="false"] .chev{transform:rotate(-90deg)}
   .grouphead h3{font-size:15px;font-family:var(--font-sans);font-weight:650}
   .grouphead .gcount{color:var(--ink-3);font-size:12.5px;font-weight:500}
   .grouphead .gmarkup{margin-left:auto;color:var(--ink-2);font-size:12.5px;font-variant-numeric:tabular-nums;white-space:nowrap}
-  .groupbody{margin-top:8px}
   .groupbody[hidden]{display:none}
+  .group thead th{background:var(--surface)}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
   .muted{color:var(--ink-3)}
@@ -397,8 +399,7 @@
     var val = m.markupMode==="inherited" ? "" : String(round2(m.markup));
     var cls = m.markupMode==="override" ? " ov-red" : (m.markupMode==="derived" ? " ov-blue" : "");
     return '<div class="ovcell">'
-      + '<input class="ovinput'+cls+'" data-rmarkup="'+r.id+'" type="number" step="any" min="0" inputmode="decimal" value="'+val+'" placeholder="'+round2(m.inherited)+'" aria-label="Markup">'
-      + '<span class="suf">×</span>'
+      + '<input class="ovinput'+cls+'" data-rmarkup="'+r.id+'" type="number" step="any" min="0" inputmode="decimal" value="'+val+'" placeholder="'+round2(m.inherited)+'" aria-label="Markup (multiplier)">'
       + '<button class="ovreset" data-act="reset-markup" data-id="'+r.id+'" title="Reset to category markup" aria-label="Reset markup"'+(m.markupMode==="override"?"":" hidden")+'>'+ic_reset+'</button>'
       + '</div>';
   }
@@ -431,20 +432,14 @@
         + '<span class="gmarkup">'+ratioTxt(markup)+' default</span>'
       + '</button>'
       + '<div class="groupbody"'+(collapsed?" hidden":"")+'>'
-        + '<div class="card"><div class="table-wrap"><table><thead><tr>'
+        + '<div class="table-wrap"><table><thead><tr>'
           + '<th>Recipe</th><th class="num">Cost</th><th class="num">Markup</th><th class="num">Price</th><th class="num">Margin</th><th></th>'
-          + '</tr></thead><tbody>'+rows+'</tbody></table></div></div>'
+          + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
       + '</div></div>';
   }
   function renderRecipes(){
-    var totalGM=0, n=state.recipes.length;
-    state.recipes.forEach(function(r){ var m=computeRecipe(r); totalGM += (m.cost>0?gp(m.price,m.cost):0); });
-
-    var html = '<div class="summary">'
-      + stat("Recipes", n) + stat("Elements", state.elements.length)
-      + stat("Categories", state.categories.length) + stat("Avg. margin", n? pct(totalGM/n) : "—")
-      + '</div>';
-    html += '<div class="sectionhead"><h2>Recipes</h2><button class="btn primary" id="add-recipe">+ New recipe</button></div>';
+    var n = state.recipes.length;
+    var html = '<div class="sectionhead"><h2>Recipes</h2><button class="btn primary" id="add-recipe">+ New recipe</button></div>';
 
     if(!n){
       html += emptyCard("No recipes yet","Create your first recipe to see its cost and a suggested sell price.",
@@ -503,7 +498,7 @@
     state.categories.forEach(function(c){
       html += '<tr data-cid="'+c.id+'">'
         + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
-        + '<td class="num"><div class="ovcell"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:80px;text-align:right"><span class="suf">×</span></div></td>'
+        + '<td class="num"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:90px;text-align:right"></td>'
         + '<td class="num tnum muted">'+usageCountCat(c.id)+'</td>'
         + '<td><div class="rowactions">'+iconBtn("del-cat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
     });
