@@ -290,6 +290,7 @@
       if(r.priceOverride===undefined) r.priceOverride = null;
       if(r.ratio===undefined) r.ratio = null;
       if(r.desiredMargin===undefined) r.desiredMargin = null;
+      if(r.notes==null) r.notes = "";
     });
     return s;
   }
@@ -471,7 +472,7 @@
   function recipeRow(r){
     var m = computeRecipe(r);
     return '<tr data-rid="'+r.id+'">'
-      + '<td class="name-cell rname" data-act="edit-recipe" data-id="'+r.id+'" title="Click to edit">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div></td>'
+      + '<td class="name-cell rname" data-act="edit-recipe" data-id="'+r.id+'" title="Click to edit">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div>'+(r.notes?'<div class="rowsub">'+esc(r.notes)+'</div>':'')+'</td>'
       + '<td class="num cost cell-cost">'+money(m.cost)+'</td>'
       + '<td class="num">'+markupCell(r,m)+'</td>'
       + '<td class="num">'+priceCell(r,m)+'</td>'
@@ -552,17 +553,17 @@
     state.elements.forEach(function(e){
       html += '<tr data-id="'+e.id+'">'
         + '<td><input class="inline-input" data-f="name" value="'+esc(e.name)+'" placeholder="Element name">'
-          + '<input class="inline-input elnotes" data-f="notes" value="'+esc(e.notes||"")+'" placeholder="notes…"></td>'
+          + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
         + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:100px;text-align:right"></td>'
         + '<td><select class="inline-input" data-f="unit" style="max-width:110px">'+unitOptions(e.unit)+'</select></td>'
         + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:110px;text-align:right">'
           + '<div class="rowsub eldate">'+(e.priceDate? "as of "+esc(e.priceDate):"")+'</div></td>'
         + '<td class="num money muted">'+money(unitCost(e))+'<span class="muted" style="font-size:11px">/'+esc(e.unit||"unit")+'</span></td>'
         + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
-        + '<td><div class="rowactions">'+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
+        + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit (name, notes…)", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>';
     });
     html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px">Edit any field directly — it saves automatically and reprices every recipe using the element. Changing a <strong>Pack cost</strong> stamps today’s date under it. Use the tag icon to sell an element on its own (creates a one-line recipe). Manage the unit list in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px">Edit any field directly, or open the ✎ editor for the name &amp; notes. Changing a <strong>Pack cost</strong> stamps today’s date under it. The tag icon sells an element on its own (one-line recipe). Manage the unit list in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -703,6 +704,7 @@
       return '<div class="grid2 tight">'
         + '<label class="field">Recipe name<input id="r-name" value="'+esc(draft.name)+'" placeholder="e.g. Negroni"></label>'
         + '<label class="field">Category<select id="r-cat">'+catOpts+'</select></label></div>'
+        + '<label class="field" style="margin-top:14px">Notes <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— optional, shown under the recipe name</span><input id="r-notes" value="'+esc(draft.notes||"")+'" placeholder="e.g. seasonal; ask before 86ing"></label>'
         + '<div class="field" style="margin:18px 0 0">Elements</div><div class="lines" id="r-lines"></div>'
         + '<div style="margin-top:10px"><button type="button" class="btn sm" id="r-addline">+ Add element</button></div>'
         + '<div class="preview" id="r-preview"></div>';
@@ -726,7 +728,7 @@
         row.querySelector('[data-lrem]').addEventListener("click", function(){ draft.lines.splice(idx,1); if(!draft.lines.length) draft.lines.push({elementId:state.elements[0].id,amount:0}); paintLines(); paintPreview(); });
       });
     }
-    function readTop(){ draft.name = document.getElementById("r-name").value; draft.categoryId = document.getElementById("r-cat").value || null; }
+    function readTop(){ draft.name = document.getElementById("r-name").value; draft.categoryId = document.getElementById("r-cat").value || null; draft.notes = document.getElementById("r-notes").value; }
     function paintPreview(){
       readTop();
       var m = computeRecipe(draft);
@@ -857,6 +859,7 @@
       else if(a==="reset-price"){ r=findRecipe(id); if(r){ r.priceOverride=null; save(); repriceRow(rowOf(id)); } }
       else if(a==="reset-desired"){ r=findRecipe(id); if(r){ r.desiredMargin=null; save(); repriceRow(rowOf(id)); } }
       else if(a==="sell-elem"){ sellElement(id); }
+      else if(a==="edit-elem"){ editElement(elem(id)); }
       else if(a==="del-cat"){ var ucn=usageCountCat(id), cc=cat(id); confirmDelete("Delete category", ucn? ("“"+cc.name+"” is used by "+ucn+" recipe"+(ucn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+cc.name+"”?"), function(){ state.recipes.forEach(function(x){ if(x.categoryId===id) x.categoryId=null; }); state.categories=state.categories.filter(function(x){return x.id!==id;}); save(); render(); toast("Category deleted"); }); }
       else if(a==="del-elem"){ var un=usageCountElem(id), ee=elem(id); confirmDelete("Delete element", un? ("“"+ee.name+"” is used in "+un+" recipe"+(un===1?"":"s")+". It’ll be removed from them. Delete it?") : ("Delete “"+ee.name+"”?"), function(){ state.recipes.forEach(function(x){ x.lines=x.lines.filter(function(l){return l.elementId!==id;}); }); state.elements=state.elements.filter(function(x){return x.id!==id;}); save(); render(); toast("Element deleted"); }); }
       else if(a==="del-unit"){ state.settings.units.splice(+id,1); save(); render(); }
@@ -943,8 +946,28 @@
   }
   function sellElement(id){
     var e = elem(id); if(!e) return;
-    state.recipes.push({ id:uid("r"), name:e.name, categoryId:(state.categories[0]?state.categories[0].id:null), ratio:null, priceOverride:null, desiredMargin:null, lines:[{elementId:id, amount:1}] });
+    state.recipes.push({ id:uid("r"), name:e.name, categoryId:(state.categories[0]?state.categories[0].id:null), ratio:null, priceOverride:null, desiredMargin:null, notes:"", lines:[{elementId:id, amount:1}] });
     save(); ui.tab="recipes"; render(); toast("Added “"+(e.name||"element")+"” as a recipe");
+  }
+  function editElement(e){
+    if(!e) return;
+    var body = '<div class="grid2 tight">'
+      + '<label class="field">Name<input id="e-name" value="'+esc(e.name)+'" placeholder="Element name"></label>'
+      + '<label class="field">Unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label></div>'
+      + '<div class="grid2" style="margin-top:14px">'
+        + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label>'
+        + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label></div>'
+      + '<label class="field" style="margin-top:14px">Notes <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— optional, shown under the name</span><input id="e-notes" value="'+esc(e.notes||"")+'" placeholder="e.g. price per kg; 1 portion = 300 g"></label>';
+    openModal("Edit element", body, function(){
+      var name = document.getElementById("e-name").value.trim();
+      if(!name){ toast("Give the element a name.", true); return false; }
+      var nc = num(document.getElementById("e-cost").value);
+      if(nc !== num(e.cost)) e.priceDate = today();
+      e.name = name; e.unit = document.getElementById("e-unit").value;
+      e.size = num(document.getElementById("e-size").value); e.cost = nc;
+      e.notes = document.getElementById("e-notes").value;
+      toast("Element saved");
+    });
   }
   function addCategory(){
     var c = { id:uid("c"), name:"", ratio:3, desiredMargin:65 };
