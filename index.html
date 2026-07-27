@@ -741,7 +741,13 @@
   /* ---------------- Import / Export ---------------- */
   function driveEnabled(){ return !!(state.settings.driveSync && state.settings.driveUrl); }
   function isDataset(obj){ return obj && obj.settings && (Array.isArray(obj.elements)||Array.isArray(obj.ingredients)) && Array.isArray(obj.recipes) && Array.isArray(obj.categories); }
-  function applyImported(obj){ if(!isDataset(obj)) throw new Error("Not a valid Plate & Pour dataset."); state = migrate(obj); save(); render(); }
+  function applyImported(obj){
+    if(!isDataset(obj)) throw new Error("Not a valid Plate & Pour dataset.");
+    var ds = state.settings.driveSync, du = state.settings.driveUrl;   // Drive config is device-local, never overwritten by loaded data
+    state = migrate(obj);
+    state.settings.driveSync = ds; state.settings.driveUrl = du;
+    save(); render();
+  }
 
   function doExport(){
     if(driveEnabled()){ drivePush(); return; }
@@ -786,7 +792,9 @@
     var url = state.settings.driveUrl;
     if(!url){ toast("Set the Drive URL in Settings first.", true); return; }
     toast("Saving to Adversaire drive…");
-    fetch(url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(state)})
+    var out = JSON.parse(JSON.stringify(state));
+    if(out.settings){ delete out.settings.driveUrl; delete out.settings.driveSync; }   // keep the shared file free of device config
+    fetch(url, {method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(out)})
       .then(function(res){ if(!res.ok) throw new Error("HTTP "+res.status); return res.text(); })
       .then(function(){ toast("Saved to Adversaire drive"); })
       .catch(function(err){ toast("Drive push failed: "+((err&&err.message)||err), true); });
