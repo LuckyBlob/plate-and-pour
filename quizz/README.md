@@ -141,8 +141,15 @@ mechanism to look at first.
   dashboard keeps that, so the data is the only loud thing on the page.
 - **Team colours are fixed to the team, not to its rank** — a team keeps its
   colour across every view and every season, so filtering never repaints anyone.
-  Past 8 teams the extras go grey rather than reusing a hue: two bars of the same
-  colour would be a lie, and the team name is written beside every bar anyway.
+- **The palette is 18 colours**: the original 8 plus 10 picked by search, each as
+  far as possible from every colour already chosen *as a colourblind eye sees
+  it*, then ordered so no two neighbouring slots resemble each other. It passes
+  every gate on the adjacent-pair list, which is the one that applies to bars.
+  Note the honest limit: 18 mutually distinguishable hues don't exist — under
+  the all-pairs test any palette this size fails, and no ordering saves it. It
+  holds here because the team's **name is written beside every bar and in every
+  table**, so colour is a second cue and never the only one. Past 18 teams the
+  list repeats.
 - **The palettes were validated, not eyeballed** — the 8 team hues and the blue
   round-ramp both clear the lightness, chroma, colourblind-separation and
   contrast gates against this site's black. Re-run

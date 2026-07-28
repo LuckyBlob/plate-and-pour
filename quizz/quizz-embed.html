@@ -40,8 +40,15 @@
      noir et blanc, comme le site. Jeu catégoriel (identité d'une équipe) et
      rampe ordinale bleue (manche 1 → 4), tous deux validés sur le noir du
      site pour rester distinguables en cas de daltonisme.                  */
-  var TEAM_COLORS = ["#3987e5", "#d95926", "#199e70", "#c98500",
-                     "#d55181", "#008300", "#9085e9", "#e66767"];
+  // 18 couleurs : les 8 d'origine plus 10 choisies pour rester le plus loin
+  // possible des précédentes, y compris vues par un œil daltonien, puis
+  // ordonnées pour que deux barres voisines ne se ressemblent jamais. Au-delà
+  // de 18 équipes on recommence la liste : à ce compte-là aucune palette ne
+  // tient debout, et le nom écrit à côté de chaque barre reste ce qui identifie
+  // vraiment l'équipe.
+  var TEAM_COLORS = ["#3987e5", "#d95926", "#a1319b", "#199e70", "#6c35ec", "#d55181",
+                     "#9085e9", "#008300", "#b654b0", "#e66767", "#b72164", "#c98500",
+                     "#467ac6", "#b4514e", "#7c44c3", "#d42515", "#805bfe", "#cb2f90"];
   var ROUND_RAMPS = {                       // un jeu par nombre de manches
     1: ["#3987e5"],
     2: ["#86b6ef", "#256abf"],
@@ -304,11 +311,8 @@
 
   var COLOR_MAP = {}, COLOR_N = 0;
   function colorOf(name) {
-    // Au-delà de 8 équipes : du gris, pas une couleur déjà prise. Deux barres de
-    // la même couleur mentiraient ; le gris dit simplement « pas de couleur
-    // attitrée », et le nom est de toute façon écrit à côté de chaque barre.
     if (!(name in COLOR_MAP))
-      COLOR_MAP[name] = COLOR_N < TEAM_COLORS.length ? TEAM_COLORS[COLOR_N++] : "#8b8a86";
+      COLOR_MAP[name] = TEAM_COLORS[COLOR_N++ % TEAM_COLORS.length];
     return COLOR_MAP[name];
   }
   function roundColor(r, total) {
@@ -450,6 +454,21 @@
 '#qz-root .qz-t th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);',
 '  font-weight:500;text-align:right;padding:0 0 8px 14px;white-space:nowrap}',
 '#qz-root .qz-t th:first-child,#qz-root .qz-t td:first-child{text-align:left;padding-left:0}',
+'#qz-root .qz-sort{font:inherit;color:inherit;letter-spacing:inherit;text-transform:inherit;',
+'  cursor:pointer;padding:0;display:inline-flex;align-items:center;gap:4px;white-space:nowrap}',
+'#qz-root .qz-sort:hover{color:var(--ink)}',
+'#qz-root .qz-sort[data-sorted="asc"],#qz-root .qz-sort[data-sorted="desc"]{color:var(--ink)}',
+'#qz-root .qz-arrow{width:7px;display:inline-block}',
+'#qz-root .qz-sort[data-sorted="asc"] .qz-arrow::after{content:"↑"}',
+'#qz-root .qz-sort[data-sorted="desc"] .qz-arrow::after{content:"↓"}',
+'#qz-root .qz-t th.qz-sp,#qz-root .qz-t td.qz-sp{width:100%;padding:0;border-top:0}',
+'#qz-root .qz-t td.qz-nil{color:#5a5955}',
+'#qz-root .qz-dot-lg{width:12px;height:12px}',
+'#qz-root .qz-select{border:2px solid var(--line);border-radius:25px;padding:6px 14px;',
+'  background:var(--bg);color:var(--ink);font:inherit;font-size:13px;cursor:pointer;',
+'  max-width:min(100%,320px)}',
+'#qz-root .qz-select:hover{border-color:var(--ink)}',
+'#qz-root .qz-select option{background:#111110;color:var(--ink)}',
 '#qz-root .qz-t td{padding:9px 0 9px 14px;text-align:right;border-top:1px solid var(--line);',
 '  color:var(--ink2);white-space:nowrap}',
 '#qz-root .qz-t tbody tr:hover td{background:var(--wash)}',
@@ -530,11 +549,24 @@
     });
     fitHost();
   }
+  /** Redessine sans condition. Indispensable quand les polices finissent de
+      charger : la largeur du graphique n'a pas bougé, mais celle des mots si —
+      or c'est sur elle qu'on a calculé la place à réserver aux noms. Sans ça,
+      les noms mesurés en Helvetica débordent une fois affichés en Montserrat. */
+  function redrawAll() {
+    [].forEach.call(document.querySelectorAll("#qz-root .qz-chart"), function (host) {
+      if (host.__spec) draw(host);
+    });
+    fitHost();
+  }
+
   var syncTimer = null;
   function syncSoon() { clearTimeout(syncTimer); syncTimer = setTimeout(syncCharts, 120); }
   window.addEventListener("resize", syncSoon);
   window.addEventListener("orientationchange", syncSoon);
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncSoon);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () {
+    setTimeout(redrawAll, 0);
+  });
 
   /** Raccourcit une étiquette SVG jusqu'à ce qu'elle tienne, avec un « … ».
       Le nom complet reste dans l'infobulle et dans le tableau. */
@@ -702,16 +734,31 @@
     var rows = spec.rows, n = rows.length;
     if (!n) { host.appendChild(el("div", "qz-msg", "Rien à afficher pour l'instant.")); return; }
 
-    var labW = Math.min(175, Math.max(70, avail * 0.30));
-    var padL = labW + 10, padR = 44, rowH = 30, padT = 4, padB = 20;
-    var W = Math.max(avail, 260), plotW = Math.max(60, W - padL - padR);
+    var padR = 44, rowH = 30, padT = 4, padB = 20;
+    var W = Math.max(avail, 260);
     var H = padT + rowH * n + padB;
     var max = Math.max.apply(null, rows.map(function (r) { return r.value; }).concat([0]));
     var scale = niceTicks(max);
 
     var s = svg("svg", { width: W, height: H, role: "img",
                          "aria-label": spec.title || "graphique" });
-    host.appendChild(s);              // idem : mesurer les noms d'équipe
+    host.appendChild(s);              // dans la page : on peut mesurer le texte
+
+    // La colonne des noms prend la place qu'il faut au plus long d'entre eux,
+    // sans jamais manger plus de 45 % du graphique. « Les Cadavres Exquizz » a
+    // droit à son nom en entier ; au-delà de la limite, on coupe avec un « … ».
+    var probe = svg("text", { x: -999, y: -999, "font-size": 12.5 });
+    s.appendChild(probe);
+    var longest = 0;
+    rows.forEach(function (r) {
+      probe.textContent = r.label;
+      var w = probe.getComputedTextLength ? probe.getComputedTextLength() : 0;
+      longest = Math.max(longest, w || r.label.length * 6.4);   // si la mesure échoue
+    });
+    s.removeChild(probe);
+
+    var labW = Math.max(70, Math.min(longest + 10, W * 0.45));
+    var padL = labW + 10, plotW = Math.max(60, W - padL - padR);
 
     scale.ticks.forEach(function (t) {
       var x = padL + (t / scale.max) * plotW;
@@ -736,10 +783,12 @@
       if (w > 0.4) {
         s.appendChild(svg("path", { d: barPath(padL, cy - bh / 2, w, bh, 4), fill: r.color }));
       }
-      var val = svg("text", { x: padL + Math.max(w, 0) + 8, y: cy + 4, fill: "#fff",
-                              "font-size": 12, "font-weight": 600 });
-      val.textContent = fmt(r.value);
-      s.appendChild(val);
+      if (r.value) {                       // un « 0 » collé à une barre vide n'apprend rien
+        var val = svg("text", { x: padL + Math.max(w, 0) + 8, y: cy + 4, fill: "#fff",
+                                "font-size": 12, "font-weight": 600 });
+        val.textContent = fmt(r.value);
+        s.appendChild(val);
+      }
 
       var hit = svg("rect", { x: 0, y: padT + rowH * i, width: W, height: rowH, fill: "transparent" });
       bindTip(hit, host, function () { return spec.tip(r, i); });
@@ -836,9 +885,19 @@
     panel.appendChild(el("div", "qz-pnote",
       "1 point par manche gagnée + 1 point pour le meilleur total de la soirée. "
       + "En cas d'égalité, chaque équipe à égalité marque le point."));
+    // Une équipe encore à 0 n'a pas de barre à montrer : elle encombrerait le
+    // graphique d'une ligne vide. Elle reste dans le tableau juste en dessous.
+    var scoring = data.ranked.filter(function (t) { return t.points > 0; });
+    if (scoring.length < data.ranked.length) {
+      panel.appendChild(el("div", "qz-pnote",
+        (data.ranked.length - scoring.length) + " équipe" +
+        (data.ranked.length - scoring.length > 1 ? "s" : "") +
+        " encore sans point ne figure" + (data.ranked.length - scoring.length > 1 ? "nt" : "") +
+        " pas ici — elles sont dans le tableau."));
+    }
     panel.appendChild(chart({
       kind: "hbars",
-      rows: data.ranked.map(function (t) {
+      rows: scoring.map(function (t) {
         return { label: t.name, value: t.points, color: t.color, team: t };
       }),
       tip: function (r) {
@@ -875,16 +934,26 @@
   /* ── 2. par équipe ── */
   function viewTeam(body, data) {
     if (S.team >= data.teams.length) S.team = 0;
+    // Une liste déroulante plutôt que des pastilles : à quinze équipes ou plus,
+    // les pastilles couvrent la moitié de l'écran avant qu'on ait vu un chiffre.
     var picker = el("div", "qz-bar");
     picker.appendChild(el("span", "qz-lab", "Équipe"));
-    data.teams.forEach(function (t, i) {
-      var b = el("button", "qz-pill");
-      var dot = el("span", "qz-dot"); dot.style.background = t.color;
-      b.appendChild(dot); b.appendChild(document.createTextNode(t.name));
-      b.setAttribute("aria-pressed", i === S.team ? "true" : "false");
-      b.onclick = function () { S.team = i; render(); };
-      picker.appendChild(b);
-    });
+    var dot = el("span", "qz-dot qz-dot-lg");
+    dot.style.background = data.teams[S.team].color;
+    picker.appendChild(dot);
+
+    var sel = el("select", "qz-select");
+    sel.setAttribute("aria-label", "Choisir une équipe");
+    data.teams.map(function (t, i) { return { t: t, i: i }; })
+      .sort(function (a, b) { return a.t.name.localeCompare(b.t.name, "fr", { numeric: true }); })
+      .forEach(function (o) {
+        var opt = el("option", null, o.t.name);
+        opt.value = o.i;
+        if (o.i === S.team) opt.selected = true;
+        sel.appendChild(opt);
+      });
+    sel.onchange = function () { S.team = +sel.value; render(); };
+    picker.appendChild(sel);
     body.appendChild(picker);
 
     var me = data.teams[S.team], season = data.season, R = season.roundCount;
@@ -1125,30 +1194,84 @@
     return box;
   }
 
+  /** Ce qui sert à trier une cellule : son nombre si c'en est un, son texte
+      sinon. Les cases vides (« — ») partent toujours en dernier. */
+  function sortKey(c) {
+    if (c.name != null) return { txt: c.name.toLowerCase() };
+    var n = num(c.v);
+    if (n != null) return { n: n };
+    var t = String(c.v == null ? "" : c.v).trim();
+    return (!t || t === "—") ? {} : { txt: t.toLowerCase() };
+  }
+
   function table(head, rows) {
     var wrap = el("div", "qz-scroll"), t = el("table", "qz-t");
     var thead = el("thead"), tr = el("tr");
-    head.forEach(function (h) { tr.appendChild(el("th", null, h)); });
-    thead.appendChild(tr); t.appendChild(thead);
-    var tb = el("tbody");
-    rows.forEach(function (cells) {
-      var r = el("tr");
-      cells.forEach(function (c) {
-        var td = el("td", c.cls || null);
-        if (c.name != null) {
-          var box = el("span", "qz-name");
-          var dot = el("span", "qz-dot"); dot.style.background = c.color;
-          box.appendChild(dot);
-          box.appendChild(document.createTextNode(c.name));
-          td.appendChild(box);
-        } else {
-          td.textContent = String(c.v);
-        }
-        r.appendChild(td);
-      });
-      tb.appendChild(r);
+    var sortCol = null, sortDir = 1;
+
+    head.forEach(function (h, i) {
+      var th = el("th");
+      if (h) {
+        var b = el("button", "qz-sort", h);
+        b.setAttribute("data-col", i);       // le rang n'a pas de bouton : on retient la colonne
+        b.appendChild(el("span", "qz-arrow"));
+        b.onclick = function () {
+          // Deuxième clic sur la même colonne : on inverse. Nouvelle colonne :
+          // les nombres partent du plus grand, les noms de A à Z.
+          if (sortCol === i) sortDir = -sortDir;
+          else { sortCol = i; sortDir = (sortKey(rows[0] && rows[0][i] || {}).n != null) ? -1 : 1; }
+          paint();
+        };
+        th.appendChild(b);
+      }
+      tr.appendChild(th);
     });
+    tr.appendChild(el("th", "qz-sp"));            // avale la largeur restante
+    thead.appendChild(tr); t.appendChild(thead);
+
+    var tb = el("tbody");
     t.appendChild(tb); wrap.appendChild(t);
+
+    function paint() {
+      [].forEach.call(tr.querySelectorAll(".qz-sort"), function (b) {
+        var mine = +b.getAttribute("data-col") === sortCol;
+        b.setAttribute("data-sorted", mine ? (sortDir > 0 ? "asc" : "desc") : "");
+      });
+      var list = rows.slice();
+      if (sortCol != null) {
+        list.sort(function (x, y) {
+          var a = sortKey(x[sortCol]), b = sortKey(y[sortCol]);
+          if (a.n != null && b.n != null) return (a.n - b.n) * sortDir;
+          if (a.n != null) return -1;                       // les nombres avant le texte
+          if (b.n != null) return 1;
+          if (a.txt == null) return 1;                      // les vides tout en bas
+          if (b.txt == null) return -1;
+          return a.txt.localeCompare(b.txt, "fr", { numeric: true }) * sortDir;
+        });
+      }
+      while (tb.firstChild) tb.removeChild(tb.firstChild);
+      list.forEach(function (cells) {
+        var r = el("tr");
+        cells.forEach(function (c) {
+          var td = el("td", c.cls || null);
+          if (c.name != null) {
+            var box = el("span", "qz-name");
+            var dot = el("span", "qz-dot"); dot.style.background = c.color;
+            box.appendChild(dot);
+            box.appendChild(document.createTextNode(c.name));
+            td.appendChild(box);
+          } else {
+            var txt = String(c.v);
+            td.textContent = txt;
+            if (txt === "0") td.className = (c.cls ? c.cls + " " : "") + "qz-nil";
+          }
+          r.appendChild(td);
+        });
+        r.appendChild(el("td", "qz-sp"));
+        tb.appendChild(r);
+      });
+    }
+    paint();
     return wrap;
   }
 
