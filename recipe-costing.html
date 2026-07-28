@@ -168,9 +168,10 @@
   .grid2.tight{grid-template-columns:1.6fr 1fr}
 
   .lines{display:flex;flex-direction:column;gap:8px;margin-top:6px}
-  .line{display:grid;grid-template-columns:minmax(0,1fr) 80px 34px minmax(64px,auto) auto;gap:8px;align-items:center}
+  .line{display:grid;grid-template-columns:minmax(0,1fr) 80px minmax(84px,auto) minmax(64px,auto) auto;gap:8px;align-items:center}
   .line .lc{font-family:var(--font-mono);font-size:13px;color:var(--ink-2);white-space:nowrap;text-align:right;min-width:64px}
   .line .u{font-size:12px;color:var(--ink-3);min-width:34px}
+  .line .u-sel{font-size:12px;padding:5px 6px;color:var(--ink-2);width:100%;max-width:120px}
   .preview{margin-top:16px;border:1px dashed var(--line-strong);border-radius:10px;padding:14px 16px;background:var(--paper)}
   .preview .row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:3px 0}
   .preview .row .lab{color:var(--ink-2);font-size:13px}
@@ -192,7 +193,7 @@
   @media (max-width:560px){
     .brand .sub{display:none}
     .line{grid-template-columns:minmax(0,1fr) 66px minmax(56px,auto) auto}
-    .line .u{display:none}
+    .line .u,.line .u-sel{display:none}
     .grid2,.grid2.tight{grid-template-columns:1fr}
   }
   @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -335,7 +336,11 @@
 
   // One portion is expressed in the pack's own unit, so portion cost = pack cost × (one portion ÷ pack size).
   function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)/s; }
-  function lineCost(l){ var e = elem(l.elementId); return e ? portionCost(e)*num(l.amount) : 0; }
+  // A recipe line counts its amount either in portions or in the element's own unit (when that unit isn't already "portion").
+  function lineUnitOptions(e){ return (e && e.unit && e.unit!=="portion") ? ["portion", e.unit] : ["portion"]; }
+  function isIntegerAmount(a){ var n=num(a); return n===Math.floor(n); }
+  function defaultLineUnit(l){ var e=elem(l.elementId); return (e && e.unit && e.unit!=="portion" && !isIntegerAmount(l.amount)) ? e.unit : "portion"; }
+  function lineCost(l){ var e = elem(l.elementId); if(!e) return 0; var lu=(l&&l.unit)||"portion"; if(lu!=="portion" && lu===e.unit){ var s=num(e.size); return s>0 ? num(e.cost)/s*num(l.amount) : 0; } return portionCost(e)*num(l.amount); }
   function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
   function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
 
@@ -716,6 +721,7 @@
     r = r || { id:uid("r"), name:"", categoryId: state.categories[0]?state.categories[0].id:null, ratio:null, priceOverride:null, lines:[] };
     var draft = JSON.parse(JSON.stringify(r));
     if(draft.lines.length===0) draft.lines.push({elementId:state.elements[0].id, amount:0});
+    draft.lines.forEach(function(l){ if(l.unit==null) l.unit = defaultLineUnit(l); });
 
     function body(){
       var catOpts = '<option value="">Uncategorized</option>' + state.categories.map(function(c){ return '<option value="'+c.id+'"'+(draft.categoryId===c.id?" selected":"")+'>'+esc(c.name)+' ('+ratioTxt(c.ratio)+')</option>'; }).join("");
@@ -730,10 +736,14 @@
     function lineRow(l, idx){
       var opts = state.elements.map(function(e){ return '<option value="'+e.id+'"'+(l.elementId===e.id?" selected":"")+'>'+esc(e.name)+'</option>'; }).join("");
       var e = elem(l.elementId);
+      var uOpts = lineUnitOptions(e), cur = l.unit||"portion";
+      var unitCtrl = uOpts.length>1
+        ? '<select data-lf="unit" class="u-sel" aria-label="Unit">'+uOpts.map(function(u){ return '<option value="'+esc(u)+'"'+(cur===u?" selected":"")+'>'+esc(u)+'</option>'; }).join("")+'</select>'
+        : '<span class="u">'+esc(uOpts[0])+'</span>';
       return '<div class="line" data-idx="'+idx+'">'
         + '<select data-lf="elementId">'+opts+'</select>'
         + '<input data-lf="amount" type="number" step="any" min="0" inputmode="decimal" value="'+esc(l.amount)+'" aria-label="Amount">'
-        + '<span class="u">'+esc(e?e.unit:"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
+        + unitCtrl + '<span class="lc">'+money(lineCost(l))+'</span>'
         + '<button type="button" class="iconbtn danger" data-lrem="'+idx+'" aria-label="Remove">'+ic_trash+'</button></div>';
     }
     function paintLines(){
@@ -741,9 +751,10 @@
       box.innerHTML = draft.lines.map(function(l,idx){ return lineRow(l,idx); }).join("");
       box.querySelectorAll(".line").forEach(function(row){
         var idx = +row.dataset.idx;
-        row.querySelector('[data-lf="elementId"]').addEventListener("change", function(ev){ draft.lines[idx].elementId=ev.target.value; paintLines(); paintPreview(); });
+        row.querySelector('[data-lf="elementId"]').addEventListener("change", function(ev){ draft.lines[idx].elementId=ev.target.value; draft.lines[idx].unit=defaultLineUnit(draft.lines[idx]); paintLines(); paintPreview(); });
         row.querySelector('[data-lf="amount"]').addEventListener("input", function(ev){ draft.lines[idx].amount=ev.target.value; row.querySelector(".lc").textContent=money(lineCost(draft.lines[idx])); paintPreview(); });
-        row.querySelector('[data-lrem]').addEventListener("click", function(){ draft.lines.splice(idx,1); if(!draft.lines.length) draft.lines.push({elementId:state.elements[0].id,amount:0}); paintLines(); paintPreview(); });
+        var us=row.querySelector('[data-lf="unit"]'); if(us) us.addEventListener("change", function(ev){ draft.lines[idx].unit=ev.target.value; row.querySelector(".lc").textContent=money(lineCost(draft.lines[idx])); paintPreview(); });
+        row.querySelector('[data-lrem]').addEventListener("click", function(){ draft.lines.splice(idx,1); if(!draft.lines.length) draft.lines.push({elementId:state.elements[0].id,amount:0,unit:"portion"}); paintLines(); paintPreview(); });
       });
     }
     function readTop(){ draft.name = document.getElementById("r-name").value; draft.categoryId = document.getElementById("r-cat").value || null; draft.notes = document.getElementById("r-notes").value; }
@@ -766,7 +777,7 @@
       toast(isNew?"Recipe added":"Recipe saved");
     });
     document.getElementById("r-cat").addEventListener("change", paintPreview);
-    document.getElementById("r-addline").addEventListener("click", function(){ draft.lines.push({elementId:state.elements[0].id,amount:0}); paintLines(); paintPreview(); });
+    document.getElementById("r-addline").addEventListener("click", function(){ draft.lines.push({elementId:state.elements[0].id,amount:0,unit:"portion"}); paintLines(); paintPreview(); });
     paintLines(); paintPreview();
   }
 
