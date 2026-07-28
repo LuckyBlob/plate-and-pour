@@ -1,13 +1,15 @@
 name: Sync data from Adversaire drive
 
-# Keeps data.json (served same-origin by GitHub Pages) in step with the live
-# Google Drive file, so networks that block Google still see up-to-date data.
-# GitHub's runners can reach script.google.com even when a workplace can't.
+# data.json (served same-origin by GitHub Pages) mirrors the live Google Drive
+# file, so networks that block Google still see up-to-date data.
+#
+# Real-time sync is EVENT-DRIVEN, not polled: the Apps Script web app pushes
+# every save straight to data.json via the GitHub API (see drive-bridge.gs ->
+# pushToGitHub), so the mirror updates within seconds of the Drive file being
+# modified. This workflow is only a manual, on-demand backstop for that push.
 
 on:
-  schedule:
-    - cron: "*/15 * * * *"   # every 15 minutes (GitHub may delay scheduled runs)
-  workflow_dispatch: {}        # allow manual "Run workflow"
+  workflow_dispatch: {}        # manual "Run workflow" — on-demand backstop only
 
 permissions:
   contents: write
