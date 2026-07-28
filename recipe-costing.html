@@ -255,7 +255,7 @@
   var DEFAULT_DRIVE_URL = "https://script.google.com/macros/s/AKfycbyTQNKOZRoDZlhBovwptpJif3jvNrXgq5BsTZvs9B5qXqKyXupjV57c_7qs25R_STvN/exec";
 
   var state = load() || migrate(seed());
-  var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1}, loadedFrom:null };
+  var ui = { tab:"recipes", collapsed:{}, sort:{col:"name",dir:1}, esort:{col:"name",dir:1}, loadedFrom:null };
   function today(){ try{ return new Date().toISOString().slice(0,10); }catch(e){ return ""; } }
   function nowStamp(){ try{ var d=new Date(); function p(n){return (n<10?"0":"")+n;} return d.getFullYear()+"-"+p(d.getMonth()+1)+"-"+p(d.getDate())+" "+p(d.getHours())+":"+p(d.getMinutes()); }catch(e){ return today(); } }
 
@@ -541,6 +541,17 @@
     view.innerHTML = html;
   }
 
+  function earrow(col){ return ui.esort.col===col ? '<span class="sortarrow">'+(ui.esort.dir>0?"▲":"▼")+'</span>' : ''; }
+  function sortElements(list){
+    var col=ui.esort.col, dir=ui.esort.dir;
+    return list.slice().sort(function(a,b){
+      if(col==="used") return (usageCountElem(a.id)-usageCountElem(b.id))*dir;
+      var av,bv;
+      if(col==="modified"){ av=a.modified||""; bv=b.modified||""; }
+      else { av=(a.name||"").toLowerCase(); bv=(b.name||"").toLowerCase(); }
+      return av<bv?-dir:av>bv?dir:0;
+    });
+  }
   function renderElements(){
     var html = '<div class="sectionhead"><div><h2>Elements</h2>'
       + '<div class="hint">The raw things you buy — food or drink. Enter the pack size you purchase and its price; the unit cost is worked out for you.</div></div>'
@@ -550,9 +561,9 @@
       view.innerHTML = html; return;
     }
     html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th style="min-width:200px">Name</th><th class="num">Pack cost</th><th class="num">Pack size</th><th>Unit</th>'
-      + '<th class="num">Portion cost</th><th>Last modified</th><th class="num">Used in</th><th></th></tr></thead><tbody>';
-    state.elements.forEach(function(e){
+      + '<th class="sortable" style="min-width:200px" data-esortcol="name">Name'+earrow("name")+'</th><th class="num">Pack cost</th><th class="num">Pack size</th><th>Unit</th>'
+      + '<th class="num">Portion cost</th><th class="sortable" data-esortcol="modified">Last modified'+earrow("modified")+'</th><th class="num sortable" data-esortcol="used">Used in'+earrow("used")+'</th><th></th></tr></thead><tbody>';
+    sortElements(state.elements).forEach(function(e){
       html += '<tr data-id="'+e.id+'" class="el-main">'
         + '<td class="name-cell rname" data-act="edit-elem" data-id="'+e.id+'" title="Click to edit">'+esc(e.name||"(unnamed)")
           + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
@@ -855,6 +866,8 @@
   view.addEventListener("click", function(e){
     var sc = e.target.closest("[data-sortcol]");
     if(sc){ var col=sc.dataset.sortcol; if(ui.sort.col===col){ ui.sort.dir*=-1; } else { ui.sort={col:col,dir:1}; } render(); return; }
+    var esc2 = e.target.closest("[data-esortcol]");
+    if(esc2){ var ecol=esc2.dataset.esortcol; if(ui.esort.col===ecol){ ui.esort.dir*=-1; } else { ui.esort={col:ecol,dir:1}; } render(); return; }
     var act = e.target.closest("[data-act]");
     if(act){
       var id = act.dataset.id, a = act.dataset.act, r;
