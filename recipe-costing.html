@@ -143,6 +143,8 @@
   .el-main>td{border-bottom:0}
   .el-portion>td{padding-top:0;padding-bottom:12px}
   .el-main .cell-portioncost{color:var(--ink)}
+  .portion-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .portion-line .switch{white-space:nowrap}
   .portion-box{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
   .portion-box input,.portion-box select{padding:5px 7px;font-size:13px}
   .portion-unit{font-size:13px;color:var(--ink-2);font-family:var(--font-mono)}
@@ -288,11 +290,15 @@
     if(!Array.isArray(s.elementCategories)) s.elementCategories = [];
     if(!Array.isArray(s.elements)) s.elements = Array.isArray(s.ingredients) ? s.ingredients : [];
     delete s.ingredients;
-    s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.modified==null) e.modified=today(); if(e.catId===undefined) e.catId=null; });
+    // hasPortion defaults to true for data written before the flag existed — those elements were all priced by the portion.
+    s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.hasPortion==null) e.hasPortion=true; if(e.modified==null) e.modified=today(); if(e.catId===undefined) e.catId=null; });
+    var elById = {}; s.elements.forEach(function(e){ elById[e.id]=e; });
     if(!Array.isArray(s.recipes)) s.recipes = [];
     s.recipes.forEach(function(r){
       if(!Array.isArray(r.lines)) r.lines = [];
       r.lines.forEach(function(l){ if(l.elementId==null && l.ingredientId!=null) l.elementId=l.ingredientId; delete l.ingredientId; });
+      // An element with no portion can only be counted in its own unit.
+      r.lines.forEach(function(l){ var e=elById[l.elementId]; if(e && !e.hasPortion) l.unit = e.unit || "each"; });
       if(r.priceOverride===undefined) r.priceOverride = null;
       if(r.ratio===undefined) r.ratio = null;
       if(r.desiredMargin===undefined) r.desiredMargin = null;
@@ -378,14 +384,36 @@
   function isExpr(str){ return /[+\-*/()]/.test(String(str==null?"":str)); }   // has a math operator → it's an equation, not a plain number
   function fmtNum(v){ if(!isFinite(v)) return "0"; if(v===0) return "0"; return String(parseFloat(v.toPrecision(6))); }
 
+  // Some elements are bought and used in their own unit and never split into a portion — "Define portion" is off for those.
+  function hasPortion(e){ return !!(e && e.hasPortion); }
+  function elemUnit(e){ return (e && e.unit) || "each"; }
+  // What one unit of the pack costs.
+  function unitCost(e){ if(!e) return 0; var s=num(e.size); return s>0 ? num(e.cost)/s : 0; }
   // One portion is expressed in the pack's own unit, so portion cost = pack cost × (one portion ÷ pack size).
-  function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)/s; }
+  // With no portion defined, the element is simply counted in its own unit.
+  function portionCost(e){ if(!e) return 0; return hasPortion(e) ? unitCost(e)*num(e.portion) : unitCost(e); }
   // A recipe line counts its amount either in portions or in the element's own unit (when that unit isn't already "portion").
-  function lineUnitOptions(e){ return (e && e.unit && e.unit!=="portion") ? ["portion", e.unit] : ["portion"]; }
-  function isIntegerAmount(a){ var n=num(a); return n===Math.floor(n); }
-  function defaultLineUnit(l){ var e=elem(l.elementId); return (e && e.unit && e.unit!=="portion" && !isIntegerAmount(l.amount)) ? e.unit : "portion"; }
-  function lineCost(l){ var e = elem(l.elementId); if(!e) return 0; var lu=(l&&l.unit)||"portion"; if(lu!=="portion" && lu===e.unit){ var s=num(e.size); return s>0 ? num(e.cost)/s*num(l.amount) : 0; } return portionCost(e)*num(l.amount); }
+  // No portion defined → the element's unit is the only choice, so the editor shows it as plain text.
+  function lineUnitOptions(e){
+    if(!e) return ["portion"];
+    if(!hasPortion(e)) return [elemUnit(e)];
+    return (e.unit && e.unit!=="portion") ? ["portion", e.unit] : ["portion"];
+  }
+  // A line with no unit yet counts in portions — the pack unit is a whole bottle or case, never the intent.
+  function defaultLineUnit(l){
+    var e=elem(l.elementId); if(!e) return "portion";
+    return hasPortion(e) ? "portion" : elemUnit(e);
+  }
+  function lineCost(l){ var e = elem(l.elementId); if(!e) return 0; var lu=(l&&l.unit)||"portion"; if(!hasPortion(e) || (lu!=="portion" && lu===e.unit)) return unitCost(e)*num(l.amount); return portionCost(e)*num(l.amount); }
   function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
+  // Keep every recipe line on a unit the element still offers — called when an element loses its portion or changes unit.
+  function coerceLinesTo(e){
+    if(!e) return;
+    var ok = lineUnitOptions(e);
+    state.recipes.forEach(function(r){
+      r.lines.forEach(function(l){ if(l.elementId===e.id && ok.indexOf(l.unit||"portion")<0) l.unit = ok[0]; });
+    });
+  }
   function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
 
   function roundPrice(raw, rule){
@@ -609,17 +637,23 @@
       + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
       + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
       + '<td><select class="inline-input" data-f="unit" style="max-width:100px">'+unitOptions(e.unit)+'</select></td>'
-      + '<td class="num money cell-portioncost">'+money(portionCost(e))+'<span class="muted" style="font-size:11px">/portion</span></td>'
+      + '<td class="num money cell-portioncost">'+portionCostCell(e)+'</td>'
       + '<td class="muted cell-modified" style="font-size:12.5px;white-space:nowrap">'+esc(e.modified||"")+'</td>'
       + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
       + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>'
-      + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
-        + '<div class="portion-box"><span>One portion:</span>'
-          + '<input class="inline-input tnum" data-f="portionExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" title="A number or an equation — e.g. 750/25 or (2+3)*4" placeholder="e.g. 750/25" style="width:104px;text-align:right">'
-          + '<span class="portion-eval">'+(isExpr(portionRaw(e))?"= "+esc(fmtNum(num(e.portion))):"")+'</span>'
-          + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
+      + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3"><div class="portion-line">'
+        + '<label class="switch"><input type="checkbox" data-f="hasPortion"'+(hasPortion(e)?" checked":"")+'>Define portion</label>'
+        + (hasPortion(e)
+          ? '<div class="portion-box"><span>One portion:</span>'
+            + '<input class="inline-input tnum" data-f="portionExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" title="A number or an equation — e.g. 750/25 or (2+3)*4" placeholder="e.g. 750/25" style="width:104px;text-align:right">'
+            + '<span class="portion-eval">'+(isExpr(portionRaw(e))?"= "+esc(fmtNum(num(e.portion))):"")+'</span>'
+            + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
+          + '</div>'
+          : '<span class="muted" style="font-size:12.5px">Counted in '+esc(elemUnit(e))+' — recipes use that unit.</span>')
         + '</div></td><td></td><td></td><td></td><td></td></tr>';
   }
+  // The portion-cost column falls back to the unit cost when the element has no portion.
+  function portionCostCell(e){ return money(portionCost(e))+'<span class="muted" style="font-size:11px">/'+esc(hasPortion(e)?"portion":elemUnit(e))+'</span>'; }
   // What the "One portion" field shows: the stored equation if there is one, otherwise the plain number.
   function portionRaw(e){ return (e && e.portionExpr!=null && e.portionExpr!=="") ? e.portionExpr : String(e?num(e.portion):0); }
   function elementGroupBlock(gid, name, list){
@@ -653,7 +687,7 @@
     var uncat = state.elements.filter(function(e){ return !ecat(e.catId); });
     if(uncat.length) groups += elementGroupBlock("el:__uncat__", "Uncategorized", uncat);
     html += groups;
-    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Any edit stamps <em>Last modified</em>. The ✎ editor holds name, notes &amp; category; the tag icon sells an element on its own. Click a column header to sort every section. Manage units in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Leave <em>Define portion</em> off for things you buy and use in the same unit — the column then shows the cost of one unit, and recipes count them in that unit. Any edit stamps <em>Last modified</em>. The ✎ editor holds name, notes &amp; category; the tag icon sells an element on its own. Click a column header to sort every section. Manage units in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -1013,6 +1047,13 @@
     if(erow){
       var el=elem(erow.dataset.id);
       if(el){
+        if(f==="hasPortion"){
+          if(e.type!=="change") return;          // checkbox fires input then change — act once, then repaint the row
+          el.hasPortion = inp.checked; el.modified = nowStamp();
+          if(el.hasPortion && el.portionUnit==null) el.portionUnit = el.unit;
+          if(!el.hasPortion) coerceLinesTo(el);
+          save(); render(); return;
+        }
         if(f==="portionExpr"){
           var raw=inp.value, val=evalExpr(raw), esp=inp.parentElement.querySelector(".portion-eval");
           if(isNaN(val) || val<0){
@@ -1030,10 +1071,14 @@
         else if(f==="size"||f==="cost") el[f]=num(inp.value);
         else el[f]=inp.value;
         if(f==="cost") el.priceDate=today();
+        if(f==="unit"){
+          el.portionUnit=el.unit; coerceLinesTo(el); el.modified=nowStamp();
+          if(!hasPortion(el)){ save(); render(); return; }   // the row's unit caption is baked in — repaint it
+        }
         el.modified=nowStamp();
         var mrow=view.querySelector('tr[data-id="'+el.id+'"]');
         if(mrow){
-          var pc=mrow.querySelector(".cell-portioncost"); if(pc) pc.innerHTML=money(portionCost(el))+'<span class="muted" style="font-size:11px">/portion</span>';
+          var pc=mrow.querySelector(".cell-portioncost"); if(pc) pc.innerHTML=portionCostCell(el);
           var md=mrow.querySelector(".cell-modified"); if(md) md.textContent=el.modified;
         }
         var pus=view.querySelectorAll('tr[data-id="'+el.id+'"] .portion-unit'); for(var z=0;z<pus.length;z++) pus[z].textContent=el.unit||"";
@@ -1087,7 +1132,7 @@
   function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
   function addElement(){
     var u = (state.settings.units[0]||"each");
-    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today(), catId:null };
+    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, hasPortion:false, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today(), catId:null };
     state.elements.push(it); save(); render(); editElement(it);
   }
   function sellElement(id){
@@ -1106,26 +1151,34 @@
         + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label>'
         + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label></div>'
       + '<label class="field" style="margin-top:14px">Pack unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label>'
-      + '<div class="subcard" style="margin-top:14px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— a number or equation, in the pack unit above</span>'
-        + '<input id="e-portion" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" placeholder="e.g. 750/25 or (2+3)*4"></label>'
-        + '<div class="hint" id="e-portion-eval" style="margin-top:6px"></div></div>';
+      + '<div class="subcard" style="margin-top:14px">'
+        + '<label class="switch"><input type="checkbox" id="e-hasportion"'+(hasPortion(e)?" checked":"")+'>Define portion</label>'
+        + '<div id="e-portion-wrap"'+(hasPortion(e)?"":" hidden")+' style="margin-top:12px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— a number or equation, in the pack unit above</span>'
+          + '<input id="e-portion" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" placeholder="e.g. 750/25 or (2+3)*4"></label>'
+          + '<div class="hint" id="e-portion-eval" style="margin-top:6px"></div></div>'
+        + '<div class="hint" id="e-noportion"'+(hasPortion(e)?" hidden":"")+' style="margin-top:8px">Recipes will count this element in its pack unit — no portion to choose.</div></div>';
     openModal("Edit element", body, function(){
       var name = document.getElementById("e-name").value.trim();
       if(!name){ toast("Give the element a name.", true); return false; }
+      var wantsPortion = document.getElementById("e-hasportion").checked;
       var praw = document.getElementById("e-portion").value, pval = evalExpr(praw);
-      if(isNaN(pval) || pval<0){ toast("One portion must be a number or a valid equation.", true); return false; }
+      if(wantsPortion && (isNaN(pval) || pval<0)){ toast("One portion must be a number or a valid equation.", true); return false; }
       var nc = num(document.getElementById("e-cost").value);
       if(nc !== num(e.cost)) e.priceDate = today();
       e.name = name; e.notes = document.getElementById("e-notes").value;
       e.catId = document.getElementById("e-cat").value || null;
       e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
-      e.portion = pval; e.portionExpr = isExpr(praw) ? praw.trim() : null; e.portionUnit = e.unit;
+      e.hasPortion = wantsPortion;
+      if(wantsPortion){ e.portion = pval; e.portionExpr = isExpr(praw) ? praw.trim() : null; }
+      e.portionUnit = e.unit;
+      coerceLinesTo(e);
       e.modified = nowStamp();
       toast("Element saved");
     });
     (function(){
       var pe=document.getElementById("e-portion"), pv=document.getElementById("e-portion-eval");
-      if(!pe||!pv) return;
+      var cb=document.getElementById("e-hasportion"), wrap=document.getElementById("e-portion-wrap"), np=document.getElementById("e-noportion");
+      if(!pe||!pv||!cb) return;
       function upd(){
         var raw=pe.value, val=evalExpr(raw), unit=document.getElementById("e-unit").value||"";
         if(raw.trim()===""){ pe.classList.remove("bad"); pv.style.color=""; pv.textContent=""; return; }
@@ -1133,9 +1186,11 @@
         pe.classList.remove("bad"); pv.style.color="";
         pv.textContent = isExpr(raw) ? ("= "+fmtNum(val)+" "+unit) : "";
       }
+      function toggle(){ wrap.hidden = !cb.checked; np.hidden = cb.checked; if(cb.checked) upd(); }
       pe.addEventListener("input", upd);
+      cb.addEventListener("change", toggle);
       document.getElementById("e-unit").addEventListener("change", upd);
-      upd();
+      toggle();
     })();
   }
   function addCategory(){
