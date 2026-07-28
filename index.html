@@ -151,6 +151,8 @@
   .portion-box{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
   .portion-box input,.portion-box select{padding:5px 7px;font-size:13px}
   .portion-unit{font-size:13px;color:var(--ink-2);font-family:var(--font-mono)}
+  .portion-eval{font-size:13px;color:var(--accent-2);font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+  .inline-input.bad{border-color:var(--bad);color:var(--bad)}
   tbody tr.el-portion:hover{background:transparent}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
@@ -350,6 +352,39 @@
   function num(v){ var n = parseFloat(v); return isFinite(n) ? n : 0; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
   function round2(v){ return Math.round((v+Number.EPSILON)*100)/100; }
+
+  // Safe calculator: evaluate + - * / and parentheses with a tiny recursive-descent
+  // parser (no eval). Returns NaN for anything malformed. Powers the "One portion" field.
+  function evalExpr(str){
+    if(str==null) return NaN;
+    var s = String(str), i = 0, n = s.length;
+    function ws(){ while(i<n && (s[i]===" "||s[i]==="\t")) i++; }
+    function expr(){ var v=term(); if(isNaN(v)) return NaN;
+      for(;;){ ws(); var c=s[i];
+        if(c==="+"){ i++; var r=term(); if(isNaN(r)) return NaN; v+=r; }
+        else if(c==="-"){ i++; var r2=term(); if(isNaN(r2)) return NaN; v-=r2; }
+        else return v; } }
+    function term(){ var v=factor(); if(isNaN(v)) return NaN;
+      for(;;){ ws(); var c=s[i];
+        if(c==="*"){ i++; var r=factor(); if(isNaN(r)) return NaN; v*=r; }
+        else if(c==="/"){ i++; var r2=factor(); if(isNaN(r2)) return NaN; v/=r2; }
+        else return v; } }
+    function factor(){ ws(); var c=s[i];
+      if(c==="+"){ i++; return factor(); }
+      if(c==="-"){ i++; var f=factor(); return isNaN(f)?NaN:-f; }
+      if(c==="("){ i++; var v=expr(); ws(); if(s[i]!==")") return NaN; i++; return v; }
+      var start=i;
+      while(i<n && s[i]>="0" && s[i]<="9") i++;
+      if(s[i]==="."){ i++; while(i<n && s[i]>="0" && s[i]<="9") i++; }
+      if(i===start) return NaN;
+      return parseFloat(s.slice(start,i)); }
+    ws(); if(s.slice(i).trim()==="") return NaN;
+    var val = expr(); ws();
+    if(i!==n || !isFinite(val)) return NaN;
+    return val;
+  }
+  function isExpr(str){ return /[+\-*/()]/.test(String(str==null?"":str)); }   // has a math operator → it's an equation, not a plain number
+  function fmtNum(v){ if(!isFinite(v)) return "0"; if(v===0) return "0"; return String(parseFloat(v.toPrecision(6))); }
 
   // One portion is expressed in the pack's own unit, so portion cost = pack cost × (one portion ÷ pack size).
   function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)/s; }
@@ -588,10 +623,13 @@
       + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>'
       + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
         + '<div class="portion-box"><span>One portion:</span>'
-          + '<input class="inline-input tnum" data-f="portion" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.portion)+'" style="width:72px;text-align:right">'
+          + '<input class="inline-input tnum" data-f="portionExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" title="A number or an equation — e.g. 750/25 or (2+3)*4" placeholder="e.g. 750/25" style="width:104px;text-align:right">'
+          + '<span class="portion-eval">'+(isExpr(portionRaw(e))?"= "+esc(fmtNum(num(e.portion))):"")+'</span>'
           + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
         + '</div></td><td></td><td></td><td></td><td></td></tr>';
   }
+  // What the "One portion" field shows: the stored equation if there is one, otherwise the plain number.
+  function portionRaw(e){ return (e && e.portionExpr!=null && e.portionExpr!=="") ? e.portionExpr : String(e?num(e.portion):0); }
   function elementGroupBlock(gid, name, list){
     var collapsed = !!ui.collapsed[gid];
     var rows = sortElements(list).map(elementRow).join("");
@@ -983,7 +1021,21 @@
     if(erow){
       var el=elem(erow.dataset.id);
       if(el){
-        if(f==="size"||f==="cost"||f==="portion") el[f]=num(inp.value);
+        if(f==="portionExpr"){
+          var raw=inp.value, val=evalExpr(raw), esp=inp.parentElement.querySelector(".portion-eval");
+          if(isNaN(val) || val<0){
+            inp.classList.add("bad"); if(esp) esp.textContent="";
+            if(e.type==="change"){   // on blur, restore the last good value rather than leave it broken
+              inp.value=portionRaw(el); inp.classList.remove("bad");
+              if(esp) esp.textContent = isExpr(inp.value) ? "= "+fmtNum(num(el.portion)) : "";
+            }
+            return;
+          }
+          inp.classList.remove("bad");
+          el.portion=val; el.portionExpr = isExpr(raw) ? raw.trim() : null;
+          if(esp) esp.textContent = el.portionExpr!=null ? "= "+fmtNum(val) : "";
+        }
+        else if(f==="size"||f==="cost") el[f]=num(inp.value);
         else el[f]=inp.value;
         if(f==="cost") el.priceDate=today();
         el.modified=nowStamp();
@@ -1062,19 +1114,37 @@
         + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label>'
         + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label></div>'
       + '<label class="field" style="margin-top:14px">Pack unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label>'
-      + '<div class="subcard" style="margin-top:14px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— in the pack unit above</span><input id="e-portion" type="number" step="any" min="0" value="'+esc(e.portion)+'"></label></div>';
+      + '<div class="subcard" style="margin-top:14px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— a number or equation, in the pack unit above</span>'
+        + '<input id="e-portion" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" placeholder="e.g. 750/25 or (2+3)*4"></label>'
+        + '<div class="hint" id="e-portion-eval" style="margin-top:6px"></div></div>';
     openModal("Edit element", body, function(){
       var name = document.getElementById("e-name").value.trim();
       if(!name){ toast("Give the element a name.", true); return false; }
+      var praw = document.getElementById("e-portion").value, pval = evalExpr(praw);
+      if(isNaN(pval) || pval<0){ toast("One portion must be a number or a valid equation.", true); return false; }
       var nc = num(document.getElementById("e-cost").value);
       if(nc !== num(e.cost)) e.priceDate = today();
       e.name = name; e.notes = document.getElementById("e-notes").value;
       e.catId = document.getElementById("e-cat").value || null;
       e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
-      e.portion = num(document.getElementById("e-portion").value); e.portionUnit = e.unit;
+      e.portion = pval; e.portionExpr = isExpr(praw) ? praw.trim() : null; e.portionUnit = e.unit;
       e.modified = nowStamp();
       toast("Element saved");
     });
+    (function(){
+      var pe=document.getElementById("e-portion"), pv=document.getElementById("e-portion-eval");
+      if(!pe||!pv) return;
+      function upd(){
+        var raw=pe.value, val=evalExpr(raw), unit=document.getElementById("e-unit").value||"";
+        if(raw.trim()===""){ pe.classList.remove("bad"); pv.style.color=""; pv.textContent=""; return; }
+        if(isNaN(val)||val<0){ pe.classList.add("bad"); pv.style.color="var(--bad)"; pv.textContent="Not a valid number or equation."; return; }
+        pe.classList.remove("bad"); pv.style.color="";
+        pv.textContent = isExpr(raw) ? ("= "+fmtNum(val)+" "+unit) : "";
+      }
+      pe.addEventListener("input", upd);
+      document.getElementById("e-unit").addEventListener("change", upd);
+      upd();
+    })();
   }
   function addCategory(){
     var c = { id:uid("c"), name:"", ratio:3, desiredMargin:65 };
