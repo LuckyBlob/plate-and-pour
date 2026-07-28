@@ -19,7 +19,11 @@
     ENDPOINT: "https://script.google.com/macros/s/AKfycbw2O-V3YzoAqWzsFil_2doCJla8_3gC4Gz7KkPHUSSd8aUWz2gWkMurM_lEsa_mFg646w/exec",
 
     TITLE:    "Quizz",
-    SUBTITLE: "1 point par manche gagnée, 1 point pour le meilleur total de la soirée.",
+    SUBTITLE: "1 point pour chacun des trois meilleurs pointages de chaque manche, "
+            + "et autant pour les trois meilleurs totaux de la soirée.",
+
+    // Combien de places marquent un point. 3 = le podium.
+    PODIUM: 3,
 
     // Où se trouve la saison en cours dans le classeur : le dernier onglet
     // ("last") ou le premier ("first"). C'est celle qui s'ouvre par défaut.
@@ -89,6 +93,9 @@
     var n = parseFloat(s);
     return isFinite(n) ? n : null;
   }
+  /** 1 -> « 1er », 2 -> « 2e ». */
+  function ordinal(p) { return p === 1 ? "1er" : p + "e"; }
+
   function fmt(n, dec) {
     if (n == null) return "—";
     var s = (dec ? n.toFixed(dec) : String(Math.round(n * 100) / 100));
@@ -237,55 +244,71 @@
 
 
   /* ══════════════════ les règles ══════════════════
-     Par soirée : 1 point à la meilleure équipe de chaque manche, plus 1 point
-     à la meilleure équipe au total des manches. Égalité : chaque équipe à
-     égalité marque le point.                                              */
+     Chaque manche donne 1 point à chacune des trois meilleures places, et le
+     total de la soirée en donne autant. Les places se comptent par POINTAGE,
+     pas par équipe : toutes celles qui ont le meilleur pointage sont premières,
+     celles qui ont le pointage suivant sont deuxièmes, et ainsi de suite. Il
+     peut donc y avoir quatre premiers — et alors personne n'est deuxième.  */
+
+  /** Rend { indice d'équipe : place } pour les CFG.PODIUM meilleures places.
+      Reçoit [{ i: équipe, v: pointage }] et ne garde que ceux qui marquent. */
+  function placements(entries) {
+    var scores = [];
+    entries.forEach(function (e) { if (scores.indexOf(e.v) < 0) scores.push(e.v); });
+    scores.sort(function (a, b) { return b - a; });
+    var out = {};
+    entries.forEach(function (e) {
+      var place = scores.indexOf(e.v) + 1;
+      if (place <= CFG.PODIUM) out[e.i] = place;
+    });
+    return out;
+  }
+  function placeCount(places) {
+    var n = 0; for (var k in places) if (places.hasOwnProperty(k)) n++; return n;
+  }
 
   function compute(season) {
     var T = season.teams.length, D = season.dates.length, R = season.roundCount;
     var nights = [];
 
     for (var d = 0; d < D; d++) {
-      var night = { rounds: [], totals: [], winners: [], played: false, points: [] };
+      var night = { rounds: [], totals: [], places: {}, played: false, points: [] };
       for (var t = 0; t < T; t++) { night.totals[t] = null; night.points[t] = 0; }
 
       for (var r = 0; r < R; r++) {
-        var best = null, winners = [];
+        var entries = [];
         for (t = 0; t < T; t++) {
           var v = valueAt(season.teams[t], r, d);
           if (v == null) continue;
           night.played = true;
           night.totals[t] = (night.totals[t] || 0) + v;
-          if (best === null || v > best) { best = v; winners = [t]; }
-          else if (v === best) winners.push(t);
+          entries.push({ i: t, v: v });
         }
-        winners.forEach(function (t) { night.points[t] += 1; });
-        night.rounds.push({ best: best, winners: winners });
+        var places = placements(entries);
+        for (var k in places) if (places.hasOwnProperty(k)) night.points[+k] += 1;
+        night.rounds.push({ places: places });
       }
 
-      var bestTotal = null;
-      for (t = 0; t < T; t++) {
-        var tot = night.totals[t];
-        if (tot == null) continue;
-        if (bestTotal === null || tot > bestTotal) { bestTotal = tot; night.winners = [t]; }
-        else if (tot === bestTotal) night.winners.push(t);
-      }
-      night.winners.forEach(function (t) { night.points[t] += 1; });
-      night.bestTotal = bestTotal;
+      var totals = [];
+      for (t = 0; t < T; t++) if (night.totals[t] != null) totals.push({ i: t, v: night.totals[t] });
+      night.places = placements(totals);
+      for (var k2 in night.places) if (night.places.hasOwnProperty(k2)) night.points[+k2] += 1;
       nights.push(night);
     }
 
     var teams = season.teams.map(function (team, t) {
       var s = { name: team.name, index: t, color: colorOf(team.name), points: 0,
-                roundWins: 0, nightWins: 0, raw: 0, played: 0, pointsByNight: [],
-                totalsByNight: [] };
+                roundTop: 0, nightTop: 0, roundWins: 0, raw: 0, played: 0,
+                pointsByNight: [], totalsByNight: [] };
       nights.forEach(function (night, d) {
         s.pointsByNight.push(night.played ? night.points[t] : null);
         s.totalsByNight.push(night.totals[t]);
         if (!night.played) return;
         s.points += night.points[t];
-        night.rounds.forEach(function (rd) { if (rd.winners.indexOf(t) >= 0) s.roundWins++; });
-        if (night.winners.indexOf(t) >= 0) s.nightWins++;
+        night.rounds.forEach(function (rd) {
+          if (rd.places[t]) { s.roundTop++; if (rd.places[t] === 1) s.roundWins++; }
+        });
+        if (night.places[t]) s.nightTop++;
         if (night.totals[t] != null) { s.raw += night.totals[t]; s.played++; }
       });
       return s;
@@ -475,8 +498,9 @@
 '#qz-root .qz-t .qz-strong{color:var(--ink);font-weight:600}',
 '#qz-root .qz-t .qz-name{display:flex;align-items:center;gap:9px;color:var(--ink)}',
 '#qz-root .qz-rank{color:var(--muted);width:1%;padding-right:0}',
-'#qz-root .qz-win::after{content:"★";font-size:10px;margin-left:5px;color:var(--muted);',
-'  vertical-align:1px}',
+'#qz-root .qz-rk{font-size:9px;margin-left:4px;color:var(--muted);vertical-align:2px;',
+'  font-weight:400}',
+'#qz-root .qz-rk[data-p="1"]{color:var(--ink)}',
 '#qz-root .qz-t td.qz-pts{color:var(--ink);font-weight:600}',
 
 /* graphiques */
@@ -883,8 +907,10 @@
     var panel = el("div", "qz-panel");
     panel.appendChild(el("div", "qz-ptitle", "Points par équipe"));
     panel.appendChild(el("div", "qz-pnote",
-      "1 point par manche gagnée + 1 point pour le meilleur total de la soirée. "
-      + "En cas d'égalité, chaque équipe à égalité marque le point."));
+      "Chacun des trois meilleurs pointages d'une manche marque 1 point, et les "
+      + "trois meilleurs totaux de la soirée aussi. Les places se comptent par "
+      + "pointage : toutes les équipes à égalité ont le même rang, donc s'il y a "
+      + "deux premières, personne n'est deuxième."));
     // Une équipe encore à 0 n'a pas de barre à montrer : elle encombrerait le
     // graphique d'une ligne vide. Elle reste dans le tableau juste en dessous.
     var scoring = data.ranked.filter(function (t) { return t.points > 0; });
@@ -904,19 +930,21 @@
         var t = r.team;
         return "<span class='qz-tip-h'>" + esc(t.name) + "</span>"
           + "<b>" + fmt(t.points) + "</b> point" + (t.points > 1 ? "s" : "") + "<br>"
-          + "<i>" + t.roundWins + " manche" + (t.roundWins > 1 ? "s" : "") + " · "
-          + t.nightWins + " soirée" + (t.nightWins > 1 ? "s" : "") + "</i>";
+          + "<i>" + t.roundTop + " manche" + (t.roundTop > 1 ? "s" : "") + " dans le top 3"
+          + (t.roundWins ? " (dont " + t.roundWins + " gagnée" + (t.roundWins > 1 ? "s" : "") + ")" : "")
+          + " · " + t.nightTop + " soirée" + (t.nightTop > 1 ? "s" : "") + " dans le top 3</i>";
       }
     }));
     body.appendChild(panel);
 
-    var cols = ["", "Équipe", "Points", "Manches", "Soirées", "Pointage", "Moy./soirée"];
+    var cols = ["", "Équipe", "Points", "Manches top 3", "Soirées top 3",
+                "Pointage", "Moy./soirée"];
     var t = table(cols, data.ranked.map(function (s) {
       return [
         { v: s.rank, cls: "qz-rank" },
         { name: s.name, color: s.color },
         { v: fmt(s.points), cls: "qz-pts" },
-        { v: s.roundWins }, { v: s.nightWins },
+        { v: s.roundTop }, { v: s.nightTop },
         { v: fmt(s.raw) },
         { v: s.played ? fmt(s.raw / s.played, 1) : "—" }
       ];
@@ -924,9 +952,9 @@
     var wrap = el("div", "qz-panel");
     wrap.appendChild(el("div", "qz-ptitle", "Détail"));
     wrap.appendChild(el("div", "qz-pnote",
-      "« Manches » = manches gagnées · « Soirées » = soirées gagnées au total · "
-      + "« Pointage » = total de bonnes réponses, qui départage les équipes "
-      + "à égalité de points."));
+      "« Manches top 3 » = manches terminées dans les trois meilleurs pointages · "
+      + "« Soirées top 3 » = idem sur le total d'une soirée · « Pointage » = total "
+      + "de bonnes réponses, qui départage les équipes à égalité de points."));
     wrap.appendChild(t);
     body.appendChild(wrap);
   }
@@ -961,8 +989,8 @@
     var tiles = el("div", "qz-tiles");
     [["Rang", me.rank + (me.rank === 1 ? "er" : "e")],
      ["Points", fmt(me.points)],
-     ["Manches gagnées", me.roundWins],
-     ["Soirées gagnées", me.nightWins],
+     ["Manches top 3", me.roundTop],
+     ["Soirées top 3", me.nightTop],
      ["Pointage total", fmt(me.raw)],
      ["Moyenne / soirée", me.played ? fmt(me.raw / me.played, 1) : "—"]
     ].forEach(function (p) {
@@ -999,13 +1027,13 @@
       tip: function (g) {
         var night = data.nights[g.d], won = [];
         night.rounds.forEach(function (rd, r) {
-          if (rd.winners.indexOf(me.index) >= 0) won.push(roundName(season, r));
+          if (rd.places[me.index]) won.push(roundName(season, r) + " " + ordinal(rd.places[me.index]));
         });
-        if (night.winners.indexOf(me.index) >= 0) won.push("total");
+        if (night.places[me.index]) won.push("total " + ordinal(night.places[me.index]));
         return "<span class='qz-tip-h'>" + esc(season.dates[g.d].long) + "</span>"
           + "<b>" + fmt(night.points[me.index]) + "</b> point"
           + (night.points[me.index] > 1 ? "s" : "")
-          + (won.length ? "<br><i>gagné : " + won.join(", ") + "</i>" : "");
+          + (won.length ? "<br><i>" + won.join(", ") + "</i>" : "");
       }
     }));
     grid.appendChild(p1);
@@ -1030,9 +1058,9 @@
       tip: function (g) {
         var night = data.nights[g.d];
         var lines = g.segments.map(function (sg, r) {
-          var win = night.rounds[r] && night.rounds[r].winners.indexOf(me.index) >= 0;
+          var pl = night.rounds[r] && night.rounds[r].places[me.index];
           return "<i>" + esc(roundNameCap(season, r)) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
-                 + (win ? " ★" : "");
+                 + (pl ? " <i>" + ordinal(pl) + "</i>" : "");
         });
         return "<span class='qz-tip-h'>" + esc(season.dates[g.d].long) + "</span>"
           + lines.join("<br>") + "<br><i>Total</i> <b>" + fmt(night.totals[me.index]) + "</b>";
@@ -1053,7 +1081,7 @@
         var v = valueAt(season.teams[me.index], r, d);
         if (v == null) return;
         sum += v; cnt++;
-        if (data.nights[d].rounds[r].winners.indexOf(me.index) >= 0) wins++;
+        if (data.nights[d].rounds[r].places[me.index]) wins++;
       });
       return { total: sum, count: cnt, wins: wins };
     }
@@ -1068,7 +1096,7 @@
         return "<span class='qz-tip-h'>" + esc(roundNameCap(season, g.r)) + "</span>"
           + "<b>" + fmt(pr.total) + "</b> au total<br>"
           + "<i>moyenne</i> <b>" + (pr.count ? fmt(pr.total / pr.count, 1) : "—") + "</b><br>"
-          + "<i>gagnée " + pr.wins + " fois sur " + pr.count + "</i>";
+          + "<i>dans le top 3 " + pr.wins + " fois sur " + pr.count + "</i>";
       }
     }));
     grid.appendChild(p3);
@@ -1084,17 +1112,18 @@
         " · " + season.dates[d].season : ""), cls: "qz-strong" }];
       for (var r = 0; r < R; r++) {
         var v = valueAt(season.teams[me.index], r, d);
-        var win = night.rounds[r] && night.rounds[r].winners.indexOf(me.index) >= 0;
-        cells.push({ v: v == null ? "—" : fmt(v), cls: win ? "qz-strong qz-win" : "" });
+        var pl = night.rounds[r] && night.rounds[r].places[me.index];
+        cells.push({ v: v == null ? "—" : fmt(v), rk: pl, cls: pl ? "qz-strong" : "" });
       }
-      cells.push({ v: fmt(night.totals[me.index]),
-                   cls: night.winners.indexOf(me.index) >= 0 ? "qz-strong qz-win" : "" });
+      cells.push({ v: fmt(night.totals[me.index]), rk: night.places[me.index],
+                   cls: night.places[me.index] ? "qz-strong" : "" });
       cells.push({ v: fmt(night.points[me.index]), cls: "qz-pts" });
       return cells;
     });
     var panel = el("div", "qz-panel");
     panel.appendChild(el("div", "qz-ptitle", "Soirée par soirée — " + me.name));
-    panel.appendChild(el("div", "qz-pnote", "★ = manche (ou soirée) gagnée."));
+    panel.appendChild(el("div", "qz-pnote",
+      "Le petit chiffre est la place au pointage : les trois premières marquent 1 point."));
     panel.appendChild(table(head, rows));
     body.appendChild(panel);
   }
@@ -1149,9 +1178,9 @@
       tip: function (g) {
         var t = g.t;
         var lines = g.segments.map(function (sg, r) {
-          var win = night.rounds[r] && night.rounds[r].winners.indexOf(t.index) >= 0;
+          var pl = night.rounds[r] && night.rounds[r].places[t.index];
           return "<i>" + esc(roundNameCap(season, r)) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
-                 + (win ? " ★" : "");
+                 + (pl ? " <i>" + ordinal(pl) + "</i>" : "");
         });
         return "<span class='qz-tip-h'>" + esc(t.name) + "</span>" + lines.join("<br>")
           + "<br><i>Total</i> <b>" + fmt(night.totals[t.index]) + "</b>"
@@ -1167,17 +1196,18 @@
       var cells = [{ name: t.name, color: t.color }];
       for (var r = 0; r < R; r++) {
         var v = valueAt(season.teams[t.index], r, d);
-        var win = night.rounds[r] && night.rounds[r].winners.indexOf(t.index) >= 0;
-        cells.push({ v: v == null ? "—" : fmt(v), cls: win ? "qz-strong qz-win" : "" });
+        var pl = night.rounds[r] && night.rounds[r].places[t.index];
+        cells.push({ v: v == null ? "—" : fmt(v), rk: pl, cls: pl ? "qz-strong" : "" });
       }
-      cells.push({ v: fmt(night.totals[t.index]),
-                   cls: night.winners.indexOf(t.index) >= 0 ? "qz-strong qz-win" : "" });
+      cells.push({ v: fmt(night.totals[t.index]), rk: night.places[t.index],
+                   cls: night.places[t.index] ? "qz-strong" : "" });
       cells.push({ v: fmt(night.points[t.index]), cls: "qz-pts" });
       return cells;
     });
     var p2 = el("div", "qz-panel");
     p2.appendChild(el("div", "qz-ptitle", "Résultats détaillés"));
-    p2.appendChild(el("div", "qz-pnote", "★ = manche (ou soirée) gagnée."));
+    p2.appendChild(el("div", "qz-pnote",
+      "Le petit chiffre est la place au pointage : les trois premières marquent 1 point."));
     p2.appendChild(table(head, rows));
     body.appendChild(p2);
   }
@@ -1264,6 +1294,11 @@
             var txt = String(c.v);
             td.textContent = txt;
             if (txt === "0") td.className = (c.cls ? c.cls + " " : "") + "qz-nil";
+            if (c.rk) {
+              var rk = el("sup", "qz-rk", ordinal(c.rk));
+              rk.setAttribute("data-p", c.rk);
+              td.appendChild(rk);
+            }
           }
           r.appendChild(td);
         });

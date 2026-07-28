@@ -40,12 +40,21 @@ to print "mercredi 8 juillet 2026".
 
 ## Scoring
 
-Per night: **1 point to the best team of each round**, plus **1 point to the best
-total of the night**. With 4 rounds that's 5 points a night. On a tie, *everyone*
-tied takes the point. Teams level on points are ordered by total pointage.
+Per night: **1 point to each of the top three placings in every round**, plus the
+same for the **night's total**. With 4 rounds a team can take 5 points a night.
 
-The rules live in the page (`compute()` in `quizz-embed.html`), not in the Apps
-Script — so changing them is an edit + re-paste, with no redeploy.
+Placings are counted **by score, not by team**. Every team on the best score is
+first, every team on the next distinct score is second, then third — and all
+three placings score a point. So four teams can be first; when they are, nobody
+is second. Three teams tied on 20 are all first, and the team on 10 behind them
+is second, not fourth.
+
+Teams level on points are ordered by total pointage.
+
+`CFG.PODIUM` sets how many placings score — 3 today, change it to 1 to go back to
+winner-takes-it. The rules live in the page (`placements()` and `compute()` in
+`quizz-embed.html`), not in the Apps Script, so changing them is an edit and a
+re-paste with no redeploy.
 
 ## Setup (once)
 
