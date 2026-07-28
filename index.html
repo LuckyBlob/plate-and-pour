@@ -95,6 +95,8 @@
   .sectionhead .hint{font-size:13px;color:var(--ink-3)}
 
   .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .cardhead{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:11px 14px;background:var(--surface-2);border-bottom:1px solid var(--line)}
+  .cardhead h3{font-size:15px;font-family:var(--font-sans);font-weight:650}
   .table-wrap{overflow-x:auto}
   table{border-collapse:collapse;width:100%;min-width:600px}
   th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -289,9 +291,10 @@
     if(s.settings.driveUrl==null) s.settings.driveUrl = "";
     if(!Array.isArray(s.categories)) s.categories = [];
     s.categories.forEach(function(c){ delete c.rounding; if(c.desiredMargin==null) c.desiredMargin = 65; });
+    if(!Array.isArray(s.elementCategories)) s.elementCategories = [];
     if(!Array.isArray(s.elements)) s.elements = Array.isArray(s.ingredients) ? s.ingredients : [];
     delete s.ingredients;
-    s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.modified==null) e.modified=today(); });
+    s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.modified==null) e.modified=today(); if(e.catId===undefined) e.catId=null; });
     if(!Array.isArray(s.recipes)) s.recipes = [];
     s.recipes.forEach(function(r){
       if(!Array.isArray(r.lines)) r.lines = [];
@@ -315,14 +318,19 @@
         { id:"c_wine",     name:"Wine (by glass)", ratio:3.5 },
         { id:"c_food",     name:"Kitchen",         ratio:3 }
       ],
+      elementCategories: [
+        { id:"ec_spirits",   name:"Spirits" },
+        { id:"ec_mixers",    name:"Juices & mixers" },
+        { id:"ec_food",      name:"Food" }
+      ],
       elements: [
-        { id:"i_vodka",  name:"Vodka (well)",      size:750,  unit:"ml",   cost:22 },
-        { id:"i_triple", name:"Triple sec",        size:750,  unit:"ml",   cost:18 },
-        { id:"i_lime",   name:"Lime juice",        size:1000, unit:"ml",   cost:6 },
-        { id:"i_cran",   name:"Cranberry juice",   size:1890, unit:"ml",   cost:7 },
-        { id:"i_bun",    name:"Burger bun",        size:8,    unit:"each", cost:5.6 },
-        { id:"i_patty",  name:"Beef patty (150g)", size:1,    unit:"each", cost:2.35 },
-        { id:"i_cheese", name:"Cheddar slice",     size:24,   unit:"slice",cost:8.4 }
+        { id:"i_vodka",  name:"Vodka (well)",      size:750,  unit:"ml",   cost:22,   catId:"ec_spirits" },
+        { id:"i_triple", name:"Triple sec",        size:750,  unit:"ml",   cost:18,   catId:"ec_spirits" },
+        { id:"i_lime",   name:"Lime juice",        size:1000, unit:"ml",   cost:6,    catId:"ec_mixers" },
+        { id:"i_cran",   name:"Cranberry juice",   size:1890, unit:"ml",   cost:7,    catId:"ec_mixers" },
+        { id:"i_bun",    name:"Burger bun",        size:8,    unit:"each", cost:5.6,  catId:"ec_food" },
+        { id:"i_patty",  name:"Beef patty (150g)", size:1,    unit:"each", cost:2.35, catId:"ec_food" },
+        { id:"i_cheese", name:"Cheddar slice",     size:24,   unit:"slice",cost:8.4,  catId:"ec_food" }
       ],
       recipes: [
         { id:"r_cosmo", name:"Cosmopolitan", categoryId:"c_cocktail", ratio:null, priceOverride:null, lines:[
@@ -337,6 +345,7 @@
 
   /* ---------------- Lookups & math ---------------- */
   function cat(id){ for(var i=0;i<state.categories.length;i++) if(state.categories[i].id===id) return state.categories[i]; return null; }
+  function ecat(id){ for(var i=0;i<state.elementCategories.length;i++) if(state.elementCategories[i].id===id) return state.elementCategories[i]; return null; }
   function elem(id){ for(var i=0;i<state.elements.length;i++) if(state.elements[i].id===id) return state.elements[i]; return null; }
   function num(v){ var n = parseFloat(v); return isFinite(n) ? n : 0; }
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
@@ -396,6 +405,7 @@
 
   function usageCountElem(id){ var n=0; state.recipes.forEach(function(r){ r.lines.forEach(function(l){ if(l.elementId===id) n++; }); }); return n; }
   function usageCountCat(id){ var n=0; state.recipes.forEach(function(r){ if(r.categoryId===id) n++; }); return n; }
+  function usageCountEcat(id){ var n=0; state.elements.forEach(function(e){ if(e.catId===id) n++; }); return n; }
 
   /* ---------------- Formatting ---------------- */
   function cur(){ return state.settings.currency || "$"; }
@@ -565,59 +575,101 @@
       return av<bv?-dir:av>bv?dir:0;
     });
   }
+  function elementRow(e){
+    return '<tr data-id="'+e.id+'" class="el-main">'
+      + '<td class="name-cell rname" data-act="edit-elem" data-id="'+e.id+'" title="Click to edit">'+esc(e.name||"(unnamed)")
+        + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
+      + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
+      + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
+      + '<td><select class="inline-input" data-f="unit" style="max-width:100px">'+unitOptions(e.unit)+'</select></td>'
+      + '<td class="num money cell-portioncost">'+money(portionCost(e))+'<span class="muted" style="font-size:11px">/portion</span></td>'
+      + '<td class="muted cell-modified" style="font-size:12.5px;white-space:nowrap">'+esc(e.modified||"")+'</td>'
+      + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
+      + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>'
+      + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
+        + '<div class="portion-box"><span>One portion:</span>'
+          + '<input class="inline-input tnum" data-f="portion" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.portion)+'" style="width:72px;text-align:right">'
+          + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
+        + '</div></td><td></td><td></td><td></td><td></td></tr>';
+  }
+  function elementGroupBlock(gid, name, list){
+    var collapsed = !!ui.collapsed[gid];
+    var rows = sortElements(list).map(elementRow).join("");
+    return '<div class="group">'
+      + '<button class="grouphead" data-act="toggle-group" data-id="'+esc(gid)+'" aria-expanded="'+(collapsed?"false":"true")+'">'
+        + '<span class="chev">'+ic_chev+'</span><h3>'+esc(name)+'</h3>'
+        + '<span class="gcount">'+list.length+' element'+(list.length===1?"":"s")+'</span>'
+      + '</button>'
+      + '<div class="groupbody"'+(collapsed?" hidden":"")+'>'
+        + '<div class="table-wrap"><table><thead><tr>'
+          + '<th class="sortable" style="min-width:200px" data-esortcol="name">Name'+earrow("name")+'</th><th class="num">Pack cost</th><th class="num">Pack size</th><th>Unit</th>'
+          + '<th class="num">Portion cost</th><th class="sortable" data-esortcol="modified">Last modified'+earrow("modified")+'</th><th class="num sortable" data-esortcol="used">Used in'+earrow("used")+'</th><th></th>'
+          + '</tr></thead><tbody>'+rows+'</tbody></table></div>'
+      + '</div></div>';
+  }
   function renderElements(){
     var html = '<div class="sectionhead"><div><h2>Elements</h2>'
-      + '<div class="hint">The raw things you buy — food or drink. Enter the pack size you purchase and its price; the unit cost is worked out for you.</div></div>'
+      + '<div class="hint">The raw things you buy — food or drink. Enter the pack size you purchase and its price; the unit cost is worked out for you. Grouped by element category — manage those in the Categories tab.</div></div>'
       + '<button class="btn primary" id="add-elem">+ New element</button></div>';
     if(!state.elements.length){
       html += emptyCard("No elements yet","Add the things you buy — a 750 ml bottle of gin, a case of buns, a kilo of flour — with their pack size and price.","add-elem-2","+ New element");
       view.innerHTML = html; return;
     }
-    html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th class="sortable" style="min-width:200px" data-esortcol="name">Name'+earrow("name")+'</th><th class="num">Pack cost</th><th class="num">Pack size</th><th>Unit</th>'
-      + '<th class="num">Portion cost</th><th class="sortable" data-esortcol="modified">Last modified'+earrow("modified")+'</th><th class="num sortable" data-esortcol="used">Used in'+earrow("used")+'</th><th></th></tr></thead><tbody>';
-    sortElements(state.elements).forEach(function(e){
-      html += '<tr data-id="'+e.id+'" class="el-main">'
-        + '<td class="name-cell rname" data-act="edit-elem" data-id="'+e.id+'" title="Click to edit">'+esc(e.name||"(unnamed)")
-          + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
-        + '<td><select class="inline-input" data-f="unit" style="max-width:100px">'+unitOptions(e.unit)+'</select></td>'
-        + '<td class="num money cell-portioncost">'+money(portionCost(e))+'<span class="muted" style="font-size:11px">/portion</span></td>'
-        + '<td class="muted cell-modified" style="font-size:12.5px;white-space:nowrap">'+esc(e.modified||"")+'</td>'
-        + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
-        + '<td><div class="rowactions">'+iconBtn("edit-elem", e.id, "Edit", ic_edit)+iconBtn("sell-elem", e.id, "Sell directly (create a recipe of just this)", ic_sell)+iconBtn("del-elem", e.id, "Delete", ic_trash, true)+'</div></td></tr>'
-        + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
-          + '<div class="portion-box"><span>One portion:</span>'
-            + '<input class="inline-input tnum" data-f="portion" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.portion)+'" style="width:72px;text-align:right">'
-            + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
-          + '</div></td><td></td><td></td><td></td><td></td></tr>';
+    var groups = "";
+    state.elementCategories.forEach(function(c){
+      var list = state.elements.filter(function(e){ return e.catId===c.id; });
+      if(list.length) groups += elementGroupBlock("el:"+c.id, c.name, list);
     });
-    html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Any edit stamps <em>Last modified</em>. The ✎ editor holds name &amp; notes; the tag icon sells an element on its own. Manage units in Settings.</p>';
+    var uncat = state.elements.filter(function(e){ return !ecat(e.catId); });
+    if(uncat.length) groups += elementGroupBlock("el:__uncat__", "Uncategorized", uncat);
+    html += groups;
+    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Any edit stamps <em>Last modified</em>. The ✎ editor holds name, notes &amp; category; the tag icon sells an element on its own. Click a column header to sort every section. Manage units in Settings.</p>';
     view.innerHTML = html;
   }
 
   function renderCategories(){
     var html = '<div class="sectionhead"><div><h2>Categories</h2>'
-      + '<div class="hint">Types of item — Cocktails, Beer, Kitchen. Each sets the default markup that its recipes use unless a recipe overrides it.</div></div>'
-      + '<button class="btn primary" id="add-cat">+ New category</button></div>';
+      + '<div class="hint">Two kinds of grouping: <strong>recipe categories</strong> set the default markup for the menu items in them, and <strong>element categories</strong> just sort your raw elements into collapsible sections.</div></div></div>';
+
+    // ---- Recipe categories ----
+    html += '<div class="card">'
+      + '<div class="cardhead"><h3>Recipe categories</h3><button class="btn sm" id="add-cat">+ New category</button></div>';
     if(!state.categories.length){
-      html += emptyCard("No categories yet","Group your recipes — Cocktails, Beer, Kitchen — and give each a default markup.","add-cat-2","+ New category");
-      view.innerHTML = html; return;
+      html += '<div class="empty" style="padding:20px 8px"><p>Group your recipes — Cocktails, Beer, Kitchen — and give each a default markup.</p></div>';
+    } else {
+      html += '<div class="table-wrap"><table><thead><tr>'
+        + '<th style="min-width:200px">Category</th><th class="num">Default markup</th><th class="num">Desired margin</th><th class="num">Recipes</th><th></th></tr></thead><tbody>';
+      state.categories.forEach(function(c){
+        html += '<tr data-cid="'+c.id+'">'
+          + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
+          + '<td class="num"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:80px;text-align:right"></td>'
+          + '<td class="num"><div class="ovcell" style="justify-content:flex-end"><input class="inline-input tnum" data-f="desiredMargin" type="number" step="any" min="0" max="100" value="'+esc(c.desiredMargin)+'" style="max-width:66px;text-align:right"><span class="suf">%</span></div></td>'
+          + '<td class="num tnum muted">'+usageCountCat(c.id)+'</td>'
+          + '<td><div class="rowactions">'+iconBtn("del-cat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
+      });
+      html += '</tbody></table></div>';
     }
-    html += '<div class="card"><div class="table-wrap"><table><thead><tr>'
-      + '<th style="min-width:200px">Category</th><th class="num">Default markup</th><th class="num">Desired margin</th><th class="num">Recipes</th><th></th></tr></thead><tbody>';
-    state.categories.forEach(function(c){
-      html += '<tr data-cid="'+c.id+'">'
-        + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
-        + '<td class="num"><input class="inline-input tnum" data-f="ratio" type="number" step="any" min="0" value="'+esc(c.ratio)+'" style="max-width:80px;text-align:right"></td>'
-        + '<td class="num"><div class="ovcell" style="justify-content:flex-end"><input class="inline-input tnum" data-f="desiredMargin" type="number" step="any" min="0" max="100" value="'+esc(c.desiredMargin)+'" style="max-width:66px;text-align:right"><span class="suf">%</span></div></td>'
-        + '<td class="num tnum muted">'+usageCountCat(c.id)+'</td>'
-        + '<td><div class="rowactions">'+iconBtn("del-cat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
-    });
-    html += '</tbody></table></div></div>';
-    html += '<p class="hint" style="margin-top:12px">Desired margin (0–100%) is the gross-margin target a recipe should hit; recipes show a ✓/✗ against it and can override it. The global defaults for recipes with no category are set in Settings.</p>';
+    html += '</div>';
+
+    // ---- Element categories ----
+    html += '<div class="card" style="margin-top:18px">'
+      + '<div class="cardhead"><h3>Element categories</h3><button class="btn sm" id="add-ecat">+ New element category</button></div>';
+    if(!state.elementCategories.length){
+      html += '<div class="empty" style="padding:20px 8px"><p>Sort your raw elements — Spirits, Juices, Sauces, Food — into collapsible sections on the Elements tab.</p></div>';
+    } else {
+      html += '<div class="table-wrap"><table><thead><tr>'
+        + '<th style="min-width:200px">Element category</th><th class="num">Elements</th><th></th></tr></thead><tbody>';
+      state.elementCategories.forEach(function(c){
+        html += '<tr data-ecid="'+c.id+'">'
+          + '<td><input class="inline-input" data-f="name" value="'+esc(c.name)+'" placeholder="Category name"></td>'
+          + '<td class="num tnum muted">'+usageCountEcat(c.id)+'</td>'
+          + '<td><div class="rowactions">'+iconBtn("del-ecat", c.id, "Delete", ic_trash, true)+'</div></td></tr>';
+      });
+      html += '</tbody></table></div>';
+    }
+    html += '</div>';
+
+    html += '<p class="hint" style="margin-top:12px">Desired margin (0–100%) is the gross-margin target a recipe should hit; recipes show a ✓/✗ against it and can override it. The global defaults for recipes with no category are set in Settings. Element categories are organisational only — deleting one leaves its elements Uncategorized.</p>';
     view.innerHTML = html;
   }
 
@@ -900,6 +952,7 @@
       else if(a==="sell-elem"){ sellElement(id); }
       else if(a==="edit-elem"){ editElement(elem(id)); }
       else if(a==="del-cat"){ var ucn=usageCountCat(id), cc=cat(id); confirmDelete("Delete category", ucn? ("“"+cc.name+"” is used by "+ucn+" recipe"+(ucn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+cc.name+"”?"), function(){ state.recipes.forEach(function(x){ if(x.categoryId===id) x.categoryId=null; }); state.categories=state.categories.filter(function(x){return x.id!==id;}); save(); render(); toast("Category deleted"); }); }
+      else if(a==="del-ecat"){ var uecn=usageCountEcat(id), ecc=ecat(id); confirmDelete("Delete element category", uecn? ("“"+(ecc?ecc.name:"")+"” holds "+uecn+" element"+(uecn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+(ecc?ecc.name:"")+"”?"), function(){ state.elements.forEach(function(x){ if(x.catId===id) x.catId=null; }); state.elementCategories=state.elementCategories.filter(function(x){return x.id!==id;}); save(); render(); toast("Element category deleted"); }); }
       else if(a==="del-elem"){ var un=usageCountElem(id), ee=elem(id); confirmDelete("Delete element", un? ("“"+ee.name+"” is used in "+un+" recipe"+(un===1?"":"s")+". It’ll be removed from them. Delete it?") : ("Delete “"+ee.name+"”?"), function(){ state.recipes.forEach(function(x){ x.lines=x.lines.filter(function(l){return l.elementId!==id;}); }); state.elements=state.elements.filter(function(x){return x.id!==id;}); save(); render(); toast("Element deleted"); }); }
       else if(a==="del-unit"){ state.settings.units.splice(+id,1); save(); render(); }
       return;
@@ -910,12 +963,13 @@
     else if(bid==="go-elements"){ ui.tab="elements"; render(); }
     else if(bid==="add-elem"||bid==="add-elem-2") addElement();
     else if(bid==="add-cat"||bid==="add-cat-2") addCategory();
+    else if(bid==="add-ecat"||bid==="add-ecat-2") addElementCategory();
     else if(bid==="unit-add") addUnit();
     else if(bid==="save-settings") saveSettings();
     else if(bid==="set-export") doExport();
     else if(bid==="set-import") doImport();
     else if(bid==="set-sample"){ confirmDelete("Reload sample data","Replace everything in this browser with the built-in sample data?", function(){ state=migrate(seed()); save(); render(); toast("Sample data loaded"); }); }
-    else if(bid==="set-clear"){ confirmDelete("Clear all data","Remove all elements, recipes and categories from this browser? Export a backup first if you might want it back.", function(){ var st=state.settings; state={settings:{currency:st.currency,defaultRatio:st.defaultRatio,defaultMargin:st.defaultMargin,rounding:st.rounding,units:st.units,driveSync:st.driveSync,driveUrl:st.driveUrl},categories:[],elements:[],recipes:[]}; save(); render(); toast("All data cleared"); }); }
+    else if(bid==="set-clear"){ confirmDelete("Clear all data","Remove all elements, recipes and categories from this browser? Export a backup first if you might want it back.", function(){ var st=state.settings; state={settings:{currency:st.currency,defaultRatio:st.defaultRatio,defaultMargin:st.defaultMargin,rounding:st.rounding,units:st.units,driveSync:st.driveSync,driveUrl:st.driveUrl},categories:[],elementCategories:[],elements:[],recipes:[]}; save(); render(); toast("All data cleared"); }); }
   });
 
   // inline markup / price / desired overrides (recipes) + inline element/category fields
@@ -945,6 +999,8 @@
     }
     var crow = inp.closest("tr[data-cid]");
     if(crow){ var c=cat(crow.dataset.cid); if(c){ c[f]=(f==="ratio")?num(inp.value):(f==="desiredMargin"?clamp(num(inp.value),0,100):inp.value); save(); } return; }
+    var ecrow = inp.closest("tr[data-ecid]");
+    if(ecrow){ var ec=ecat(ecrow.dataset.ecid); if(ec){ ec[f]=inp.value; save(); } return; }
   }
   view.addEventListener("input", function(e){
     var mk=e.target.closest("[data-rmarkup]"); if(mk){ handleMarkup(mk); return; }
@@ -987,7 +1043,7 @@
   function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
   function addElement(){
     var u = (state.settings.units[0]||"each");
-    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today() };
+    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today(), catId:null };
     state.elements.push(it); save(); render(); editElement(it);
   }
   function sellElement(id){
@@ -997,9 +1053,11 @@
   }
   function editElement(e){
     if(!e) return;
+    var catOpts = '<option value="">Uncategorized</option>' + state.elementCategories.map(function(c){ return '<option value="'+c.id+'"'+(e.catId===c.id?" selected":"")+'>'+esc(c.name)+'</option>'; }).join("");
     var body = '<div class="grid2 tight">'
       + '<label class="field">Name<input id="e-name" value="'+esc(e.name)+'" placeholder="Element name"></label>'
       + '<label class="field">Notes<input id="e-notes" value="'+esc(e.notes||"")+'" placeholder="optional — shown under the name"></label></div>'
+      + '<label class="field" style="margin-top:14px">Category<select id="e-cat">'+catOpts+'</select></label>'
       + '<div class="grid2" style="margin-top:14px">'
         + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label>'
         + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label></div>'
@@ -1011,6 +1069,7 @@
       var nc = num(document.getElementById("e-cost").value);
       if(nc !== num(e.cost)) e.priceDate = today();
       e.name = name; e.notes = document.getElementById("e-notes").value;
+      e.catId = document.getElementById("e-cat").value || null;
       e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
       e.portion = num(document.getElementById("e-portion").value); e.portionUnit = e.unit;
       e.modified = nowStamp();
@@ -1021,6 +1080,11 @@
     var c = { id:uid("c"), name:"", ratio:3, desiredMargin:65 };
     state.categories.push(c); save(); render();
     var row = view.querySelector('tr[data-cid="'+c.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
+  }
+  function addElementCategory(){
+    var c = { id:uid("ec"), name:"" };
+    state.elementCategories.push(c); save(); render();
+    var row = view.querySelector('tr[data-ecid="'+c.id+'"]'); if(row){ var inp=row.querySelector('input[data-f="name"]'); if(inp) inp.focus(); }
   }
   function addUnit(){
     var el = document.getElementById("unit-new"); if(!el) return;
