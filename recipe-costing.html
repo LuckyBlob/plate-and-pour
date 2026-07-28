@@ -143,6 +143,7 @@
   .el-main .cell-portioncost{color:var(--ink)}
   .portion-box{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
   .portion-box input,.portion-box select{padding:5px 7px;font-size:13px}
+  .portion-unit{font-size:13px;color:var(--ink-2);font-family:var(--font-mono)}
   tbody tr.el-portion:hover{background:transparent}
 
   .chip{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);white-space:nowrap}
@@ -332,13 +333,8 @@
   function clamp(v,a,b){ return Math.max(a, Math.min(b, v)); }
   function round2(v){ return Math.round((v+Number.EPSILON)*100)/100; }
 
-  // Unit conversion within a family (volume / mass); anything else = 1 (treat numbers as-is).
-  var VOLB={ml:1,cl:10,dl:100,l:1000,oz:29.5735,shot:44.36,dash:0.92,goutte:0.05,tbsp:14.79,tsp:4.93,cup:236.6};
-  var MASSB={g:1,kg:1000,mg:0.001,lb:453.592};
-  function ufam(u){ u=(u||"").toLowerCase(); if(VOLB[u]!=null) return ["v",VOLB[u]]; if(MASSB[u]!=null) return ["m",MASSB[u]]; return null; }
-  function unitFactor(from,to){ if(!from||!to||from===to) return 1; var a=ufam(from), b=ufam(to); return (a&&b&&a[0]===b[0]) ? a[1]/b[1] : 1; }
-  // Cost of one portion = pack cost × (one-portion size ÷ pack size), converting portion→pack unit.
-  function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)*unitFactor(e.portionUnit,e.unit)/s; }
+  // One portion is expressed in the pack's own unit, so portion cost = pack cost × (one portion ÷ pack size).
+  function portionCost(e){ if(!e) return 0; var s=num(e.size); if(s<=0) return 0; return num(e.cost)*num(e.portion)/s; }
   function lineCost(l){ var e = elem(l.elementId); return e ? portionCost(e)*num(l.amount) : 0; }
   function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
   function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
@@ -570,7 +566,7 @@
         + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3">'
           + '<div class="portion-box"><span>One portion:</span>'
             + '<input class="inline-input tnum" data-f="portion" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.portion)+'" style="width:72px;text-align:right">'
-            + '<select class="inline-input" data-f="portionUnit" style="width:auto">'+unitOptions(e.portionUnit)+'</select>'
+            + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
           + '</div></td><td></td><td></td><td></td><td></td></tr>';
     });
     html += '</tbody></table></div></div>';
@@ -726,7 +722,7 @@
       return '<div class="line" data-idx="'+idx+'">'
         + '<select data-lf="elementId">'+opts+'</select>'
         + '<input data-lf="amount" type="number" step="any" min="0" inputmode="decimal" value="'+esc(l.amount)+'" aria-label="Amount">'
-        + '<span class="u">'+esc(e?(e.portionUnit||e.unit):"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
+        + '<span class="u">'+esc(e?e.unit:"")+'</span><span class="lc">'+money(lineCost(l))+'</span>'
         + '<button type="button" class="iconbtn danger" data-lrem="'+idx+'" aria-label="Remove">'+ic_trash+'</button></div>';
     }
     function paintLines(){
@@ -910,6 +906,7 @@
           var pc=mrow.querySelector(".cell-portioncost"); if(pc) pc.innerHTML=money(portionCost(el))+'<span class="muted" style="font-size:11px">/portion</span>';
           var md=mrow.querySelector(".cell-modified"); if(md) md.textContent=el.modified;
         }
+        var pus=view.querySelectorAll('tr[data-id="'+el.id+'"] .portion-unit'); for(var z=0;z<pus.length;z++) pus[z].textContent=el.unit||"";
         save();
       }
       return;
@@ -975,10 +972,7 @@
         + '<label class="field">Pack cost<input id="e-cost" type="number" step="any" min="0" value="'+esc(e.cost)+'"></label>'
         + '<label class="field">Pack size<input id="e-size" type="number" step="any" min="0" value="'+esc(e.size)+'"></label></div>'
       + '<label class="field" style="margin-top:14px">Pack unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label>'
-      + '<div class="subcard" style="margin-top:14px"><div class="field" style="margin-bottom:8px">One portion</div><div class="grid2">'
-        + '<label class="field">Amount<input id="e-portion" type="number" step="any" min="0" value="'+esc(e.portion)+'"></label>'
-        + '<label class="field">Unit<select id="e-portionunit">'+unitOptions(e.portionUnit)+'</select></label>'
-      + '</div></div>';
+      + '<div class="subcard" style="margin-top:14px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— in the pack unit above</span><input id="e-portion" type="number" step="any" min="0" value="'+esc(e.portion)+'"></label></div>';
     openModal("Edit element", body, function(){
       var name = document.getElementById("e-name").value.trim();
       if(!name){ toast("Give the element a name.", true); return false; }
@@ -986,7 +980,7 @@
       if(nc !== num(e.cost)) e.priceDate = today();
       e.name = name; e.notes = document.getElementById("e-notes").value;
       e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
-      e.portion = num(document.getElementById("e-portion").value); e.portionUnit = document.getElementById("e-portionunit").value;
+      e.portion = num(document.getElementById("e-portion").value); e.portionUnit = e.unit;
       e.modified = nowStamp();
       toast("Element saved");
     });
