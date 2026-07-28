@@ -12,20 +12,25 @@ standings, a per-team breakdown, and a per-night breakdown. It lives in the
 
 ## The sheet it expects
 
-One tab per season. Row 1 is `Équipes` then one column per quizz night. Under
-that, one block per team: the row carrying the team name is **round 1**, and the
-unnamed rows below it are rounds 2, 3, 4…
+One tab per season. Column A carries the team name on the first row of its
+block. Then an **optional column of round labels** — if it's there, those names
+are what the site displays (`ronde 1` rather than a generic `Manche 1`). Then one
+column per quizz night, dated in row 1.
 
 ```
-        │ 08-07-2026 │ 15-07-2026 │ 22-07-2026 │
-Équipes │            │            │            │
-A       │     15     │      6     │     25     │   ← manche 1
-        │     30     │     21     │      2     │   ← manche 2
-        │     20     │     27     │      8     │   ← manche 3
-        │     26     │     27     │      5     │   ← manche 4
-B       │      5     │      7     │     13     │
-        │     …
+Équipes              │         │ 08-07-2026 │ 15-07-2026 │ 22-07-2026 │
+Ancien du bureau     │ ronde 1 │     15     │      6     │     25     │
+                     │ ronde 2 │     30     │     21     │      2     │
+                     │ ronde 3 │     20     │     27     │      8     │
+                     │ ronde 4 │     26     │     27     │      5     │
+Alexandre despaquiz  │ ronde 1 │      5     │      7     │     13     │
+                     │   …
 ```
+
+A column counts as a quizz night only if it has a header **and** at least one
+score under it, so a column of text can never be mistaken for a date — labelled
+or not. Long team names are kept whole in the tables and tooltips and shortened
+with an `…` only where an axis is too narrow for them.
 
 Nothing is hard-coded: 4 rounds or 6, 6 teams or 12, any number of nights. A
 **blank** cell means "didn't play" and is left out of the scoring — which is not
@@ -88,6 +93,46 @@ python -m http.server 8765
 ```
 
 then open `http://localhost:8765/quizz/quizz-preview.html` from the repo root.
+
+## Teams come and go
+
+Teams are read from the sheet on every load, so the roster is whatever column A
+says today. All of this behaves as you'd expect, and is covered by the tests
+described below:
+
+- **Adding a team** — add its block of rows. Blank cells for nights before it
+  existed count as "didn't play", so it doesn't compete for those points.
+- **Removing a team** — delete its rows. The standings recompute, which means
+  rounds that team used to win now go to whoever came second. That's intended:
+  the table always reflects the sheet as it stands.
+- **A team that stops showing up** — leave its later cells blank. It keeps the
+  points it earned and its average only counts the nights it played.
+- **Renaming a team** — the history lives in the rows, not the name, so a rename
+  keeps everything.
+
+One wrinkle worth knowing: bar colours are handed out in the order teams first
+appear in the sheet, so **deleting a team in the middle shifts the colour of
+every team below it**. Adding new teams at the bottom keeps everyone's colour
+stable. Nothing breaks either way — the name is always written next to the
+colour — but it's why a team can change colour after an edit you didn't expect
+to matter. Past 8 teams, the extras are grey rather than reusing a hue.
+
+## Freshness
+
+Edit the sheet, reload the page, it's current. Nothing caches on purpose: the
+page asks for `?fresh=1` (which skips the Apps Script cache even on an older
+deployment) and `CACHE_MINUTES` is 0. If the page ever looks stale, it's the
+browser holding the *page* — a hard reload settles it.
+
+## Living inside the site builder's box
+
+The builder drops the code into a block with a **fixed height**, positioned
+absolutely. The dashboard's height isn't fixed — it grows with every quizz night
+you add, and roughly doubles on a phone. Left alone, the overflow spills over the
+footer and can't be reached by scrolling. So after every render the page pushes
+its containers to the height it actually needs (never below the height the
+builder gave them). If you ever see content cut off at the bottom, that's the
+mechanism to look at first.
 
 ## Design notes
 

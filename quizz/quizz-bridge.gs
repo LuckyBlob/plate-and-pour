@@ -41,8 +41,10 @@
 
 var SHEET_ID = 'PASTE_THE_SPREADSHEET_ID_HERE';
 
-var CACHE_SECONDS = 60;   // repeat visits inside a minute are served instantly
-                          // add ?fresh=1 to the URL to bypass it
+// 0 = never cache: a corrected sheet shows up on the very next page load, which
+// is the whole point. (The page asks for ?fresh=1 anyway, so it already bypasses
+// any cache — raising this only ever adds a delay for someone.)
+var CACHE_SECONDS = 0;
 
 function doGet(e) {
   var params = (e && e.parameter) || {};
@@ -81,11 +83,13 @@ function buildPayload_() {
 }
 
 function readCache_() {
+  if (!CACHE_SECONDS) return null;
   try { return CacheService.getScriptCache().get('quizz'); }
   catch (err) { return null; }
 }
 
 function writeCache_(payload) {
+  if (!CACHE_SECONDS) return;
   if (payload.length > 90000) return;                 // over the cache's limit
   try { CacheService.getScriptCache().put('quizz', payload, CACHE_SECONDS); }
   catch (err) { /* cache is a nicety; never let it break the response */ }

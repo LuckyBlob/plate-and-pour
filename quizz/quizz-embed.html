@@ -16,17 +16,21 @@
   /* ══════════════════ RÉGLAGES ══════════════════ */
   var CFG = {
     // L'adresse /exec du script Google (voir quizz-bridge.gs).
-    ENDPOINT: "PASTE_YOUR_APPS_SCRIPT_EXEC_URL_HERE",
+    ENDPOINT: "https://script.google.com/macros/s/AKfycbw2O-V3YzoAqWzsFil_2doCJla8_3gC4Gz7KkPHUSSd8aUWz2gWkMurM_lEsa_mFg646w/exec",
 
     TITLE:    "Quizz",
     SUBTITLE: "1 point par manche gagnée, 1 point pour le meilleur total de la soirée.",
 
     // Où se trouve la saison en cours dans le classeur : le dernier onglet
     // ("last") ou le premier ("first"). C'est celle qui s'ouvre par défaut.
-    NEWEST_SEASON: "last",
+    NEWEST_SEASON: "first",
 
     SHOW_ALL_SEASONS: true,   // ajoute un choix « Toutes les saisons »
-    CACHE_MINUTES: 5          // 0 = rappeler Google à chaque visite
+
+    // 0 = relire la feuille à chaque chargement de page. C'est le réglage voulu :
+    // on corrige la feuille, on recharge, c'est à jour. Mettre un nombre de
+    // minutes ne ferait qu'y remettre du retard.
+    CACHE_MINUTES: 0
   };
   /* ═══════════════ FIN DES RÉGLAGES ═══════════════ */
 
@@ -105,19 +109,17 @@
 
 
   /* ══════════════════ lecture de la feuille ══════════════════
-     Ligne 1 : « Équipes » puis une colonne par soirée.
-     Ensuite un bloc par équipe : la ligne portant le nom est la manche 1,
-     les lignes sans nom qui suivent sont les manches 2, 3, 4…            */
+     Colonne A : le nom de l'équipe, sur la première ligne de son bloc.
+     Puis, en option, une colonne d'étiquettes (« ronde 1 », « ronde 2 »…) —
+     si elle est là, ce sont ces noms-là qui s'affichent sur le site.
+     Puis une colonne par soirée, la date en en-tête.
+
+     Une colonne compte comme une soirée si elle a un en-tête ET au moins un
+     pointage en dessous : une colonne de texte ne peut donc jamais se faire
+     passer pour une date, qu'elle soit intitulée ou non.                  */
 
   function parseSeason(name, rows) {
     if (!rows || rows.length < 2) return null;
-
-    var header = rows[0], cols = [];
-    for (var c = 1; c < header.length; c++) {
-      var h = String(header[c] == null ? "" : header[c]).trim();
-      if (h) cols.push({ idx: c, raw: h });
-    }
-    if (!cols.length) return null;
 
     var starts = [];
     for (var r = 1; r < rows.length; r++) {
@@ -126,20 +128,47 @@
     }
     if (!starts.length) return null;
 
+    var header = rows[0], width = 0;
+    rows.forEach(function (row) { width = Math.max(width, row.length); });
+
+    var cols = [], labelCol = -1;
+    for (var c = 1; c < width; c++) {
+      var head = String(header[c] == null ? "" : header[c]).trim();
+      var numbers = 0, texts = 0;
+      for (var rr = starts[0].row; rr < rows.length; rr++) {
+        var cell = rows[rr][c];
+        if (num(cell) != null) numbers++;
+        else if (String(cell == null ? "" : cell).trim()) texts++;
+      }
+      if (head && numbers) cols.push({ idx: c, raw: head });
+      else if (labelCol < 0 && texts) labelCol = c;
+    }
+    if (!cols.length) return null;
+
     var teams = [];
     for (var i = 0; i < starts.length; i++) {
       var from = starts[i].row;
       var to = (i + 1 < starts.length) ? starts[i + 1].row : rows.length;
-      var block = [];
-      for (var rr = from; rr < to; rr++) {
-        block.push(cols.map(function (col) { return num(rows[rr][col.idx]); }));
+      var block = [], labels = [];
+      for (var rw = from; rw < to; rw++) {
+        block.push(cols.map(function (col) { return num(rows[rw][col.idx]); }));
+        labels.push(labelCol < 0 ? null
+          : String(rows[rw][labelCol] == null ? "" : rows[rw][labelCol]).trim() || null);
       }
-      while (block.length > 1 && block[block.length - 1].every(isNull)) block.pop();
-      teams.push({ name: starts[i].name, rounds: block });
+      while (block.length > 1 && block[block.length - 1].every(isNull)) { block.pop(); labels.pop(); }
+      teams.push({ name: starts[i].name, rounds: block, labels: labels });
     }
 
     var roundCount = 0;
     teams.forEach(function (t) { roundCount = Math.max(roundCount, t.rounds.length); });
+
+    // Le nom de chaque manche : le premier que les équipes lui donnent.
+    var roundNames = [];
+    for (var n = 0; n < roundCount; n++) {
+      var found = null;
+      teams.forEach(function (t) { if (!found && t.labels[n]) found = t.labels[n]; });
+      roundNames.push(found);
+    }
 
     return {
       name: name,
@@ -149,8 +178,19 @@
                  long: dateLong(d, col.raw), season: name };
       }),
       teams: teams,
-      roundCount: roundCount
+      roundCount: roundCount,
+      roundNames: roundNames
     };
+  }
+
+  /** « ronde 2 » si la feuille le dit, « Manche 2 » sinon. */
+  function roundName(season, r) {
+    var n = season.roundNames && season.roundNames[r];
+    return n || ("Manche " + (r + 1));
+  }
+  function roundNameCap(season, r) {
+    var n = roundName(season, r);
+    return n.charAt(0).toUpperCase() + n.slice(1);
   }
 
   /** Toutes les saisons bout à bout : une seule « saison » virtuelle, donc
@@ -160,9 +200,10 @@
     list.forEach(function (s) { offsets.push(total); total += s.dates.length;
                                 dates = dates.concat(s.dates); });
 
-    var byName = {}, order = [], roundCount = 0;
+    var byName = {}, order = [], roundCount = 0, roundNames = [];
     list.forEach(function (s) {
       roundCount = Math.max(roundCount, s.roundCount);
+      (s.roundNames || []).forEach(function (rn, r) { if (!roundNames[r] && rn) roundNames[r] = rn; });
       s.teams.forEach(function (t) {
         if (!byName[t.name]) { byName[t.name] = { name: t.name, rounds: [] }; order.push(t.name); }
       });
@@ -184,7 +225,7 @@
 
     return { name: "Toutes les saisons", dates: dates,
              teams: order.map(function (n) { return byName[n]; }),
-             roundCount: roundCount, merged: true };
+             roundCount: roundCount, roundNames: roundNames, merged: true };
   }
 
 
@@ -244,7 +285,7 @@
     });
 
     var ranked = teams.slice().sort(function (a, b) {
-      return b.points - a.points || b.raw - a.raw || a.name.localeCompare(b.name, "fr");
+      return b.points - a.points || b.raw - a.raw || a.name.localeCompare(b.name, "fr", { numeric: true });
     });
     ranked.forEach(function (s, i) {
       s.rank = (i > 0 && s.points === ranked[i - 1].points && s.raw === ranked[i - 1].raw)
@@ -290,7 +331,9 @@
       var hit = readCache();
       if (hit) return Promise.resolve(hit);
     }
-    var full = url + (url.indexOf("?") < 0 ? "?" : "&") + "t=" + Date.now() + (force ? "&fresh=1" : "");
+    // « fresh » saute aussi le cache du script Google, et « t » celui du
+    // navigateur : une feuille modifiée se voit au rechargement suivant.
+    var full = url + (url.indexOf("?") < 0 ? "?" : "&") + "fresh=1&t=" + Date.now();
     return fetch(full, { method: "GET" })
       .then(function (res) { if (!res.ok) throw new Error("HTTP " + res.status); return res.json(); })
       .catch(function () { return jsonp(full); })      // filet de sécurité si le fetch est bloqué
@@ -485,12 +528,47 @@
       var now = Math.max(240, host.clientWidth || 0);
       if (Math.abs(now - (host.__w || 0)) > 1) draw(host);
     });
+    fitHost();
   }
   var syncTimer = null;
   function syncSoon() { clearTimeout(syncTimer); syncTimer = setTimeout(syncCharts, 120); }
   window.addEventListener("resize", syncSoon);
   window.addEventListener("orientationchange", syncSoon);
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(syncSoon);
+
+  /** Raccourcit une étiquette SVG jusqu'à ce qu'elle tienne, avec un « … ».
+      Le nom complet reste dans l'infobulle et dans le tableau. */
+  function fitLabel(node, maxW) {
+    if (!(maxW > 8) || !node.getComputedTextLength) return;
+    var full = node.textContent;
+    if (node.getComputedTextLength() <= maxW) return;
+    var t = full;
+    while (t.length > 1) {
+      t = t.slice(0, -1);
+      node.textContent = t.replace(/[\s·—-]+$/, "") + "…";
+      if (node.getComputedTextLength() <= maxW) return;
+    }
+  }
+
+  /* Le bloc « Code » du site a une hauteur fixée au moment du montage, et il est
+     positionné en absolu : si le tableau de bord grandit (une soirée de plus,
+     un écran plus étroit), le surplus déborde par-dessus le pied de page et
+     devient impossible à atteindre au défilement. On pousse donc la hauteur des
+     conteneurs à ce qu'il faut — jamais en dessous de leur hauteur d'origine. */
+  function fitHost() {
+    var root = document.getElementById("qz-root");
+    if (!root) return;
+    var need = Math.ceil(root.getBoundingClientRect().height);
+    var node = root.parentNode, depth = 0;
+    while (node && node !== document.body && depth++ < 5) {
+      if (node.__qzBase == null) node.__qzBase = node.offsetHeight;
+      var gap = Math.round(root.getBoundingClientRect().top - node.getBoundingClientRect().top);
+      var want = need + Math.max(0, gap) + 8;
+      if (want > node.__qzBase) node.style.height = want + "px";
+      else if (node.style.height) node.style.height = "";
+      node = node.parentNode;
+    }
+  }
 
   function niceTicks(max) {
     if (!(max > 0)) return { max: 1, ticks: [0, 1] };
@@ -514,8 +592,13 @@
     // Une valeur au-dessus de chaque colonne se lit bien à 12 colonnes près ;
     // au-delà ça devient une haie de chiffres — la grille et l'infobulle suffisent.
     var showTotals = spec.labelTotals && n <= 12;
+    // Des dates, on peut en sauter une sur deux : on devine les autres. Un nom
+    // d'équipe, non — sans lui la barre n'appartient plus à personne. Les
+    // graphiques d'identité gardent donc toutes leurs étiquettes, quitte à
+    // défiler horizontalement pour leur laisser de la place.
+    var keepAll = !!spec.keepAllLabels;
     var padL = 34, padR = 10, padT = showTotals ? 20 : 8, padB = spec.sub ? 40 : 26;
-    var minBand = 30;
+    var minBand = keepAll ? 64 : 30;
     var plotW = Math.max(avail - padL - padR, n * minBand);
     var W = plotW + padL + padR, H = spec.height || 240;
     var plotH = H - padT - padB;
@@ -527,6 +610,7 @@
 
     var s = svg("svg", { width: W, height: H, role: "img",
                          "aria-label": spec.title || "graphique" });
+    host.appendChild(s);              // dans la page tout de suite : on mesure le texte
 
     scale.ticks.forEach(function (t) {
       s.appendChild(svg("line", { x1: padL, x2: padL + plotW, y1: y(t), y2: y(t),
@@ -540,7 +624,7 @@
     var band = plotW / n, bw = Math.min(24, band * 0.62);
     // Combien d'étiquettes de date tiennent côte à côte ? On en saute autant
     // qu'il faut : « 15 juill. » fait environ 52 px.
-    var every = Math.max(1, Math.ceil((n * 52) / plotW));
+    var every = keepAll ? 1 : Math.max(1, Math.ceil((n * 52) / plotW));
 
     groups.forEach(function (g, i) {
       var cx = padL + band * i + band / 2, x = cx - bw / 2, acc = 0;
@@ -576,6 +660,7 @@
                                 fill: "#8b8a86", "font-size": 11 });
         lab.textContent = g.label;
         s.appendChild(lab);
+        fitLabel(lab, band * every - 6);      // « Alexandre despaquiz » ne déborde pas
       }
 
       var hit = svg("rect", { x: padL + band * i, y: padT, width: band, height: plotH,
@@ -606,8 +691,6 @@
         from = i;
       }
     }
-
-    host.appendChild(s);
   }
 
   function gTotal(g) {
@@ -619,7 +702,7 @@
     var rows = spec.rows, n = rows.length;
     if (!n) { host.appendChild(el("div", "qz-msg", "Rien à afficher pour l'instant.")); return; }
 
-    var labW = Math.min(120, Math.max(58, avail * 0.24));
+    var labW = Math.min(175, Math.max(70, avail * 0.30));
     var padL = labW + 10, padR = 44, rowH = 30, padT = 4, padB = 20;
     var W = Math.max(avail, 260), plotW = Math.max(60, W - padL - padR);
     var H = padT + rowH * n + padB;
@@ -628,6 +711,7 @@
 
     var s = svg("svg", { width: W, height: H, role: "img",
                          "aria-label": spec.title || "graphique" });
+    host.appendChild(s);              // idem : mesurer les noms d'équipe
 
     scale.ticks.forEach(function (t) {
       var x = padL + (t / scale.max) * plotW;
@@ -647,6 +731,7 @@
                                "font-size": 12.5 });
       name.textContent = r.label;
       s.appendChild(name);
+      fitLabel(name, labW - 6);               // le nom entier reste dans l'infobulle
 
       if (w > 0.4) {
         s.appendChild(svg("path", { d: barPath(padL, cy - bh / 2, w, bh, 4), fill: r.color }));
@@ -660,8 +745,6 @@
       bindTip(hit, host, function () { return spec.tip(r, i); });
       s.appendChild(hit);
     });
-
-    host.appendChild(s);
   }
 
   /* bout arrondi côté données, carré à la ligne de base */
@@ -729,6 +812,7 @@
     if (S.view === "classement") viewStandings(body, data);
     else if (S.view === "equipe") viewTeam(body, data);
     else viewNight(body, data);
+    fitHost();
     setTimeout(syncCharts, 60);           // les panneaux viennent de changer de taille
   }
 
@@ -846,7 +930,7 @@
       tip: function (g) {
         var night = data.nights[g.d], won = [];
         night.rounds.forEach(function (rd, r) {
-          if (rd.winners.indexOf(me.index) >= 0) won.push("M" + (r + 1));
+          if (rd.winners.indexOf(me.index) >= 0) won.push(roundName(season, r));
         });
         if (night.winners.indexOf(me.index) >= 0) won.push("total");
         return "<span class='qz-tip-h'>" + esc(season.dates[g.d].long) + "</span>"
@@ -861,7 +945,7 @@
     var p2 = el("div", "qz-panel");
     p2.appendChild(el("div", "qz-ptitle", "Pointage par manche"));
     p2.appendChild(el("div", "qz-pnote", "Le total de la soirée, empilé manche par manche."));
-    p2.appendChild(roundLegend(R));
+    p2.appendChild(roundLegend(season, R));
     p2.appendChild(chart({
       height: 210, sub: !!season.merged,
       groups: played.map(function (d) {
@@ -878,7 +962,7 @@
         var night = data.nights[g.d];
         var lines = g.segments.map(function (sg, r) {
           var win = night.rounds[r] && night.rounds[r].winners.indexOf(me.index) >= 0;
-          return "<i>Manche " + (r + 1) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
+          return "<i>" + esc(roundNameCap(season, r)) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
                  + (win ? " ★" : "");
         });
         return "<span class='qz-tip-h'>" + esc(season.dates[g.d].long) + "</span>"
@@ -905,14 +989,14 @@
       return { total: sum, count: cnt, wins: wins };
     }
     p3.appendChild(chart({
-      height: 200, labelTotals: true,
+      height: 200, labelTotals: true, keepAllLabels: true,
       groups: perRound.map(function (pr, r) {
-        return { label: "Manche " + (r + 1), zero: pr.count > 0,
+        return { label: roundNameCap(season, r), zero: pr.count > 0,
                  segments: [{ value: pr.total, color: roundColor(r, R) }], r: r };
       }),
       tip: function (g) {
         var pr = perRound[g.r];
-        return "<span class='qz-tip-h'>Manche " + (g.r + 1) + "</span>"
+        return "<span class='qz-tip-h'>" + esc(roundNameCap(season, g.r)) + "</span>"
           + "<b>" + fmt(pr.total) + "</b> au total<br>"
           + "<i>moyenne</i> <b>" + (pr.count ? fmt(pr.total / pr.count, 1) : "—") + "</b><br>"
           + "<i>gagnée " + pr.wins + " fois sur " + pr.count + "</i>";
@@ -924,7 +1008,7 @@
 
     /* le tableau */
     var head = ["Soirée"];
-    for (var r = 0; r < R; r++) head.push("M" + (r + 1));
+    for (var r = 0; r < R; r++) head.push(roundNameCap(season, r));
     head.push("Total", "Points");
     var rows = played.map(function (d) {
       var night = data.nights[d], cells = [{ v: season.dates[d].short + (season.merged ?
@@ -975,16 +1059,17 @@
     var d = S.night, night = data.nights[d];
     var order = data.teams.slice().filter(function (t) { return night.totals[t.index] != null; })
       .sort(function (a, b) { return night.totals[b.index] - night.totals[a.index] ||
-                                     a.name.localeCompare(b.name, "fr"); });
+                                     a.name.localeCompare(b.name, "fr", { numeric: true }); });
 
     var panel = el("div", "qz-panel");
     panel.appendChild(el("div", "qz-ptitle", season.dates[d].long +
       (season.merged ? " — " + season.dates[d].season : "")));
     panel.appendChild(el("div", "qz-pnote", order.length + " équipes · " + R +
       " manches · " + data.maxNightPoints + " points en jeu"));
-    panel.appendChild(roundLegend(R));
+    panel.appendChild(roundLegend(season, R));
     panel.appendChild(chart({
       height: 230, labelTotals: true,
+      keepAllLabels: true,
       groups: order.map(function (t) {
         var segs = [];
         for (var r = 0; r < R; r++) {
@@ -996,7 +1081,7 @@
         var t = g.t;
         var lines = g.segments.map(function (sg, r) {
           var win = night.rounds[r] && night.rounds[r].winners.indexOf(t.index) >= 0;
-          return "<i>Manche " + (r + 1) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
+          return "<i>" + esc(roundNameCap(season, r)) + "</i> " + (sg.value == null ? "—" : "<b>" + fmt(sg.value) + "</b>")
                  + (win ? " ★" : "");
         });
         return "<span class='qz-tip-h'>" + esc(t.name) + "</span>" + lines.join("<br>")
@@ -1007,7 +1092,7 @@
     body.appendChild(panel);
 
     var head = ["Équipe"];
-    for (var r = 0; r < R; r++) head.push("M" + (r + 1));
+    for (var r = 0; r < R; r++) head.push(roundNameCap(season, r));
     head.push("Total", "Points");
     var rows = order.map(function (t) {
       var cells = [{ name: t.name, color: t.color }];
@@ -1028,13 +1113,13 @@
     body.appendChild(p2);
   }
 
-  function roundLegend(R) {
+  function roundLegend(season, R) {
     var box = el("div", "qz-legend");
     for (var r = 0; r < R; r++) {
       var s = el("span");
       var k = el("span", "qz-key"); k.style.background = roundColor(r, R);
       s.appendChild(k);
-      s.appendChild(document.createTextNode("Manche " + (r + 1)));
+      s.appendChild(document.createTextNode(roundNameCap(season, r)));
       box.appendChild(s);
     }
     return box;
