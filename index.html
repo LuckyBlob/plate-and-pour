@@ -113,6 +113,17 @@
   .inline-input{padding:6px 8px;font-size:13.5px}
   td .inline-input{max-width:100%}
   .rowsub{font-size:12px;color:var(--ink-3);margin-top:2px;font-weight:400}
+  /* Notes edit where they sit: click the text, type, click away. The box only shows up under the pointer. */
+  .noteline{display:flex;align-items:flex-start;gap:2px;margin-top:2px}
+  .note{flex:1 1 auto;min-width:0;margin:0 0 0 -5px;padding:2px 5px;border:1px solid transparent;border-radius:6px;cursor:text;white-space:pre-wrap;overflow-wrap:anywhere}
+  .note:hover{border-color:var(--line-strong);background:var(--paper)}
+  .note:focus{outline:none;border-color:var(--accent);background:var(--paper);color:var(--ink-2)}
+  .note:empty::before{content:attr(data-ph);color:var(--ink-3);opacity:0;transition:opacity .12s}
+  tr:hover .note:empty::before,.note:empty:focus::before{opacity:.75}
+  .notedel{flex:0 0 auto;margin-top:1px;padding:3px;border:0;border-radius:5px;background:transparent;color:var(--ink-3);line-height:0;cursor:pointer;opacity:0;transition:opacity .12s}
+  tr:hover .notedel{opacity:1}
+  .notedel:hover{color:var(--bad);background:var(--bad-soft)}
+  .notedel[hidden]{display:none}
 
   /* override cells (markup / price) */
   .ovcell{display:flex;align-items:center;gap:3px;justify-content:flex-end}
@@ -150,9 +161,15 @@
   .el-main .cell-portioncost{color:var(--ink)}
   .portion-line{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
   .portion-line .switch{white-space:nowrap}
-  .portion-box{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line-strong);border-radius:8px;padding:6px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
-  .portion-box input,.portion-box select{padding:5px 7px;font-size:13px}
+  .portion-box{display:inline-grid;grid-template-columns:auto auto auto auto;align-items:center;gap:7px 8px;border:1px solid var(--line-strong);border-radius:8px;padding:8px 10px;background:var(--paper);font-size:13px;color:var(--ink-2)}
+  /* A select will happily shrink to just its arrow, which makes the table squeeze the unit dropdowns
+     into nothing instead of letting .table-wrap scroll. Give them a floor so scrolling wins. */
+  .portion-box input,.portion-box select{padding:5px 7px;font-size:13px;min-width:78px}
+  .portion-box .lab{white-space:nowrap}
   .portion-unit{font-size:13px;color:var(--ink-2);font-family:var(--font-mono)}
+  .packunit{font-family:var(--font-mono);color:var(--ink-2)}
+  .conv-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .conv-row select{max-width:140px}
   .portion-eval{font-size:13px;color:var(--accent-2);font-family:var(--font-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
   .inline-input.bad{border-color:var(--bad);color:var(--bad)}
   tbody tr.el-portion:hover{background:transparent}
@@ -300,13 +317,16 @@
     delete s.ingredients;
     // hasPortion defaults to true for data written before the flag existed — those elements were all priced by the portion.
     s.elements.forEach(function(e){ if(e.notes==null) e.notes=""; if(e.priceDate===undefined) e.priceDate=null; if(e.portion==null) e.portion=1; if(e.portionUnit==null) e.portionUnit=e.unit||"portion"; if(e.hasPortion==null) e.hasPortion=true; if(e.modified==null) e.modified=today(); if(e.catId===undefined) e.catId=null; });
+    // Unit transfer ("1 bouteille = 750 ml"): absent from data written before it existed, and the portion
+    // was then always in the pack unit — portionUnit is only ever the pack unit or the transfer unit.
+    s.elements.forEach(function(e){ if(e.convQty===undefined) e.convQty=null; if(e.convExpr===undefined) e.convExpr=null; if(e.convUnit===undefined) e.convUnit=null; e.portionUnit=portionUnitOf(e); });
     var elById = {}; s.elements.forEach(function(e){ elById[e.id]=e; });
     if(!Array.isArray(s.recipes)) s.recipes = [];
     s.recipes.forEach(function(r){
       if(!Array.isArray(r.lines)) r.lines = [];
       r.lines.forEach(function(l){ if(l.elementId==null && l.ingredientId!=null) l.elementId=l.ingredientId; delete l.ingredientId; });
-      // An element with no portion can only be counted in its own unit.
-      r.lines.forEach(function(l){ var e=elById[l.elementId]; if(e && !e.hasPortion) l.unit = e.unit || "each"; });
+      // Every line must sit on a unit its element still offers — a stale one would be costed as whole packs.
+      r.lines.forEach(function(l){ var e=elById[l.elementId]; if(!e) return; var ok=lineUnitOptions(e); if(l.unit==null || ok.indexOf(l.unit)<0) l.unit = ok[0]; });
       if(r.priceOverride===undefined) r.priceOverride = null;
       if(r.ratio===undefined) r.ratio = null;
       if(r.desiredMargin===undefined) r.desiredMargin = null;
@@ -397,30 +417,76 @@
   function elemUnit(e){ return (e && e.unit) || "each"; }
   // What one unit of the pack costs.
   function unitCost(e){ if(!e) return 0; var s=num(e.size); return s>0 ? num(e.cost)/s : 0; }
-  // One portion is expressed in the pack's own unit, so portion cost = pack cost × (one portion ÷ pack size).
-  // With no portion defined, the element is simply counted in its own unit.
-  function portionCost(e){ if(!e) return 0; return hasPortion(e) ? unitCost(e)*num(e.portion) : unitCost(e); }
-  // A recipe line counts its amount either in portions or in the element's own unit (when that unit isn't already "portion").
-  // No portion defined → the element's unit is the only choice, so the editor shows it as plain text.
+  // A pack unit can be spelled out in a smaller one — "1 bouteille = 750 ml". That transfer unit is then
+  // a second way to write the portion, and a third way to count the element in a recipe.
+  // It only lives alongside a portion, and never repeats the pack unit — that would be a circular transfer.
+  function convUnit(e){ return (e && hasPortion(e) && e.convUnit && e.convUnit!==elemUnit(e)) ? e.convUnit : null; }
+  function convQty(e){ return num(e && e.convQty); }
+  function hasConv(e){ return !!convUnit(e) && convQty(e)>0; }
+  // The units "One portion" may be written in: the pack unit, plus the transfer unit when there is one.
+  function portionUnitOptions(e){ var o=[elemUnit(e)]; if(hasConv(e)) o.push(convUnit(e)); return o; }
+  function portionUnitOf(e){ var o=portionUnitOptions(e); return (e && o.indexOf(e.portionUnit)>=0) ? e.portionUnit : o[0]; }
+  // One portion, expressed in pack units — 30 ml out of a 750 ml bottle is 0.04 bottle.
+  function portionInPack(e){ var p=num(e&&e.portion); return portionUnitOf(e)===convUnit(e) ? p/convQty(e) : p; }
+  // Portion cost = pack cost × (one portion ÷ pack size). With no portion defined, the element is simply counted in its own unit.
+  function portionCost(e){ if(!e) return 0; return hasPortion(e) ? unitCost(e)*portionInPack(e) : unitCost(e); }
+  // A recipe line counts its amount in portions, in the element's own unit (when that unit isn't already
+  // "portion"), or in its transfer unit. No portion defined → the pack unit is the only choice, so the editor shows it as plain text.
   function lineUnitOptions(e){
     if(!e) return ["portion"];
     if(!hasPortion(e)) return [elemUnit(e)];
-    return (e.unit && e.unit!=="portion") ? ["portion", e.unit] : ["portion"];
+    var o = ["portion"];
+    if(e.unit && e.unit!=="portion") o.push(e.unit);
+    if(hasConv(e) && o.indexOf(convUnit(e))<0) o.push(convUnit(e));
+    return o;
   }
   // A line with no unit yet counts in portions — the pack unit is a whole bottle or case, never the intent.
   function defaultLineUnit(l){
     var e=elem(l.elementId); if(!e) return "portion";
     return hasPortion(e) ? "portion" : elemUnit(e);
   }
-  function lineCost(l){ var e = elem(l.elementId); if(!e) return 0; var lu=(l&&l.unit)||"portion"; if(!hasPortion(e) || (lu!=="portion" && lu===e.unit)) return unitCost(e)*num(l.amount); return portionCost(e)*num(l.amount); }
+  function lineCost(l){
+    var e = elem(l.elementId); if(!e) return 0;
+    var lu = (l&&l.unit) || defaultLineUnit(l), amt = num(l&&l.amount);
+    if(hasPortion(e) && lu==="portion") return portionCost(e)*amt;
+    if(hasConv(e) && lu===convUnit(e)) return unitCost(e)*(amt/convQty(e));
+    return unitCost(e)*amt;                       // the pack's own unit
+  }
   function recipeCost(r){ var s=0; for(var k=0;k<r.lines.length;k++) s += lineCost(r.lines[k]); return s; }
-  // Keep every recipe line on a unit the element still offers — called when an element loses its portion or changes unit.
-  function coerceLinesTo(e){
+  // Keep every recipe line on a unit the element still offers — called when an element loses its portion,
+  // its transfer or changes unit. When the transfer unit is what went away, the amounts come with it:
+  // 30 ml of a 750 ml bottle becomes 0.04 bottle, not 30 bottles.
+  function coerceLinesTo(e, oldConvQty, oldConvUnit){
     if(!e) return;
-    var ok = lineUnitOptions(e);
+    var ok = lineUnitOptions(e), pack = elemUnit(e), oq = num(oldConvQty);
     state.recipes.forEach(function(r){
-      r.lines.forEach(function(l){ if(l.elementId===e.id && ok.indexOf(l.unit||"portion")<0) l.unit = ok[0]; });
+      r.lines.forEach(function(l){
+        if(l.elementId!==e.id) return;
+        var lu = l.unit || defaultLineUnit(l);
+        if(ok.indexOf(lu)>=0){ l.unit = lu; return; }
+        if(oldConvUnit && lu===oldConvUnit && oq>0 && ok.indexOf(pack)>=0){ l.amount = num(l.amount)/oq; l.unit = pack; return; }
+        l.unit = ok[0];
+      });
     });
+  }
+  // Keep "One portion" on a unit the element still offers. Dropping the transfer unit re-expresses the
+  // portion in pack units first, so its cost never jumps behind the user's back.
+  function coercePortionUnit(e, oldConvQty, oldConvUnit){
+    if(!e) return;
+    var opts = portionUnitOptions(e), oq = num(oldConvQty);
+    if(opts.indexOf(e.portionUnit)>=0) return;
+    if(oldConvUnit && e.portionUnit===oldConvUnit && oq>0){ e.portion = num(e.portion)/oq; e.portionExpr = null; }
+    e.portionUnit = opts[0];
+  }
+  // Switching the portion between the pack unit and the transfer unit re-expresses the same quantity —
+  // a portion never gets cheaper just because it was written differently.
+  function setPortionUnit(e, u){
+    if(!e) return;
+    var from = portionUnitOf(e), q = convQty(e);
+    if(portionUnitOptions(e).indexOf(u)<0 || u===from) return;
+    if(q>0) e.portion = (u===convUnit(e)) ? num(e.portion)*q : num(e.portion)/q;
+    e.portionExpr = null;
+    e.portionUnit = u;
   }
   function inheritedRatio(r){ var c = cat(r.categoryId); return c ? num(c.ratio) : num(state.settings.defaultRatio); }
 
@@ -505,6 +571,14 @@
   function iconBtn(action,id,label,svg,danger){ return '<button class="iconbtn'+(danger?" danger":"")+'" data-act="'+action+'" data-id="'+id+'" title="'+label+'" aria-label="'+label+'">'+svg+'</button>'; }
   function stat(k,v){ return '<div class="stat"><div class="k">'+esc(k)+'</div><div class="v tnum">'+v+'</div></div>'; }
   function emptyCard(title,body,actId,actLabel){ return '<div class="card"><div class="empty"><h3>'+esc(title)+'</h3><p>'+esc(body)+'</p><button class="btn primary" id="'+actId+'">'+esc(actLabel)+'</button></div></div>'; }
+  // A note you can type straight into, with an × to clear it. kind is "e" for an element, "r" for a recipe.
+  // Always rendered, even when empty — an empty one is the place to click to add one.
+  function noteLine(kind, id, notes){
+    return '<div class="noteline">'
+      + '<div class="rowsub note" contenteditable="plaintext-only" spellcheck="false" data-note="'+kind+'" data-id="'+esc(id)+'" data-ph="+ note" title="Click to edit this note">'+esc(notes||"")+'</div>'
+      + '<button class="notedel" data-act="del-note" data-nkind="'+kind+'" data-id="'+esc(id)+'" title="Remove note" aria-label="Remove note"'+(notes?"":" hidden")+'>'+ic_x+'</button>'
+    + '</div>';
+  }
 
   /* ---------------- Rendering ---------------- */
   var view = document.getElementById("view");
@@ -559,7 +633,7 @@
   function recipeRow(r){
     var m = computeRecipe(r);
     return '<tr data-rid="'+r.id+'">'
-      + '<td class="name-cell rname" data-act="edit-recipe" data-id="'+r.id+'" title="Click to edit">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div>'+(r.notes?'<div class="rowsub">'+esc(r.notes)+'</div>':'')+'</td>'
+      + '<td class="name-cell rname" data-act="edit-recipe" data-id="'+r.id+'" title="Click to edit">'+esc(r.name||"Untitled")+'<div class="rowsub">'+r.lines.length+' element'+(r.lines.length===1?"":"s")+'</div>'+noteLine("r", r.id, r.notes)+'</td>'
       + '<td class="num cost cell-cost">'+money(m.cost)+'</td>'
       + '<td class="num">'+markupCell(r,m)+'</td>'
       + '<td class="num">'+priceCell(r,m)+'</td>'
@@ -605,7 +679,12 @@
   }
   function renderRecipes(){
     var n = state.recipes.length;
-    var html = '<div class="sectionhead"><h2>Recipes</h2><button class="btn primary" id="add-recipe">+ New recipe</button></div>';
+    // The legend sits above the table it explains — but says nothing until there is one.
+    var legend = n ? '<div class="hint">Type in a <strong>Markup</strong>, <strong>Price</strong> or <strong>Desired</strong> box to override it. '
+      + '<span style="color:var(--bad);font-weight:600">Red</span> = a manual override (click ↺ to reset); '
+      + 'a <span style="color:var(--info);font-weight:600">blue</span> markup is back-calculated from a price you set. '
+      + 'The Margin column shows a <span style="color:var(--good);font-weight:600">✓</span> at or above the desired margin, <span style="color:var(--bad);font-weight:600">✗</span> below. Click any column header to sort.</div>' : '';
+    var html = '<div class="sectionhead"><div><h2>Recipes</h2>'+legend+'</div><button class="btn primary" id="add-recipe">+ New recipe</button></div>';
 
     if(!n){
       html += emptyCard("No recipes yet","Create your first recipe to see its cost and a suggested sell price.",
@@ -620,10 +699,6 @@
     var uncat = state.recipes.filter(function(r){ return !cat(r.categoryId); });
     if(uncat.length) groups += groupBlock("__uncat__","Uncategorized", num(state.settings.defaultRatio), uncat);
     html += groups;
-    html += '<p class="hint" style="margin-top:6px">Type in a <strong>Markup</strong>, <strong>Price</strong> or <strong>Desired</strong> box to override it. '
-      + '<span style="color:var(--bad);font-weight:600">Red</span> = a manual override (click ↺ to reset); '
-      + 'a <span style="color:var(--info);font-weight:600">blue</span> markup is back-calculated from a price you set. '
-      + 'The Margin column shows a <span style="color:var(--good);font-weight:600">✓</span> at or above the desired margin, <span style="color:var(--bad);font-weight:600">✗</span> below. Click any column header to sort.</p>';
     view.innerHTML = html;
   }
 
@@ -641,10 +716,10 @@
   function elementRow(e){
     return '<tr data-id="'+e.id+'" class="el-main">'
       + '<td class="name-cell rname" data-act="edit-elem" data-id="'+e.id+'" title="Click to edit">'+esc(e.name||"(unnamed)")
-        + (e.notes? '<div class="rowsub">'+esc(e.notes)+'</div>':'')+'</td>'
+        + noteLine("e", e.id, e.notes)+'</td>'
       + '<td class="num"><input class="inline-input tnum" data-f="cost" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.cost)+'" style="max-width:100px;text-align:right"></td>'
       + '<td class="num"><input class="inline-input tnum" data-f="size" type="number" step="any" min="0" inputmode="decimal" value="'+esc(e.size)+'" style="max-width:90px;text-align:right"></td>'
-      + '<td><select class="inline-input" data-f="unit" style="max-width:100px">'+unitOptions(e.unit)+'</select></td>'
+      + '<td><select class="inline-input" data-f="unit" style="min-width:100px;max-width:100px">'+unitOptions(e.unit)+'</select></td>'
       + '<td class="num money cell-portioncost">'+portionCostCell(e)+'</td>'
       + '<td class="muted cell-modified" style="font-size:12.5px;white-space:nowrap">'+esc(e.modified||"")+'</td>'
       + '<td class="num tnum muted">'+usageCountElem(e.id)+'</td>'
@@ -652,18 +727,56 @@
       + '<tr data-id="'+e.id+'" class="el-portion"><td></td><td colspan="3"><div class="portion-line">'
         + '<label class="switch"><input type="checkbox" data-f="hasPortion"'+(hasPortion(e)?" checked":"")+'>Define portion</label>'
         + (hasPortion(e)
-          ? '<div class="portion-box"><span>One portion:</span>'
-            + '<input class="inline-input tnum" data-f="portionExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" title="A number or an equation — e.g. 750/25 or (2+3)*4" placeholder="e.g. 750/25" style="width:104px;text-align:right">'
-            + '<span class="portion-eval">'+(isExpr(portionRaw(e))?"= "+esc(fmtNum(num(e.portion))):"")+'</span>'
-            + '<span class="portion-unit">'+esc(e.unit||"")+'</span>'
-          + '</div>'
+          ? portionBox(e)
           : '<span class="muted" style="font-size:12.5px">Counted in '+esc(elemUnit(e))+' — recipes use that unit.</span>')
         + '</div></td><td></td><td></td><td></td><td></td></tr>';
+  }
+  // Two lines in one box: the unit transfer that spells the pack unit out in a smaller one, then the
+  // portion itself — written in either of those two units.
+  function portionBox(e){
+    var pack = esc(elemUnit(e)), praw = portionRaw(e);
+    return '<div class="portion-box">'
+      + '<span class="lab"><span class="packunit">'+pack+'</span> =</span>'
+      + '<input class="inline-input tnum" data-f="convExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(convRaw(e))+'" title="What one '+pack+' holds — a number or an equation. Leave empty for no transfer." placeholder="e.g. 750" style="width:104px;text-align:right">'
+      + '<select class="inline-input" data-f="convUnit" aria-label="Transfer unit" style="max-width:110px">'+convUnitOptions(e)+'</select>'
+      + '<span class="portion-eval eval-conv">'+esc(convEvalText(e))+'</span>'
+      + '<span class="lab">One portion:</span>'
+      + '<input class="inline-input tnum" data-f="portionExpr" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(praw)+'" title="A number or an equation — e.g. 750/25 or (2+3)*4" placeholder="e.g. 750/25" style="width:104px;text-align:right">'
+      + portionUnitControl(e)
+      + '<span class="portion-eval eval-portion">'+esc(portionEvalText(e))+'</span>'
+    + '</div>';
+  }
+  // A single choice stays plain text, exactly as it read before there was anything to choose.
+  function portionUnitControl(e){
+    var opts = portionUnitOptions(e), cur = portionUnitOf(e);
+    if(opts.length<2) return '<span class="portion-unit">'+esc(cur)+'</span>';
+    return '<select class="inline-input" data-f="portionUnit" aria-label="Portion unit" style="max-width:110px">'
+      + opts.map(function(u){ return '<option value="'+esc(u)+'"'+(u===cur?" selected":"")+'>'+esc(u)+'</option>'; }).join("")
+      + '</select>';
+  }
+  // The pack unit itself and the generic "portion" are the other two ways to count an element — offering
+  // either as the transfer unit would just collide with them.
+  function convUnitOptions(e){
+    var cur = convUnit(e) || "";
+    var list = state.settings.units.filter(function(u){ return u!==elemUnit(e) && u!=="portion"; });
+    if(cur && list.indexOf(cur)<0) list.unshift(cur);
+    return '<option value=""'+(cur?"":" selected")+'>—</option>'
+      + list.map(function(u){ return '<option value="'+esc(u)+'"'+(u===cur?" selected":"")+'>'+esc(u)+'</option>'; }).join("");
   }
   // The portion-cost column falls back to the unit cost when the element has no portion.
   function portionCostCell(e){ return money(portionCost(e))+'<span class="muted" style="font-size:11px">/'+esc(hasPortion(e)?"portion":elemUnit(e))+'</span>'; }
   // What the "One portion" field shows: the stored equation if there is one, otherwise the plain number.
   function portionRaw(e){ return (e && e.portionExpr!=null && e.portionExpr!=="") ? e.portionExpr : String(e?num(e.portion):0); }
+  // Same for the transfer, except that nothing at all means no transfer.
+  function convRaw(e){
+    if(!e) return "";
+    if(e.convExpr!=null && e.convExpr!=="") return e.convExpr;
+    return (e.convQty==null || num(e.convQty)===0) ? "" : String(num(e.convQty));
+  }
+  // An equation is worth showing the result of. A portion written in the transfer unit isn't converted
+  // for display — the dropdown beside it already says what the number means.
+  function portionEvalText(e){ return (portionUnitOf(e)===elemUnit(e) && isExpr(portionRaw(e))) ? "= "+fmtNum(num(e.portion)) : ""; }
+  function convEvalText(e){ return (hasConv(e) && isExpr(convRaw(e))) ? "= "+fmtNum(convQty(e)) : ""; }
   function elementGroupBlock(gid, name, list){
     var collapsed = !!ui.collapsed[gid];
     var rows = sortElements(list).map(elementRow).join("");
@@ -695,7 +808,7 @@
     var uncat = state.elements.filter(function(e){ return !ecat(e.catId); });
     if(uncat.length) groups += elementGroupBlock("el:__uncat__", "Uncategorized", uncat);
     html += groups;
-    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). Leave <em>Define portion</em> off for things you buy and use in the same unit — the column then shows the cost of one unit, and recipes count them in that unit. Any edit stamps <em>Last modified</em>. The ✎ editor holds name, notes &amp; category; the tag icon sells an element on its own. Click a column header to sort every section. Manage units in Settings.</p>';
+    html += '<p class="hint" style="margin-top:12px"><strong>Portion cost</strong> = pack cost × (one portion ÷ pack size). The <em>unit transfer</em> spells the pack unit out in a smaller one — <em>bouteille = 750 ml</em> — so a portion can be written as 30 ml instead of 30/750, and recipes can count in ml too. Leave <em>Define portion</em> off for things you buy and use in the same unit — the column then shows the cost of one unit, and recipes count them in that unit. Any edit stamps <em>Last modified</em>. The ✎ editor holds name, notes &amp; category; the tag icon sells an element on its own. Click a column header to sort every section. Manage units in Settings.</p>';
     view.innerHTML = html;
   }
 
@@ -853,7 +966,7 @@
     r = r || { id:uid("r"), name:"", categoryId: state.categories[0]?state.categories[0].id:null, ratio:null, priceOverride:null, lines:[] };
     var draft = JSON.parse(JSON.stringify(r));
     if(draft.lines.length===0) draft.lines.push({elementId:state.elements[0].id, amount:0});
-    draft.lines.forEach(function(l){ if(l.unit==null) l.unit = defaultLineUnit(l); });
+    draft.lines.forEach(function(l){ if(l.unit==null || lineUnitOptions(elem(l.elementId)).indexOf(l.unit)<0) l.unit = defaultLineUnit(l); });
 
     function body(){
       var catOpts = '<option value="">Uncategorized</option>' + state.categories.map(function(c){ return '<option value="'+c.id+'"'+(draft.categoryId===c.id?" selected":"")+'>'+esc(c.name)+' ('+ratioTxt(c.ratio)+')</option>'; }).join("");
@@ -1006,7 +1119,38 @@
   document.getElementById("btn-import").addEventListener("click", doImport);
   function rowOf(rid){ return view.querySelector('tr[data-rid="'+rid+'"]'); }
 
+  // ---- Inline notes ----
+  function noteOwner(el){ return el.dataset.note==="r" ? findRecipe(el.dataset.id) : elem(el.dataset.id); }
+  // Every keystroke lands in the data, like the other inline fields — no save button, no modal.
+  function noteEdited(nt){
+    var o = noteOwner(nt); if(!o) return;
+    o.notes = nt.textContent;                       // textContent, so anything pasted arrives as plain text
+    var line = nt.parentElement, del = line && line.querySelector(".notedel");
+    if(del) del.hidden = !o.notes;
+    if(nt.dataset.note!=="r"){
+      o.modified = nowStamp();
+      var row = nt.closest("tr"), md = row && row.querySelector(".cell-modified");
+      if(md) md.textContent = o.modified;
+    }
+    save();
+  }
+  var noteWas = null;                               // what the note said when it was clicked into, for Escape
+  view.addEventListener("focusin", function(e){
+    var nt = e.target.closest && e.target.closest("[data-note]");
+    if(nt) noteWas = nt.textContent;
+  });
+  view.addEventListener("focusout", function(e){
+    var nt = e.target.closest && e.target.closest("[data-note]");
+    if(!nt) return;
+    var t = nt.textContent.trim();
+    // Emptying it always gets a real clear: browsers leave a stray <br> behind, which would keep
+    // :empty from matching and hide the "+ note" prompt.
+    if(t !== nt.textContent || t === "") nt.textContent = t;
+    noteEdited(nt);
+  });
+
   view.addEventListener("click", function(e){
+    if(e.target.closest("[data-note]")) return;     // clicking the note just puts the caret in it
     var sc = e.target.closest("[data-sortcol]");
     if(sc){ var col=sc.dataset.sortcol; if(ui.sort.col===col){ ui.sort.dir*=-1; } else { ui.sort={col:col,dir:1}; } render(); return; }
     var esc2 = e.target.closest("[data-esortcol]");
@@ -1021,6 +1165,14 @@
       else if(a==="reset-markup"){ r=findRecipe(id); if(r){ r.ratio=null; save(); repriceRow(rowOf(id)); } }
       else if(a==="reset-price"){ r=findRecipe(id); if(r){ r.priceOverride=null; save(); repriceRow(rowOf(id)); } }
       else if(a==="reset-desired"){ r=findRecipe(id); if(r){ r.desiredMargin=null; save(); repriceRow(rowOf(id)); } }
+      else if(a==="del-note"){
+        var no = act.dataset.nkind==="r" ? findRecipe(id) : elem(id);
+        if(no){
+          var line = act.parentElement, nd = line && line.querySelector("[data-note]");
+          if(nd) nd.textContent = "";
+          if(nd) noteEdited(nd); else { no.notes=""; save(); }
+        }
+      }
       else if(a==="sell-elem"){ sellElement(id); }
       else if(a==="edit-elem"){ editElement(elem(id)); }
       else if(a==="del-cat"){ var ucn=usageCountCat(id), cc=cat(id); confirmDelete("Delete category", ucn? ("“"+cc.name+"” is used by "+ucn+" recipe"+(ucn===1?"":"s")+". They’ll become Uncategorized. Delete it?") : ("Delete “"+cc.name+"”?"), function(){ state.recipes.forEach(function(x){ if(x.categoryId===id) x.categoryId=null; }); state.categories=state.categories.filter(function(x){return x.id!==id;}); save(); render(); toast("Category deleted"); }); }
@@ -1048,6 +1200,16 @@
   function handleMarkup(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.ratio = v===""?null:num(v); r.priceOverride=null; save(); repriceRow(row,"markup"); }
   function handlePrice(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.priceOverride = v===""?null:num(v); save(); repriceRow(row,"price"); }
   function handleDesired(input){ var row=input.closest("tr[data-rid]"); if(!row) return; var r=findRecipe(row.dataset.rid); if(!r) return; var v=input.value.trim(); r.desiredMargin = v===""?null:clamp(num(v),0,100); save(); repriceRow(row,"desired"); }
+  // A transfer edit can add or remove the portion's unit choice and re-express its value. Swap only those
+  // pieces, so the field being typed in keeps focus.
+  function repaintPortionBox(el, box){
+    if(!box) return;
+    var uc = box.querySelector('[data-f="portionUnit"], .portion-unit');
+    if(uc){ var tmp=document.createElement("div"); tmp.innerHTML=portionUnitControl(el); box.replaceChild(tmp.firstChild, uc); }
+    var pi = box.querySelector('[data-f="portionExpr"]'); if(pi && document.activeElement!==pi) pi.value = portionRaw(el);
+    var pe = box.querySelector(".eval-portion"); if(pe) pe.textContent = portionEvalText(el);
+    var ce = box.querySelector(".eval-conv"); if(ce) ce.textContent = convEvalText(el);
+  }
   function onFieldEdit(e){
     var inp = e.target.closest("[data-f]"); if(!inp) return;
     var f = inp.dataset.f;
@@ -1055,41 +1217,82 @@
     if(erow){
       var el=elem(erow.dataset.id);
       if(el){
+        var box = inp.closest(".portion-box");
         if(f==="hasPortion"){
           if(e.type!=="change") return;          // checkbox fires input then change — act once, then repaint the row
+          var hq=convQty(el), hu=convUnit(el);
           el.hasPortion = inp.checked; el.modified = nowStamp();
-          if(el.hasPortion && el.portionUnit==null) el.portionUnit = el.unit;
-          if(!el.hasPortion) coerceLinesTo(el);
+          // The transfer only lives alongside a portion, so it goes with it — and whatever was written
+          // in its unit is re-expressed in pack units on the way out.
+          coercePortionUnit(el, hq, hu); coerceLinesTo(el, hq, hu);
           save(); render(); return;
         }
-        if(f==="portionExpr"){
-          var raw=inp.value, val=evalExpr(raw), esp=inp.parentElement.querySelector(".portion-eval");
+        if(f==="unit"){
+          var uq=convQty(el), uu=convUnit(el);
+          el.unit = inp.value;
+          if(el.convUnit===el.unit){ el.convUnit=null; el.convQty=null; el.convExpr=null; }   // nothing transfers into itself
+          coercePortionUnit(el, uq, uu); coerceLinesTo(el, uq, uu);
+          el.modified=nowStamp(); save(); render(); return;   // the row's unit captions are baked in — repaint it
+        }
+        if(f==="convUnit"){
+          if(e.type!=="change") return;
+          var cq=convQty(el), cu=convUnit(el);
+          el.convUnit = inp.value || null;
+          coercePortionUnit(el, cq, cu); coerceLinesTo(el, cq, cu);
+          repaintPortionBox(el, box);
+        }
+        else if(f==="convExpr"){
+          var craw=inp.value.trim(), cval=craw===""?0:evalExpr(craw), ces=box?box.querySelector(".eval-conv"):null;
+          if(craw!=="" && (isNaN(cval) || cval<=0)){
+            inp.classList.add("bad"); if(ces) ces.textContent="";
+            if(e.type==="change"){   // on blur, restore the last good value rather than leave it broken
+              inp.value=convRaw(el); inp.classList.remove("bad"); if(ces) ces.textContent=convEvalText(el);
+            }
+            return;
+          }
+          inp.classList.remove("bad");
+          var xq=convQty(el), xu=convUnit(el);
+          if(craw===""){
+            // An empty field only counts as a clear once it is committed. Until then the transfer still
+            // stands, so backspacing through it can't drag the portion and the recipes along with it.
+            if(ces) ces.textContent="";
+            if(e.type!=="change") return;
+            el.convQty=null; el.convExpr=null;
+          } else {
+            el.convQty=cval; el.convExpr = isExpr(craw) ? craw : null;
+            if(ces) ces.textContent = convEvalText(el);
+          }
+          // Units only move on commit, for the same reason.
+          if(e.type==="change"){ coercePortionUnit(el, xq, xu); coerceLinesTo(el, xq, xu); repaintPortionBox(el, box); }
+        }
+        else if(f==="portionUnit"){
+          if(e.type!=="change") return;
+          setPortionUnit(el, inp.value);
+          var pin=box?box.querySelector('[data-f="portionExpr"]'):null; if(pin) pin.value=portionRaw(el);
+          var pev=box?box.querySelector(".eval-portion"):null; if(pev) pev.textContent=portionEvalText(el);
+        }
+        else if(f==="portionExpr"){
+          var raw=inp.value, val=evalExpr(raw), esp=box?box.querySelector(".eval-portion"):null;
           if(isNaN(val) || val<0){
             inp.classList.add("bad"); if(esp) esp.textContent="";
             if(e.type==="change"){   // on blur, restore the last good value rather than leave it broken
-              inp.value=portionRaw(el); inp.classList.remove("bad");
-              if(esp) esp.textContent = isExpr(inp.value) ? "= "+fmtNum(num(el.portion)) : "";
+              inp.value=portionRaw(el); inp.classList.remove("bad"); if(esp) esp.textContent=portionEvalText(el);
             }
             return;
           }
           inp.classList.remove("bad");
           el.portion=val; el.portionExpr = isExpr(raw) ? raw.trim() : null;
-          if(esp) esp.textContent = el.portionExpr!=null ? "= "+fmtNum(val) : "";
+          if(esp) esp.textContent = portionEvalText(el);
         }
         else if(f==="size"||f==="cost") el[f]=num(inp.value);
         else el[f]=inp.value;
         if(f==="cost") el.priceDate=today();
-        if(f==="unit"){
-          el.portionUnit=el.unit; coerceLinesTo(el); el.modified=nowStamp();
-          if(!hasPortion(el)){ save(); render(); return; }   // the row's unit caption is baked in — repaint it
-        }
         el.modified=nowStamp();
         var mrow=view.querySelector('tr[data-id="'+el.id+'"]');
         if(mrow){
           var pc=mrow.querySelector(".cell-portioncost"); if(pc) pc.innerHTML=portionCostCell(el);
           var md=mrow.querySelector(".cell-modified"); if(md) md.textContent=el.modified;
         }
-        var pus=view.querySelectorAll('tr[data-id="'+el.id+'"] .portion-unit'); for(var z=0;z<pus.length;z++) pus[z].textContent=el.unit||"";
         save();
       }
       return;
@@ -1100,13 +1303,22 @@
     if(ecrow){ var ec=ecat(ecrow.dataset.ecid); if(ec){ ec[f]=inp.value; save(); } return; }
   }
   view.addEventListener("input", function(e){
+    var nt=e.target.closest("[data-note]"); if(nt){ noteEdited(nt); return; }
     var mk=e.target.closest("[data-rmarkup]"); if(mk){ handleMarkup(mk); return; }
     var pr=e.target.closest("[data-rprice]"); if(pr){ handlePrice(pr); return; }
     var ds=e.target.closest("[data-rdesired]"); if(ds){ handleDesired(ds); return; }
     onFieldEdit(e);
   });
   view.addEventListener("change", onFieldEdit);
-  view.addEventListener("keydown", function(e){ if(e.target && e.target.id==="unit-new" && e.key==="Enter"){ e.preventDefault(); addUnit(); } });
+  view.addEventListener("keydown", function(e){
+    var nt = e.target.closest && e.target.closest("[data-note]");
+    if(nt){                                          // a note is one line: Enter finishes it, Escape puts it back
+      if(e.key==="Enter"){ e.preventDefault(); nt.blur(); }
+      else if(e.key==="Escape"){ e.preventDefault(); nt.textContent = noteWas||""; noteEdited(nt); nt.blur(); }
+      return;
+    }
+    if(e.target && e.target.id==="unit-new" && e.key==="Enter"){ e.preventDefault(); addUnit(); }
+  });
 
   function repriceRow(row, active){
     if(!row) return;
@@ -1140,7 +1352,7 @@
   function findRecipe(id){ for(var i=0;i<state.recipes.length;i++) if(state.recipes[i].id===id) return state.recipes[i]; return null; }
   function addElement(){
     var u = (state.settings.units[0]||"each");
-    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, hasPortion:false, portion:1, portionUnit:u, notes:"", priceDate:null, modified:today(), catId:null };
+    var it = { id:uid("i"), name:"", size:1, unit:u, cost:0, hasPortion:false, portion:1, portionUnit:u, convQty:null, convExpr:null, convUnit:null, notes:"", priceDate:null, modified:today(), catId:null };
     state.elements.push(it); save(); render(); editElement(it);
   }
   function sellElement(id){
@@ -1161,8 +1373,16 @@
       + '<label class="field" style="margin-top:14px">Pack unit<select id="e-unit">'+unitOptions(e.unit)+'</select></label>'
       + '<div class="subcard" style="margin-top:14px">'
         + '<label class="switch"><input type="checkbox" id="e-hasportion"'+(hasPortion(e)?" checked":"")+'>Define portion</label>'
-        + '<div id="e-portion-wrap"'+(hasPortion(e)?"":" hidden")+' style="margin-top:12px"><label class="field">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— a number or equation, in the pack unit above</span>'
-          + '<input id="e-portion" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" placeholder="e.g. 750/25 or (2+3)*4"></label>'
+        + '<div id="e-portion-wrap"'+(hasPortion(e)?"":" hidden")+' style="margin-top:12px">'
+          + '<div class="field">Unit transfer <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— optional: what one pack unit holds</span></div>'
+          + '<div class="conv-row" style="margin-top:6px"><span class="lab">1 <span class="packunit" id="e-conv-pack">'+esc(elemUnit(e))+'</span> =</span>'
+            + '<input id="e-conv" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(convRaw(e))+'" placeholder="e.g. 750" style="max-width:130px;text-align:right">'
+            + '<select id="e-convunit">'+convUnitOptions({unit:e.unit, hasPortion:true, convUnit:e.convUnit})+'</select></div>'
+          + '<div class="hint" id="e-conv-eval" style="margin-top:6px"></div>'
+          + '<div class="field" style="margin-top:14px">One portion <span style="font-weight:400;text-transform:none;letter-spacing:normal;color:var(--ink-3)">— a number or equation</span></div>'
+          + '<div class="conv-row" style="margin-top:6px">'
+            + '<input id="e-portion" type="text" inputmode="text" autocomplete="off" spellcheck="false" value="'+esc(portionRaw(e))+'" placeholder="e.g. 750/25 or (2+3)*4" style="max-width:200px">'
+            + '<select id="e-portionunit"><option value="'+esc(portionUnitOf(e))+'" selected>'+esc(portionUnitOf(e))+'</option></select></div>'
           + '<div class="hint" id="e-portion-eval" style="margin-top:6px"></div></div>'
         + '<div class="hint" id="e-noportion"'+(hasPortion(e)?" hidden":"")+' style="margin-top:8px">Recipes will count this element in its pack unit — no portion to choose.</div></div>';
     openModal("Edit element", body, function(){
@@ -1171,33 +1391,89 @@
       var wantsPortion = document.getElementById("e-hasportion").checked;
       var praw = document.getElementById("e-portion").value, pval = evalExpr(praw);
       if(wantsPortion && (isNaN(pval) || pval<0)){ toast("One portion must be a number or a valid equation.", true); return false; }
+      var craw = document.getElementById("e-conv").value.trim(), cval = craw===""?0:evalExpr(craw);
+      if(wantsPortion && craw!=="" && (isNaN(cval) || cval<=0)){ toast("The unit transfer must be a positive number or a valid equation.", true); return false; }
       var nc = num(document.getElementById("e-cost").value);
       if(nc !== num(e.cost)) e.priceDate = today();
+      var oq = convQty(e), ou = convUnit(e);          // the transfer the recipe lines were counting against
       e.name = name; e.notes = document.getElementById("e-notes").value;
       e.catId = document.getElementById("e-cat").value || null;
       e.cost = nc; e.size = num(document.getElementById("e-size").value); e.unit = document.getElementById("e-unit").value;
       e.hasPortion = wantsPortion;
-      if(wantsPortion){ e.portion = pval; e.portionExpr = isExpr(praw) ? praw.trim() : null; }
-      e.portionUnit = e.unit;
-      coerceLinesTo(e);
+      if(wantsPortion){
+        e.convUnit = craw==="" ? null : (document.getElementById("e-convunit").value || null);
+        e.convQty = e.convUnit ? cval : null;
+        e.convExpr = (e.convUnit && isExpr(craw)) ? craw : null;
+        e.portion = pval; e.portionExpr = isExpr(praw) ? praw.trim() : null;
+        e.portionUnit = document.getElementById("e-portionunit").value;   // the number is read in the unit shown beside it
+      }
+      coercePortionUnit(e, oq, ou);   // dropping the portion or its transfer re-expresses it in pack units
+      coerceLinesTo(e, oq, ou);
       e.modified = nowStamp();
       toast("Element saved");
     });
     (function(){
       var pe=document.getElementById("e-portion"), pv=document.getElementById("e-portion-eval");
       var cb=document.getElementById("e-hasportion"), wrap=document.getElementById("e-portion-wrap"), np=document.getElementById("e-noportion");
-      if(!pe||!pv||!cb) return;
+      var ce=document.getElementById("e-conv"), cv=document.getElementById("e-conv-eval"), cu=document.getElementById("e-convunit");
+      var pu=document.getElementById("e-portionunit"), un=document.getElementById("e-unit"), cp=document.getElementById("e-conv-pack");
+      if(!pe||!pv||!cb||!ce||!cu||!pu) return;
+      var prev = { qty:convQty(e), unit:convUnit(e) };   // the transfer the portion field is currently written against
+      // The element as the modal would save it right now — the portion's unit choice follows the transfer being typed.
+      function pending(){
+        var craw=ce.value.trim(), cval=evalExpr(craw), ok=(craw!=="" && !isNaN(cval) && cval>0);
+        return { unit:un.value, hasPortion:cb.checked, convUnit: ok ? (cu.value||null) : null, convQty: ok?cval:0, portionUnit: pu.value };
+      }
+      // commit = the transfer has settled (a blur or a dropdown pick), so a unit may now be dropped;
+      // mid-typing the current choice stays on screen rather than flickering away between keystrokes.
+      function paintUnits(commit){
+        var p=pending(), opts=portionUnitOptions(p), cur=pu.value||opts[0];
+        // The transfer can't offer the pack unit, so its list is rebuilt whenever the pack unit moves.
+        if(cp.textContent!==elemUnit(p)){ cp.textContent=elemUnit(p); cu.innerHTML=convUnitOptions({unit:p.unit, hasPortion:true, convUnit:cu.value}); }
+        if(opts.indexOf(cur)<0){
+          if(commit){
+            var val=evalExpr(pe.value);   // the unit it was written in is gone — re-express it in the pack unit
+            if(cur===prev.unit && prev.qty>0 && !isNaN(val)) pe.value=fmtNum(val/prev.qty);
+            cur=opts[0];
+          } else opts=opts.concat([cur]);
+        }
+        pu.innerHTML = opts.map(function(u){ return '<option value="'+esc(u)+'"'+(u===cur?" selected":"")+'>'+esc(u)+'</option>'; }).join("");
+        pu.value = cur;
+        // Only a real transfer becomes the basis for a later conversion — an empty or half-typed one
+        // must not erase the transfer the portion on screen is still written against.
+        if(convQty(p)>0 && convUnit(p)) prev = { qty:convQty(p), unit:convUnit(p) };
+        updConv(); upd();
+      }
+      function updConv(){
+        var raw=ce.value.trim();
+        if(raw===""){ ce.classList.remove("bad"); cv.style.color=""; cv.textContent=""; return; }
+        var val=evalExpr(raw);
+        if(isNaN(val)||val<=0){ ce.classList.add("bad"); cv.style.color="var(--bad)"; cv.textContent="Not a valid positive number or equation."; return; }
+        ce.classList.remove("bad"); cv.style.color="";
+        cv.textContent = isExpr(raw) ? ("= "+fmtNum(val)+" "+(cu.value||"")) : "";
+      }
       function upd(){
-        var raw=pe.value, val=evalExpr(raw), unit=document.getElementById("e-unit").value||"";
+        var raw=pe.value, val=evalExpr(raw), p=pending();
         if(raw.trim()===""){ pe.classList.remove("bad"); pv.style.color=""; pv.textContent=""; return; }
         if(isNaN(val)||val<0){ pe.classList.add("bad"); pv.style.color="var(--bad)"; pv.textContent="Not a valid number or equation."; return; }
         pe.classList.remove("bad"); pv.style.color="";
-        pv.textContent = isExpr(raw) ? ("= "+fmtNum(val)+" "+unit) : "";
+        // Only worth spelling out while the portion is in the pack unit — otherwise the dropdown beside it says it all.
+        pv.textContent = (portionUnitOf(p)===elemUnit(p) && isExpr(raw)) ? ("= "+fmtNum(val)+" "+elemUnit(p)) : "";
       }
-      function toggle(){ wrap.hidden = !cb.checked; np.hidden = cb.checked; if(cb.checked) upd(); }
+      function toggle(){ wrap.hidden = !cb.checked; np.hidden = cb.checked; if(cb.checked) paintUnits(true); }
       pe.addEventListener("input", upd);
+      ce.addEventListener("input", function(){ paintUnits(false); });
+      ce.addEventListener("change", function(){ paintUnits(true); });
+      cu.addEventListener("change", function(){ paintUnits(true); });
+      un.addEventListener("change", function(){ paintUnits(true); });
+      // Switching the portion's unit re-expresses the same quantity, as the row editor does.
+      pu.addEventListener("change", function(){
+        var p=pending(), q=convQty(p), val=evalExpr(pe.value);
+        if(q>0 && !isNaN(val)) pe.value = fmtNum(pu.value===convUnit(p) ? val*q : val/q);
+        prev = { qty:q, unit:convUnit(p) };
+        upd();
+      });
       cb.addEventListener("change", toggle);
-      document.getElementById("e-unit").addEventListener("change", upd);
       toggle();
     })();
   }
