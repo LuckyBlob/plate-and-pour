@@ -19,7 +19,33 @@
       "kg",
       "each",
       "L",
-      "slice"
+      "slice",
+      "bouteille",
+      "sac",
+      "plaque",
+      "pot",
+      "morceau",
+      "fruit",
+      "pogo",
+      "tarte",
+      "pain",
+      "trait"
+    ],
+    "conversions": [
+      {
+        "id": "cv_oz",
+        "fromQty": 30,
+        "fromUnit": "ml",
+        "toQty": 1,
+        "toUnit": "oz"
+      },
+      {
+        "id": "cv_trait",
+        "fromQty": 3,
+        "fromUnit": "trait",
+        "toQty": 1,
+        "toUnit": "g"
+      }
     ]
   },
   "categories": [
@@ -112,1665 +138,2864 @@
     {
       "id": "el001",
       "name": "Agostura (orange)",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0525,
-      "catId": "ec_liqueurs"
+      "cost": 173.8,
+      "size": 12,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 3,
+      "portionUnit": "trait",
+      "portionExpr": null,
+      "notes": "276g par bouteille, 1g pour 3 traits, 3 traits pour 1 portion.",
+      "priceDate": "2026-02-03",
+      "catId": "ec_liqueurs",
+      "convUnit": "g",
+      "convQty": 276,
+      "convExpr": null
     },
     {
       "id": "el002",
       "name": "batonnet fromages",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.8943,
+      "cost": 43.994,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.131579,
+      "portionUnit": "sac",
+      "portionExpr": "5/38",
+      "notes": "38 morceaux par sac, 5 morceaux par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 19,95 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el003",
       "name": "Bitter (jaune)",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.051,
-      "catId": "ec_liqueurs"
+      "cost": 169.07,
+      "size": 12,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 3,
+      "portionUnit": "trait",
+      "portionExpr": null,
+      "notes": "276g par bouteille, 1g pour 3 traits, 3 traits pour 1 portion.",
+      "priceDate": "2026-02-03",
+      "catId": "ec_liqueurs",
+      "convUnit": "g",
+      "convQty": 276,
+      "convExpr": null
     },
     {
       "id": "el004",
       "name": "brownies",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.8225,
+      "cost": 87.48,
+      "size": 2,
+      "unit": "plaque",
+      "hasPortion": true,
+      "portion": 0.041667,
+      "portionUnit": "plaque",
+      "portionExpr": "1/24",
+      "notes": "24 portions par plaque.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el005",
       "name": "Café",
-      "size": 1,
-      "unit": "unité",
       "cost": 27.35,
+      "size": 1,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "907g par sac. Format au chiffrier : 2Lbs.",
+      "priceDate": "2026-02-03",
       "catId": "ec_softs"
     },
     {
       "id": "el006",
       "name": "cerise",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.082,
+      "cost": 84.61,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.001938,
+      "portionUnit": "pot",
+      "portionExpr": "1/516",
+      "notes": "516 cerises par pot, 1 cerise par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el007",
       "name": "chili végétarien",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.769,
+      "cost": 42.45,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.108696,
+      "portionUnit": "sac",
+      "portionExpr": "200/1840",
+      "notes": "1840g par sac, 200g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el008",
       "name": "chips jalapeno",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.079,
+      "cost": 41.58,
+      "size": 40,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "sac",
+      "notes": "2 sacs de 40 g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el009",
       "name": "chips Nachos",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.3136,
+      "cost": 64.2174,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.122732,
+      "portionUnit": "sac",
+      "portionExpr": "115/937",
+      "notes": "937g par sac, 115g par portion. Le chiffrier ajoute 0,20 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 9,07 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el010",
       "name": "chips ordinaire",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.9945,
+      "cost": 39.89,
+      "size": 40,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "sac",
+      "notes": "2 sacs de 40 g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el011",
       "name": "chips sel et vinaigre",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.124,
+      "cost": 42.48,
+      "size": 40,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "sac",
+      "notes": "2 sacs de 40 g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el012",
       "name": "chips sweet chili",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.9985,
+      "cost": 39.97,
+      "size": 40,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "sac",
+      "notes": "2 sacs de 40 g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el013",
       "name": "Chips Ruffles BBQ",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.9538,
+      "cost": 46.89,
+      "size": 48,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "sac",
+      "notes": "2 sacs de 40 g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el014",
       "name": "Chocolat chaud",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.5634,
+      "cost": 28.17,
+      "size": 50,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_softs"
     },
     {
       "id": "el015",
       "name": "Churros",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.2744,
+      "cost": 113.72,
+      "size": 200,
+      "unit": "morceau",
+      "hasPortion": true,
+      "portion": 4,
+      "portionUnit": "morceau",
+      "notes": "4 morceaux par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el016",
       "name": "Citron",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.1067,
+      "cost": 12.8,
+      "size": 12,
+      "unit": "fruit",
+      "hasPortion": true,
+      "portion": 0.1,
+      "portionUnit": "fruit",
+      "portionExpr": "1/10",
+      "notes": "10 tranches par fruit, 1 tranche par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el017",
       "name": "Coke Zéro",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.6667,
+      "cost": 8,
+      "size": 12,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_softs"
     },
     {
       "id": "el018",
       "name": "Confiture aux fraises",
+      "cost": 7,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.9859,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.140845,
+      "portionUnit": "pot",
+      "portionExpr": "40/284",
+      "notes": "284g par pot, 40g pour 2 cuilleres, 2 cuilleres pour 1 portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el019",
       "name": "Crème fouettée",
-      "size": 1,
-      "unit": "unité",
-      "cost": 6.5733,
+      "cost": 78.88,
+      "size": 12,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "400g par sac.",
+      "priceDate": "2026-02-03",
       "catId": "ec_laitiers"
     },
     {
       "id": "el020",
       "name": "crème glacé",
-      "size": 1,
-      "unit": "unité",
-      "cost": 0.7146,
+      "cost": 17.15,
+      "size": 24,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "100ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_laitiers"
     },
     {
       "id": "el021",
       "name": "crème sure",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.4888,
+      "cost": 27.66,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.035344,
+      "portionUnit": "pot",
+      "portionExpr": "75/2122",
+      "notes": "2122g par pot, 75g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_laitiers"
     },
     {
       "id": "el022",
       "name": "crevettes",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.27,
+      "cost": 13.608,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.119048,
+      "portionUnit": "sac",
+      "portionExpr": "5/42",
+      "notes": "42 morceaux par sac, 5 morceaux par portion. Aucun prix au chiffrier — seul le 0,27 $ d’emballage par portion est compté.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el023",
       "name": "Edamames",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.9752,
+      "cost": 71.74,
+      "size": 24,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.660793,
+      "portionUnit": "sac",
+      "portionExpr": "300/454",
+      "notes": "454g par sac, 300g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el024",
       "name": "épices a bifteck",
+      "cost": 20.57,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.1382,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.006719,
+      "portionUnit": "pot",
+      "portionExpr": "6/893",
+      "notes": "893g par pot, 6g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el025",
       "name": "fromage rapé",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.6202,
+      "cost": 162.02,
+      "size": 4,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.04,
+      "portionUnit": "sac",
+      "portionExpr": "100/2500",
+      "notes": "2500g par sac, 100g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_laitiers"
     },
     {
       "id": "el026",
       "name": "Fromage Suisse",
+      "cost": 24.24,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.7272,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.03,
+      "portionUnit": "sac",
+      "portionExpr": "30/1000",
+      "notes": "1000g par sac, 30g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_laitiers"
     },
     {
       "id": "el027",
       "name": "jus de citron",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0539,
-      "catId": "ec_jus"
+      "cost": 41.37,
+      "size": 12,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.5,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "945ml par pot, 1 portion = 0,5 oz (14,79ml).",
+      "priceDate": "2026-02-03",
+      "catId": "ec_jus",
+      "convUnit": "ml",
+      "convQty": 945,
+      "convExpr": null
     },
     {
       "id": "el028",
       "name": "jus de lime",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0781,
-      "catId": "ec_jus"
+      "cost": 27.9,
+      "size": 12,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.5,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "440ml par pot, 1 portion = 0,5 oz (14,79ml).",
+      "priceDate": "2026-02-03",
+      "catId": "ec_jus",
+      "convUnit": "ml",
+      "convQty": 440,
+      "convExpr": null
     },
     {
       "id": "el029",
       "name": "ketchup",
-      "size": 1,
-      "unit": "unité",
-      "cost": 2.8433,
+      "cost": 34.12,
+      "size": 12,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "500ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el030",
       "name": "Lime",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.1458,
+      "cost": 14,
+      "size": 12,
+      "unit": "fruit",
+      "hasPortion": true,
+      "portion": 0.125,
+      "portionUnit": "fruit",
+      "portionExpr": "1/8",
+      "notes": "8 quartiers par fruit, 1 quartier par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el031",
       "name": "mac and cheese",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.1745,
+      "cost": 84.125,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.075472,
+      "portionUnit": "sac",
+      "portionExpr": "4/53",
+      "notes": "53 morceaux par sac, 4 morceaux par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 38,48 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el032",
       "name": "mayonnaise",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2916,
+      "cost": 69.14,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.008434,
+      "portionUnit": "pot",
+      "portionExpr": "35/4150",
+      "notes": "4150g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el033",
       "name": "miel",
-      "size": 1,
-      "unit": "unité",
-      "cost": 14.395,
+      "cost": 86.37,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "1000g par sac.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el034",
       "name": "mini pogo",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.497,
+      "cost": 69.94,
+      "size": 100,
+      "unit": "pogo",
+      "hasPortion": true,
+      "portion": 5,
+      "portionUnit": "pogo",
+      "notes": "5 pogos de 30 g par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 0,65 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el035",
       "name": "Moutarde",
-      "size": 1,
-      "unit": "unité",
-      "cost": 3.065,
+      "cost": 73.56,
+      "size": 24,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "375ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el036",
       "name": "moutarde a l'ancienne",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.284,
+      "cost": 69.79,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.008138,
+      "portionUnit": "pot",
+      "portionExpr": "35/4301",
+      "notes": "4301g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el037",
       "name": "oignon vert",
-      "size": 1,
-      "unit": "unité",
       "cost": 15.88,
+      "size": 1,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "907g par sac. Format au chiffrier : 2LB.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el038",
       "name": "Oignons rouges",
+      "cost": 9.86,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.1,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.010141,
+      "portionUnit": "sac",
+      "portionExpr": "23/2268",
+      "notes": "2268g par sac, 23g par portion. Le chiffrier ne donne pas de portion — 23 g (≈ 0,10 $) comme utilisé jusqu’ici.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el039",
       "name": "Olives Vertes Farcies",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0317,
+      "cost": 90.96,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.000697,
+      "portionUnit": "pot",
+      "portionExpr": "3/4307",
+      "notes": "4307g par pot, 3g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el040",
       "name": "Orange",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.1126,
+      "cost": 10.81,
+      "size": 12,
+      "unit": "fruit",
+      "hasPortion": true,
+      "portion": 0.125,
+      "portionUnit": "fruit",
+      "portionExpr": "1/8",
+      "notes": "8 tranches par fruit, 1 tranche par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el041",
       "name": "origan",
+      "cost": 9.19,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.11,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.010526,
+      "portionUnit": "pot",
+      "portionExpr": "2/190",
+      "notes": "190g par pot, 2g par portion. Coût arrondi à 0,11 $ au chiffrier.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el042",
       "name": "pain ciabatta",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.6551,
+      "cost": 49.13,
+      "size": 75,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el043",
       "name": "pain Naan",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.9717,
+      "cost": 34.98,
+      "size": 6,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 0.166667,
+      "portionUnit": "unité",
+      "portionExpr": "1/6",
+      "notes": "Le chiffrier divise le sac en 6 portions (format indiqué : 8 pain).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el044",
       "name": "Piments doux marinés",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.6979,
+      "cost": 46.53,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.03,
+      "portionUnit": "sac",
+      "portionExpr": "30/1000",
+      "notes": "1000g par sac, 30g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el045",
       "name": "pogo vegan",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.3333,
+      "cost": 200,
+      "size": 120,
+      "unit": "pogo",
+      "hasPortion": true,
+      "portion": 2,
+      "portionUnit": "pogo",
+      "notes": "2 pogos par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el046",
       "name": "Porc effiloché",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.3296,
+      "cost": 81.41,
+      "size": 4,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.065331,
+      "portionUnit": "sac",
+      "portionExpr": "75/1148",
+      "notes": "1148g par sac, 75g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el047",
       "name": "poulet pop corn",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.1378,
+      "cost": 87.16,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.072,
+      "portionUnit": "sac",
+      "portionExpr": "18/250",
+      "notes": "250 morceaux par sac, 18 morceaux par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 39,83 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el048",
       "name": "redbull",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.2125,
+      "cost": 53.1,
+      "size": 24,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_softs"
     },
     {
       "id": "el049",
       "name": "salade orzo",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.0665,
+      "cost": 21.33,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.1,
+      "portionUnit": "pot",
+      "portionExpr": "1/10",
+      "notes": "10 portions par pot.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el050",
       "name": "sauce chili sucré",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.152,
+      "cost": 42.2,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.007206,
+      "portionUnit": "pot",
+      "portionExpr": "35/4857",
+      "notes": "4857g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el051",
       "name": "sauce chipotle",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2979,
+      "cost": 39.22,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.015191,
+      "portionUnit": "pot",
+      "portionExpr": "35/2304",
+      "notes": "2304g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el052",
       "name": "sauce marinara",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.1283,
+      "cost": 52.79,
+      "size": 6,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.014583,
+      "portionUnit": "pot",
+      "portionExpr": "35/2400",
+      "notes": "2400g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el053",
       "name": "sauce miel et ail",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.1841,
+      "cost": 52.38,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.007028,
+      "portionUnit": "pot",
+      "portionExpr": "35/4980",
+      "notes": "4980g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el054",
       "name": "sauce ranch",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2958,
+      "cost": 64.18,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.009218,
+      "portionUnit": "pot",
+      "portionExpr": "35/3797",
+      "notes": "3797g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el055",
       "name": "sauce salsa",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2486,
+      "cost": 57.23,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.008687,
+      "portionUnit": "pot",
+      "portionExpr": "35/4029",
+      "notes": "4029g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el056",
       "name": "sauce Soja",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2481,
+      "cost": 63.01,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.007874,
+      "portionUnit": "pot",
+      "portionExpr": "35/4445",
+      "notes": "4445g par pot, 35g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el057",
       "name": "sauce Worchestershire",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0528,
-      "catId": "ec_sauces"
+      "cost": 42.09,
+      "size": 12,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 3,
+      "portionUnit": "trait",
+      "portionExpr": null,
+      "notes": "332g par pot, 5g pour 3 traits, 3 traits pour 1 portion.",
+      "priceDate": "2026-02-03",
+      "catId": "ec_sauces",
+      "convUnit": "trait",
+      "convQty": 199.2,
+      "convExpr": null
     },
     {
       "id": "el058",
       "name": "sirop simple",
+      "cost": 6.09,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.045,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.007393,
+      "portionUnit": "pot",
+      "portionExpr": "29.5735/4000",
+      "notes": "4000ml par pot, 29,5735ml par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el059",
       "name": "Sucre",
-      "size": 1,
-      "unit": "unité",
       "cost": 5.87,
+      "size": 1,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "2000g par sac.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el060",
       "name": "Tabasco",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.0525,
+      "cost": 92.66,
+      "size": 24,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.013605,
+      "portionUnit": "pot",
+      "portionExpr": "2/147",
+      "notes": "147g par pot, 2g pour 6-7 gouttes, 6-7 gouttes pour 1 portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el061",
       "name": "Tartes Pacanes",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.2702,
+      "cost": 108.97,
+      "size": 6,
+      "unit": "tarte",
+      "hasPortion": true,
+      "portion": 0.125,
+      "portionUnit": "tarte",
+      "portionExpr": "1/8",
+      "notes": "8 portions par tarte. Le chiffrier ajoute 0,50 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 14,16 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el062",
       "name": "trempette aux epinards",
-      "size": 1,
-      "unit": "portion",
-      "cost": 4.1175,
+      "cost": 65.88,
+      "size": 16,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el063",
       "name": "menthe",
-      "size": 1,
-      "unit": "portion",
       "cost": 0.35,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el064",
       "name": "Jus de gun pour drinks",
-      "size": 1,
-      "unit": "portion",
       "cost": 0.7,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_jus"
     },
     {
       "id": "el065",
       "name": "Jus de canneberge",
-      "size": 1,
-      "unit": "portion",
       "cost": 0.25,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_jus"
     },
     {
       "id": "el066",
       "name": "Olive verte tranché",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.2006,
+      "cost": 40.12,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.01,
+      "portionUnit": "pot",
+      "portionExpr": "40/4000",
+      "notes": "4000g par pot, 40g par portion. Le chiffrier inscrit 55,93 $ la caisse mais 20,06 $ l’unité — c’est le prix à l’unité qui est repris ici.",
+      "priceDate": "2026-02-03",
       "catId": "ec_garnitures"
     },
     {
       "id": "el067",
       "name": "Confit d'oignon",
-      "size": 1,
-      "unit": "portion",
       "cost": 0.5,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el068",
       "name": "Salade Quinoa fidji",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.501,
+      "cost": 30.02,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.1,
+      "portionUnit": "pot",
+      "portionExpr": "100/1000",
+      "notes": "1000g par pot, 100g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el069",
       "name": "Salade Edamames",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.792,
+      "cost": 35.84,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.1,
+      "portionUnit": "pot",
+      "portionExpr": "100/1000",
+      "notes": "1000g par pot, 100g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el070",
       "name": "vinaigre blanc pur",
-      "size": 1,
-      "unit": "unité",
       "cost": 18.91,
+      "size": 1,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "5000ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el071",
       "name": "Gateau citron noix de cocos",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.5212,
+      "cost": 73.02,
+      "size": 2,
+      "unit": "plaque",
+      "hasPortion": true,
+      "portion": 0.041667,
+      "portionUnit": "plaque",
+      "portionExpr": "1/24",
+      "notes": "24 portions par plaque.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el072",
       "name": "Bouché choux-fleur pané",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.3384,
+      "cost": 63.6267,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.220507,
+      "portionUnit": "sac",
+      "portionExpr": "200/907",
+      "notes": "907g par sac, 200g par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 9,38 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el073",
       "name": "Rondelle patate",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.453,
+      "cost": 83.0526,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.104972,
+      "portionUnit": "sac",
+      "portionExpr": "190/1810",
+      "notes": "1810g par sac, 190g par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 11,27 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el074",
       "name": "Sauce Buffalo",
+      "cost": 49.33,
       "size": 1,
       "unit": "unité",
-      "cost": 49.33,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el075",
       "name": "sirop grenadine",
-      "size": 1,
-      "unit": "unité",
       "cost": 17.01,
+      "size": 1,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "1000ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el076",
       "name": "cornichons a l'aneth",
-      "size": 1,
-      "unit": "unité",
-      "cost": 24.67,
+      "cost": 49.34,
+      "size": 2,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.001,
+      "portionUnit": "bouteille",
+      "portionExpr": "4/4000",
+      "notes": "4000ml par bouteille, 4ml par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el077",
       "name": "poivre noir",
+      "cost": 46.37,
       "size": 1,
       "unit": "unité",
-      "cost": 46.37,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el078",
       "name": "lait",
+      "cost": 5.07,
       "size": 1,
       "unit": "unité",
-      "cost": 5.07,
-      "catId": "ec_laitiers"
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "2000ml par unité, 1 portion = 1 oz (29,57ml). Le chiffrier ne chiffre pas le lait dans les cocktails.",
+      "priceDate": "2026-02-03",
+      "catId": "ec_laitiers",
+      "convUnit": "ml",
+      "convQty": 2000,
+      "convExpr": null
     },
     {
       "id": "el079",
       "name": "Canelle",
+      "cost": 26.25,
       "size": 1,
       "unit": "unité",
-      "cost": 26.25,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el080",
       "name": "Samosas Vegan",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.0289,
+      "cost": 54.52,
+      "size": 90,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 5,
+      "portionUnit": "unité",
+      "notes": "5 unités de 20 g par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 0,55 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el081",
       "name": "Quesadillas Poulet",
-      "size": 1,
-      "unit": "portion",
-      "cost": 3.2855,
+      "cost": 65.71,
+      "size": 60,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 3,
+      "portionUnit": "unité",
+      "notes": "3 unités par portion. Le chiffrier ajoute 0,27 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 1,01 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el082",
       "name": "Peperroni",
+      "cost": 49.97,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.1999,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.004,
+      "portionUnit": "sac",
+      "portionExpr": "20/5000",
+      "notes": "5000g par sac, 20g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el083",
       "name": "Bacon",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.6181,
+      "cost": 140.3,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.008811,
+      "portionUnit": "sac",
+      "portionExpr": "20/2270",
+      "notes": "2270g par sac, 20g par portion. Le chiffrier inscrit 144,68 $ la caisse mais 70,15 $ l’unité — c’est le prix à l’unité qui est repris ici.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el084",
       "name": "Sauce Hollandaise",
-      "size": 1,
-      "unit": "unité",
-      "cost": 23.88,
+      "cost": 95.52,
+      "size": 4,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "2000ml par bouteille. Le chiffrier inscrit 101,47 $ la caisse mais 23,88 $ l’unité — c’est le prix à l’unité qui est repris ici.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el085",
       "name": "Maïs éclaté au beurre",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.8279,
+      "cost": 19.87,
+      "size": 24,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "sac",
+      "notes": "Le chiffrier ajoute 0,12 $ d’emballage par portion : le coût du pack ci-dessus l’inclut (prix réel du pack : 0,71 $).",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el086",
       "name": "Pâtes alimentaire",
-      "size": 1,
-      "unit": "unité",
-      "cost": 17.56,
+      "cost": 35.12,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "4535g par sac.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el087",
       "name": "Sauce Fromage",
-      "size": 1,
-      "unit": "unité",
-      "cost": 21.415,
+      "cost": 85.66,
+      "size": 4,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "2000ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el088",
       "name": "Épices Grecques",
-      "size": 1,
-      "unit": "unité",
       "cost": 13,
+      "size": 1,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.047619,
+      "portionUnit": "sac",
+      "portionExpr": "25/525",
+      "notes": "525g par sac, 25g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el089",
       "name": "Sirop purée de fruit du dragon",
+      "cost": 34,
       "size": 1,
-      "unit": "portion",
-      "cost": 1,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 0.029412,
+      "portionUnit": "unité",
+      "portionExpr": "1/34",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el090",
       "name": "sirop de lavande",
+      "cost": 22,
       "size": 1,
-      "unit": "portion",
-      "cost": 0.6471,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 0.029412,
+      "portionUnit": "unité",
+      "portionExpr": "1/34",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el091",
       "name": "Coulis Assortis",
-      "size": 1,
-      "unit": "unité",
-      "cost": 5.59,
+      "cost": 67.08,
+      "size": 12,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.02381,
+      "portionUnit": "bouteille",
+      "portionExpr": "10/420",
+      "notes": "420ml par bouteille, 10ml par portion. Le chiffrier inscrit 65,23 $ la caisse mais 5,59 $ l’unité — c’est le prix à l’unité qui est repris ici.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el092",
       "name": "Côte de dos de porc",
-      "size": 1,
-      "unit": "portion",
-      "cost": 4.2575,
+      "cost": 64.43,
+      "size": 2,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.132159,
+      "portionUnit": "sac",
+      "portionExpr": "300/2270",
+      "notes": "2270g par sac, 300g par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el093",
       "name": "Sirop Barbotine Neutre",
-      "size": 1,
-      "unit": "unité",
-      "cost": 19.22,
+      "cost": 38.44,
+      "size": 2,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "4000ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sirops"
     },
     {
       "id": "el094",
       "name": "Sauce Sriracha",
-      "size": 1,
-      "unit": "unité",
-      "cost": 5.05,
+      "cost": 60.6,
+      "size": 12,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "500ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_sauces"
     },
     {
       "id": "el095",
       "name": "Pain Burger Patate 4Po",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.66,
+      "cost": 39.73,
+      "size": 60,
+      "unit": "pain",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "pain",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el096",
       "name": "Boulette de viande haché précuite",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.66,
+      "cost": 86.32,
+      "size": 52,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el097",
       "name": "Frites coupe régulière",
-      "size": 1,
-      "unit": "portion",
-      "cost": 0.84,
+      "cost": 45.59,
+      "size": 6,
+      "unit": "sac",
+      "hasPortion": true,
+      "portion": 0.10989,
+      "portionUnit": "sac",
+      "portionExpr": "200/1820",
+      "notes": "1820g par sac, 200g par portion. Coût arrondi à 0,84 $ au chiffrier.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el098",
       "name": "Cannelle",
-      "size": 1,
-      "unit": "unité",
       "cost": 25.72,
+      "size": 1,
+      "unit": "sac",
+      "hasPortion": false,
+      "notes": "550g par sac.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el099",
       "name": "Détergent Laveuse",
-      "size": 1,
-      "unit": "unité",
-      "cost": 16.285,
+      "cost": 32.57,
+      "size": 2,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "3600ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el100",
       "name": "Huile Olive Extra Vierge",
-      "size": 1,
-      "unit": "unité",
       "cost": 19.73,
+      "size": 1,
+      "unit": "bouteille",
+      "hasPortion": false,
+      "notes": "2840ml par bouteille.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el101",
       "name": "Gâteau aux carottes",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.4242,
+      "cost": 68.36,
+      "size": 2,
+      "unit": "plaque",
+      "hasPortion": true,
+      "portion": 0.041667,
+      "portionUnit": "plaque",
+      "portionExpr": "1/24",
+      "notes": "24 portions par plaque.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el102",
       "name": "Piroulines",
-      "size": 1,
+      "cost": 43.55,
+      "size": 225,
       "unit": "unité",
-      "cost": 0.1936,
+      "hasPortion": false,
+      "notes": "Format au chiffrier : 1 boite.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el103",
       "name": "Romarin",
-      "size": 1,
+      "cost": 8.81,
+      "size": 6,
       "unit": "unité",
-      "cost": 1.4683,
+      "hasPortion": false,
+      "notes": "Format au chiffrier : 1 boite.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el104",
       "name": "basilic",
-      "size": 1,
+      "cost": 9.12,
+      "size": 6,
       "unit": "unité",
-      "cost": 1.52,
+      "hasPortion": false,
+      "notes": "Format au chiffrier : 1 boite.",
+      "priceDate": "2026-02-03",
       "catId": "ec_epices"
     },
     {
       "id": "el105",
       "name": "Perrier",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.45,
+      "cost": 34.72,
+      "size": 24,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "unité",
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_softs"
     },
     {
       "id": "el106",
       "name": "Rouleaux de papier caisse",
+      "cost": 93.52,
       "size": 1,
       "unit": "unité",
-      "cost": 93.52,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el107",
       "name": "Rouleaux de papier TPV",
+      "cost": 28.85,
       "size": 1,
       "unit": "unité",
-      "cost": 28.85,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el108",
       "name": "Filet à cheveux",
+      "cost": 52.22,
       "size": 1,
       "unit": "unité",
-      "cost": 52.22,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el109",
       "name": "Sac compost",
+      "cost": 103.99,
       "size": 1,
       "unit": "unité",
-      "cost": 103.99,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el110",
       "name": "Sac Ordures noirs",
+      "cost": 43.73,
       "size": 1,
       "unit": "unité",
-      "cost": 43.73,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el111",
       "name": "Sac Ordures transparent",
+      "cost": 51.82,
       "size": 1,
       "unit": "unité",
-      "cost": 51.82,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el112",
       "name": "Tamis pour urinoir",
+      "cost": 62.43,
       "size": 1,
       "unit": "unité",
-      "cost": 62.43,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el113",
       "name": "Filet à barbe",
+      "cost": 55.7,
       "size": 1,
       "unit": "unité",
-      "cost": 55.7,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el114",
       "name": "Papier Hygiénique",
+      "cost": 76.32,
       "size": 1,
       "unit": "unité",
-      "cost": 76.32,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el115",
       "name": "Essuie-mains",
+      "cost": 64.13,
       "size": 1,
       "unit": "unité",
-      "cost": 64.13,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el116",
       "name": "Serviette de table",
+      "cost": 71.3,
       "size": 1,
       "unit": "unité",
-      "cost": 71.3,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el117",
       "name": "Pics en Bambou",
+      "cost": 41.18,
       "size": 1,
       "unit": "unité",
-      "cost": 41.18,
+      "hasPortion": false,
+      "notes": "Format au chiffrier : paquet.",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el118",
       "name": "Feuille de cuisson",
+      "cost": 99.76,
       "size": 1,
       "unit": "unité",
-      "cost": 99.76,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el119",
       "name": "Papier Journal (cuisson)",
+      "cost": 37.04,
       "size": 1,
       "unit": "unité",
-      "cost": 37.04,
+      "hasPortion": false,
+      "notes": "",
+      "priceDate": "2026-02-03",
       "catId": "ec_fournitures"
     },
     {
       "id": "el120",
       "name": "Profiteroles vides",
-      "size": 1,
-      "unit": "portion",
-      "cost": 2.0033,
+      "cost": 48.08,
+      "size": 144,
+      "unit": "unité",
+      "hasPortion": true,
+      "portion": 6,
+      "portionUnit": "unité",
+      "notes": "6 unités par portion.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el121",
       "name": "Salade de Bruschetta",
-      "size": 1,
-      "unit": "portion",
-      "cost": 1.44,
+      "cost": 28.93,
+      "size": 2,
+      "unit": "pot",
+      "hasPortion": true,
+      "portion": 0.1,
+      "portionUnit": "pot",
+      "portionExpr": "100/1000",
+      "notes": "1000g par pot, 100g par portion. Coût arrondi à 1,44 $ au chiffrier.",
+      "priceDate": "2026-02-03",
       "catId": "ec_cuisine"
     },
     {
       "id": "el122",
       "name": "Sauce Maison",
-      "size": 1,
-      "unit": "portion",
       "cost": 0,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": false,
+      "notes": "Absent du chiffrier — aucun coût établi.",
+      "priceDate": null,
       "catId": "ec_sauces"
     },
     {
       "id": "el123",
       "name": "lime gose sans alcool (burdock)",
-      "size": 1,
+      "cost": 75.36,
+      "size": 24,
       "unit": "canette",
-      "cost": 3.14,
+      "hasPortion": false,
+      "notes": "Caisse de 24 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el124",
       "name": "Gose sans alcool",
-      "size": 1,
+      "cost": 34.77,
+      "size": 12,
       "unit": "canette",
-      "cost": 2.8975,
+      "hasPortion": false,
+      "notes": "Caisse de 12 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el125",
       "name": "blonde sans alcool boréal",
-      "size": 1,
+      "cost": 36.5,
+      "size": 12,
       "unit": "canette",
-      "cost": 3.0417,
+      "hasPortion": false,
+      "notes": "Caisse de 12 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el126",
       "name": "radler sans alcool",
-      "size": 1,
+      "cost": 36.5,
+      "size": 12,
       "unit": "canette",
-      "cost": 3.0417,
+      "hasPortion": false,
+      "notes": "Caisse de 12 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el127",
       "name": "Sure bleuet hibicus sans alcool",
-      "size": 1,
+      "cost": 93.6,
+      "size": 24,
       "unit": "canette",
-      "cost": 3.9,
+      "hasPortion": false,
+      "notes": "Caisse de 24 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el128",
       "name": "Kombucha Ékorce",
-      "size": 1,
+      "cost": 29.32,
+      "size": 12,
       "unit": "canette",
-      "cost": 2.4433,
+      "hasPortion": false,
+      "notes": "Caisse de 12 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el129",
       "name": "Neipa Helix",
-      "size": 1,
+      "cost": 83.75,
+      "size": 24,
       "unit": "canette",
-      "cost": 3.4896,
+      "hasPortion": false,
+      "notes": "Caisse de 24 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el130",
       "name": "Saison houblonnée",
-      "size": 1,
+      "cost": 83.75,
+      "size": 24,
       "unit": "canette",
-      "cost": 3.4896,
+      "hasPortion": false,
+      "notes": "Caisse de 24 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el131",
       "name": "Miami rice",
-      "size": 1,
+      "cost": 79,
+      "size": 24,
       "unit": "canette",
-      "cost": 3.2917,
+      "hasPortion": false,
+      "notes": "Caisse de 24 canettes.",
+      "priceDate": "2026-02-03",
       "catId": "ec_bieres"
     },
     {
       "id": "el132",
       "name": "aberlour 12 ans",
+      "cost": 84.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 3.39,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el133",
       "name": "Amermelade",
+      "cost": 24.3,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.972,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el134",
       "name": "Aperol les iles",
+      "cost": 24.35,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.974,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el135",
       "name": "Avril",
+      "cost": 37.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.5,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el136",
       "name": "bitter chipotle cacao",
+      "cost": 27.95,
       "size": 1,
-      "unit": "dash",
-      "cost": 0.13,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.004651,
+      "portionUnit": "bouteille",
+      "portionExpr": "0.697674/150",
+      "notes": "Bouteille de 150 ml · le chiffrier fixe par dash à 0,13 $ (≈ 0,698 ml).",
+      "priceDate": "2025-03-07",
       "catId": "ec_liqueurs"
     },
     {
       "id": "el137",
       "name": "Bulle de nuit",
+      "cost": 8.33,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.3332,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el138",
       "name": "ButterScotch",
+      "cost": 21.55,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.862,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el139",
       "name": "Canadian club",
+      "cost": 44.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.1776,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el140",
       "name": "Canopée",
+      "cost": 40.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.63,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el141",
       "name": "Captain Morgan",
+      "cost": 36.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.9605,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el142",
       "name": "chambord",
+      "cost": 47.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.9,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el143",
       "name": "Curaçao",
+      "cost": 23.9,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.956,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el144",
       "name": "el dorado 12 ans",
+      "cost": 52,
       "size": 1,
-      "unit": "oz",
-      "cost": 2.08,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el145",
       "name": "Fireball",
+      "cost": 36.25,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.9539,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el146",
       "name": "Gin #6",
+      "cost": 39.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.59,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el147",
       "name": "gin 7 Heaven",
+      "cost": 40.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.63,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el148",
       "name": "goldschlager",
+      "cost": 49.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.99,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el149",
       "name": "hennessy",
+      "cost": 74,
       "size": 1,
-      "unit": "oz",
-      "cost": 2.96,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el150",
       "name": "Humble framboise",
+      "cost": 31.25,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.25,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el151",
       "name": "Jagermeister",
+      "cost": 51.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.3618,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el152",
       "name": "Jameson",
+      "cost": 57.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.5132,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el153",
       "name": "Kahlua",
+      "cost": 32.25,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.29,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el154",
       "name": "Kamouraska",
+      "cost": 36.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.9671,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el155",
       "name": "km12",
+      "cost": 49.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.98,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el156",
       "name": "L'auberge cuvée fest blanc",
+      "cost": 38.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.2888,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "4000ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 4000,
+      "convExpr": null
     },
     {
       "id": "el157",
       "name": "L'auberge cuvée fest rouge",
+      "cost": 38.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.2888,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "4000ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 4000,
+      "convExpr": null
     },
     {
       "id": "el158",
       "name": "lot no40 rye",
+      "cost": 42.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.7,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el159",
       "name": "Malibu",
+      "cost": 28.4,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.136,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el160",
       "name": "Méga Mousse",
+      "cost": 24.95,
       "size": 1,
-      "unit": "goutte",
-      "cost": 0.01,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.000401,
+      "portionUnit": "bouteille",
+      "portionExpr": "0.04008/100",
+      "notes": "Bouteille de 100 ml · le chiffrier fixe par goute à 0,01 $ (≈ 0,04 ml).",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el161",
       "name": "Midori",
+      "cost": 33.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.35,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el162",
       "name": "Noa Amaretto",
+      "cost": 31,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.3,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.041935,
+      "portionUnit": "bouteille",
+      "portionExpr": "29.3548/700",
+      "notes": "Bouteille de 700 ml · le chiffrier fixe portion à 1,30 $ (≈ 29,355 ml).",
+      "priceDate": "2025-03-07",
       "catId": "ec_liqueurs"
     },
     {
       "id": "el163",
       "name": "O'casey's",
+      "cost": 26.2,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.048,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el164",
       "name": "Oshlag houblonnée",
+      "cost": 34.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 2.07,
-      "catId": "ec_bieres"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "500ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_bieres",
+      "convUnit": "ml",
+      "convQty": 500,
+      "convExpr": null
     },
     {
       "id": "el165",
       "name": "radoune",
+      "cost": 42.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.8321,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "700ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 700,
+      "convExpr": null
     },
     {
       "id": "el166",
       "name": "Rosemont épicé",
+      "cost": 40.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.63,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el167",
       "name": "Rouge gorge",
+      "cost": 23.3,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.932,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el168",
       "name": "soho",
+      "cost": 31.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.26,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el169",
       "name": "sortilège",
+      "cost": 33.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.35,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el170",
       "name": "st-germain",
+      "cost": 49.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.99,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el171",
       "name": "Tequila Jose Cuervo",
+      "cost": 58,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.5263,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el172",
       "name": "Triple sec",
+      "cost": 29.6,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.184,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el173",
       "name": "Ungava",
+      "cost": 52.75,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.3882,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "1140ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 1140,
+      "convExpr": null
     },
     {
       "id": "el174",
       "name": "Vermouth Kayak",
+      "cost": 21.6,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.864,
-      "catId": "ec_liqueurs"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_liqueurs",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el175",
       "name": "vodka cirka",
+      "cost": 51.5,
       "size": 1,
-      "unit": "oz",
-      "cost": 2.06,
-      "catId": "ec_spiritueux"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_spiritueux",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el176",
       "name": "vodka vanille",
+      "cost": 49.74,
       "size": 1,
-      "unit": "oz",
-      "cost": 1.3,
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 0.026136,
+      "portionUnit": "bouteille",
+      "portionExpr": "29.7949/1140",
+      "notes": "Bouteille de 1140 ml · le chiffrier fixe portion à 1,30 $ (≈ 29,795 ml).",
+      "priceDate": "2025-03-07",
       "catId": "ec_spiritueux"
     },
     {
       "id": "el177",
       "name": "Soda",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el178",
       "name": "Limonade",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el179",
       "name": "Sprite",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el180",
       "name": "coke",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el181",
       "name": "Thé glacé",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el182",
       "name": "Tonic",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el183",
       "name": "clamato",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el184",
       "name": "ginger ale",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el185",
       "name": "jus d'ananas",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el186",
       "name": "jus d'orange",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el187",
       "name": "jus de pamplemousse",
+      "cost": 0.18,
       "size": 1,
       "unit": "oz",
-      "cost": 0.18,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el188",
       "name": "sirop canneberge romarin",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el189",
       "name": "sirop miel",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el190",
       "name": "sirop de curacao",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el191",
       "name": "sirop hibiscus",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el192",
       "name": "sirop d'érable",
+      "cost": 0,
       "size": 1,
       "unit": "oz",
-      "cost": 0,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el193",
       "name": "purée de peche",
+      "cost": 0.65,
       "size": 1,
       "unit": "oz",
-      "cost": 0.65,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el194",
       "name": "sirop basilic",
+      "cost": 0.07,
       "size": 1,
       "unit": "oz",
-      "cost": 0.07,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_sirops"
     },
     {
       "id": "el195",
       "name": "slush",
+      "cost": 0.02,
       "size": 1,
       "unit": "oz",
-      "cost": 0.02,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el196",
       "name": "mango loco",
+      "cost": 0.14,
       "size": 1,
       "unit": "oz",
-      "cost": 0.14,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_softs"
     },
     {
       "id": "el197",
       "name": "tomato water",
+      "cost": 0.35,
       "size": 1,
       "unit": "oz",
-      "cost": 0.35,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el198",
       "name": "mozza brine",
+      "cost": 0.87,
       "size": 1,
       "unit": "oz",
-      "cost": 0.87,
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "notes": "Prix maison à l’once, tel quel au chiffrier.",
+      "priceDate": "2025-03-07",
       "catId": "ec_jus"
     },
     {
       "id": "el199",
       "name": "cantina rouge",
+      "cost": 16,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.64,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el200",
       "name": "Esteban Martin windsor",
+      "cost": 14.95,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.598,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el201",
       "name": "Cantina blanc",
+      "cost": 16,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.64,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el202",
       "name": "El ilusionista Joel Delaunay",
+      "cost": 21.95,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.878,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el203",
       "name": "Blanc de lys",
+      "cost": 16.95,
       "size": 1,
-      "unit": "oz",
-      "cost": 0.678,
-      "catId": "ec_vins"
+      "unit": "bouteille",
+      "hasPortion": true,
+      "portion": 1,
+      "portionUnit": "oz",
+      "portionExpr": null,
+      "notes": "750ml par bouteille, 1 portion = 1 oz (30ml).",
+      "priceDate": "2025-03-07",
+      "catId": "ec_vins",
+      "convUnit": "ml",
+      "convQty": 750,
+      "convExpr": null
     },
     {
       "id": "el204",
       "name": "Blanc d'oeuf",
-      "size": 1,
-      "unit": "portion",
       "cost": 0,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": false,
+      "notes": "Absent du chiffrier — aucun coût établi.",
+      "priceDate": null,
       "catId": "ec_laitiers"
     },
     {
       "id": "el205",
       "name": "Jalapenos",
-      "size": 1,
-      "unit": "portion",
       "cost": 0,
+      "size": 1,
+      "unit": "unité",
+      "hasPortion": false,
+      "notes": "Absent du chiffrier — aucun coût établi.",
+      "priceDate": null,
       "catId": "ec_cuisine"
     },
     {
       "id": "el206",
       "name": "1201",
-      "size": 1,
+      "cost": 163,
+      "size": 24,
       "unit": "canette",
-      "cost": 6.7917,
+      "hasPortion": false,
+      "notes": "Caisse de 24 · canette de 473 ml.",
+      "priceDate": null,
       "catId": "ec_bieres"
     },
     {
       "id": "el207",
       "name": "salt and pulpa",
-      "size": 1,
+      "cost": 151,
+      "size": 24,
       "unit": "canette",
-      "cost": 6.2917,
+      "hasPortion": false,
+      "notes": "Caisse de 24 · canette de 473 ml.",
+      "priceDate": "2025-03-07",
       "catId": "ec_bieres"
     },
     {
       "id": "el208",
       "name": "Amourette",
-      "size": 1,
+      "cost": 110.4,
+      "size": 12,
       "unit": "canette",
-      "cost": 9.2,
+      "hasPortion": false,
+      "notes": "Caisse de 12 · canette de 250 ml.",
+      "priceDate": "2025-03-07",
       "catId": "ec_bieres"
     }
   ],
@@ -1784,23 +3009,28 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el026",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el010",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el067",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -1813,23 +3043,28 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el049",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el068",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el069",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el121",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -1842,23 +3077,28 @@
       "lines": [
         {
           "elementId": "el042",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 1.3333
+          "amount": 1.3333,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el026",
-          "amount": 1.3333
+          "amount": 1.3333,
+          "unit": "portion"
         },
         {
           "elementId": "el010",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -1871,27 +3111,33 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el052",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -1904,27 +3150,33 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el052",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -1937,27 +3189,33 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el052",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -1970,27 +3228,33 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el052",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -2003,39 +3267,48 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el052",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2048,19 +3321,23 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el007",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2073,15 +3350,18 @@
       "lines": [
         {
           "elementId": "el043",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el009",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el062",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2094,15 +3374,18 @@
       "lines": [
         {
           "elementId": "el023",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el056",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el032",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2115,11 +3398,13 @@
       "lines": [
         {
           "elementId": "el045",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el032",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2132,19 +3417,23 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -2157,19 +3446,23 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         }
       ]
     },
@@ -2182,23 +3475,28 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el026",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2211,23 +3509,28 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.99
+          "amount": 1.99,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 2.001
+          "amount": 2.001,
+          "unit": "portion"
         }
       ]
     },
@@ -2240,35 +3543,43 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2281,35 +3592,43 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1.994
+          "amount": 1.994,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 2.006
+          "amount": 2.006,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2322,23 +3641,28 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el007",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2351,23 +3675,28 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el007",
-          "amount": 1.873
+          "amount": 1.873,
+          "unit": "portion"
         }
       ]
     },
@@ -2380,47 +3709,58 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el044",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el051",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el024",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2433,43 +3773,53 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el066",
-          "amount": 1.994
+          "amount": 1.994,
+          "unit": "portion"
         },
         {
           "elementId": "el038",
-          "amount": 4
+          "amount": 4,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el046",
-          "amount": 2.001
+          "amount": 2.001,
+          "unit": "portion"
         },
         {
           "elementId": "el051",
-          "amount": 0.504
+          "amount": 0.504,
+          "unit": "portion"
         },
         {
           "elementId": "el024",
-          "amount": 2.026
+          "amount": 2.026,
+          "unit": "portion"
         }
       ]
     },
@@ -2482,35 +3832,43 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el026",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el067",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el047",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2523,31 +3881,38 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el067",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el047",
-          "amount": 1.001
+          "amount": 1.001,
+          "unit": "portion"
         },
         {
           "elementId": "el041",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2560,27 +3925,33 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -2593,27 +3964,33 @@
       "lines": [
         {
           "elementId": "el009",
-          "amount": 1.492
+          "amount": 1.492,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 1.987
+          "amount": 1.987,
+          "unit": "portion"
         },
         {
           "elementId": "el021",
-          "amount": 1.002
+          "amount": 1.002,
+          "unit": "portion"
         },
         {
           "elementId": "el055",
-          "amount": 2.011
+          "amount": 2.011,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 8.004
+          "amount": 8.004,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 7.895
+          "amount": 7.895,
+          "unit": "portion"
         }
       ]
     },
@@ -2626,23 +4003,28 @@
       "lines": [
         {
           "elementId": "el042",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el082",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el010",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -2655,15 +4037,18 @@
       "lines": [
         {
           "elementId": "el031",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el083",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2676,27 +4061,33 @@
       "lines": [
         {
           "elementId": "el095",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el025",
-          "amount": 0.2
+          "amount": 0.2,
+          "unit": "portion"
         },
         {
           "elementId": "el096",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el097",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el122",
-          "amount": 1
+          "amount": 1,
+          "unit": "unité"
         },
         {
           "elementId": "el038",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2709,7 +4100,8 @@
       "lines": [
         {
           "elementId": "el123",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2722,7 +4114,8 @@
       "lines": [
         {
           "elementId": "el124",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2735,7 +4128,8 @@
       "lines": [
         {
           "elementId": "el125",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2748,7 +4142,8 @@
       "lines": [
         {
           "elementId": "el126",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2761,7 +4156,8 @@
       "lines": [
         {
           "elementId": "el127",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2774,7 +4170,8 @@
       "lines": [
         {
           "elementId": "el128",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2787,7 +4184,8 @@
       "lines": [
         {
           "elementId": "el129",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2800,7 +4198,8 @@
       "lines": [
         {
           "elementId": "el130",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2813,7 +4212,8 @@
       "lines": [
         {
           "elementId": "el131",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -2826,7 +4226,8 @@
       "lines": [
         {
           "elementId": "el200",
-          "amount": 5
+          "amount": 5,
+          "unit": "portion"
         }
       ]
     },
@@ -2839,7 +4240,8 @@
       "lines": [
         {
           "elementId": "el201",
-          "amount": 5
+          "amount": 5,
+          "unit": "portion"
         }
       ]
     },
@@ -2852,7 +4254,8 @@
       "lines": [
         {
           "elementId": "el199",
-          "amount": 5
+          "amount": 5,
+          "unit": "portion"
         }
       ]
     },
@@ -2865,19 +4268,23 @@
       "lines": [
         {
           "elementId": "el166",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el063",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2890,27 +4297,33 @@
       "lines": [
         {
           "elementId": "el139",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el001",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el003",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         },
         {
           "elementId": "el040",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el006",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2923,27 +4336,33 @@
       "lines": [
         {
           "elementId": "el154",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el168",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el006",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el018",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el065",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -2956,31 +4375,38 @@
       "lines": [
         {
           "elementId": "el154",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el024",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el064",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el060",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el057",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el016",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el039",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         }
       ]
     },
@@ -2993,27 +4419,33 @@
       "lines": [
         {
           "elementId": "el135",
-          "amount": 2.25
+          "amount": 2.25,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el204",
-          "amount": 1
+          "amount": 1,
+          "unit": "unité"
         },
         {
           "elementId": "el040",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el006",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3026,31 +4458,38 @@
       "lines": [
         {
           "elementId": "el172",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el134",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el167",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.25
+          "amount": 0.25,
+          "unit": "portion"
         },
         {
           "elementId": "el016",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -3063,23 +4502,28 @@
       "lines": [
         {
           "elementId": "el159",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el161",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el064",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el040",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el006",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3092,19 +4536,23 @@
       "lines": [
         {
           "elementId": "el137",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         },
         {
           "elementId": "el134",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el133",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el040",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -3117,27 +4565,33 @@
       "lines": [
         {
           "elementId": "el157",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el172",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el161",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el016",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el040",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3150,27 +4604,33 @@
       "lines": [
         {
           "elementId": "el156",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el172",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el141",
-          "amount": 0.25
+          "amount": 0.25,
+          "unit": "portion"
         },
         {
           "elementId": "el016",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el040",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3183,23 +4643,28 @@
       "lines": [
         {
           "elementId": "el137",
-          "amount": 4
+          "amount": 4,
+          "unit": "portion"
         },
         {
           "elementId": "el141",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el172",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3212,11 +4677,13 @@
       "lines": [
         {
           "elementId": "el172",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el169",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3229,15 +4696,18 @@
       "lines": [
         {
           "elementId": "el140",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3250,19 +4720,23 @@
       "lines": [
         {
           "elementId": "el140",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el167",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3275,23 +4749,28 @@
       "lines": [
         {
           "elementId": "el140",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el134",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el064",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3304,11 +4783,13 @@
       "lines": [
         {
           "elementId": "el136",
-          "amount": 5
+          "amount": 5,
+          "unit": "portion"
         },
         {
           "elementId": "el168",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3321,27 +4802,33 @@
       "lines": [
         {
           "elementId": "el154",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el064",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el089",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el205",
-          "amount": 2
+          "amount": 2,
+          "unit": "unité"
         }
       ]
     },
@@ -3354,27 +4841,33 @@
       "lines": [
         {
           "elementId": "el172",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el168",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el064",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el030",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3387,19 +4880,23 @@
       "lines": [
         {
           "elementId": "el172",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el090",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el136",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         }
       ]
     },
@@ -3412,23 +4909,28 @@
       "lines": [
         {
           "elementId": "el171",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el014",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el176",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el078",
-          "amount": 5
+          "amount": 5,
+          "unit": "portion"
         },
         {
           "elementId": "el136",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -3441,19 +4943,23 @@
       "lines": [
         {
           "elementId": "el147",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el188",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el160",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         }
       ]
     },
@@ -3466,19 +4972,23 @@
       "lines": [
         {
           "elementId": "el166",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el176",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el078",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         }
       ]
     },
@@ -3491,23 +5001,28 @@
       "lines": [
         {
           "elementId": "el170",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el063",
-          "amount": 0.03
+          "amount": 0.03,
+          "unit": "portion"
         },
         {
           "elementId": "el137",
-          "amount": 4
+          "amount": 4,
+          "unit": "portion"
         },
         {
           "elementId": "el177",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el016",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3520,19 +5035,23 @@
       "lines": [
         {
           "elementId": "el147",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el104",
-          "amount": 0.03
+          "amount": 0.03,
+          "unit": "unité"
         },
         {
           "elementId": "el027",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3545,23 +5064,28 @@
       "lines": [
         {
           "elementId": "el147",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el104",
-          "amount": 0.03
+          "amount": 0.03,
+          "unit": "unité"
         },
         {
           "elementId": "el027",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el142",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3574,23 +5098,28 @@
       "lines": [
         {
           "elementId": "el147",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el104",
-          "amount": 0.03
+          "amount": 0.03,
+          "unit": "unité"
         },
         {
           "elementId": "el027",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el199",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3603,23 +5132,28 @@
       "lines": [
         {
           "elementId": "el171",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el187",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el192",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el177",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3632,23 +5166,28 @@
       "lines": [
         {
           "elementId": "el139",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el193",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el192",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el160",
-          "amount": 4
+          "amount": 4,
+          "unit": "portion"
         }
       ]
     },
@@ -3661,23 +5200,28 @@
       "lines": [
         {
           "elementId": "el171",
-          "amount": 0.75
+          "amount": 0.75,
+          "unit": "portion"
         },
         {
           "elementId": "el172",
-          "amount": 0.25
+          "amount": 0.25,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el191",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el195",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         }
       ]
     },
@@ -3690,19 +5234,23 @@
       "lines": [
         {
           "elementId": "el171",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el172",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el028",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el196",
-          "amount": 4
+          "amount": 4,
+          "unit": "portion"
         }
       ]
     },
@@ -3715,19 +5263,23 @@
       "lines": [
         {
           "elementId": "el171",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el197",
-          "amount": 2.5
+          "amount": 2.5,
+          "unit": "portion"
         },
         {
           "elementId": "el198",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el194",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         }
       ]
     },
@@ -3740,19 +5292,23 @@
       "lines": [
         {
           "elementId": "el162",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el058",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el160",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         }
       ]
     },
@@ -3765,19 +5321,23 @@
       "lines": [
         {
           "elementId": "el018",
-          "amount": 2
+          "amount": 2,
+          "unit": "portion"
         },
         {
           "elementId": "el188",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el177",
-          "amount": 0
+          "amount": 0,
+          "unit": "portion"
         }
       ]
     },
@@ -3790,19 +5350,23 @@
       "lines": [
         {
           "elementId": "el189",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el191",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el027",
-          "amount": 1.5
+          "amount": 1.5,
+          "unit": "portion"
         },
         {
           "elementId": "el177",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         }
       ]
     },
@@ -3815,19 +5379,23 @@
       "lines": [
         {
           "elementId": "el030",
-          "amount": 3
+          "amount": 3,
+          "unit": "portion"
         },
         {
           "elementId": "el063",
-          "amount": 1
+          "amount": 1,
+          "unit": "portion"
         },
         {
           "elementId": "el190",
-          "amount": 0.5
+          "amount": 0.5,
+          "unit": "portion"
         },
         {
           "elementId": "el179",
-          "amount": 0
+          "amount": 0,
+          "unit": "portion"
         }
       ]
     },
@@ -3840,7 +5408,8 @@
       "lines": [
         {
           "elementId": "el206",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -3853,7 +5422,8 @@
       "lines": [
         {
           "elementId": "el207",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     },
@@ -3866,7 +5436,8 @@
       "lines": [
         {
           "elementId": "el208",
-          "amount": 1
+          "amount": 1,
+          "unit": "canette"
         }
       ]
     }
